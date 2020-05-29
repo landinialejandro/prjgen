@@ -1,0 +1,39 @@
+[
+    {
+        "id": 1,
+        "text": "ProjectName",
+        "children": [
+            {
+                "id": 2,
+                "text": "Group 1",
+                "children": [
+                    {
+                        "id": 4,
+                        "text": "table A",
+                        "children": [
+                            {
+                                "id": 5,
+                                "text": "id_field"
+                            }
+                        ],
+                        "settings":[{
+                            "name":"Tabla A"
+                        }]
+                    },
+                    {
+                        "id":6,
+                        "text":"Table B"
+                    },
+                    {
+                        "id":7,
+                        "text":"Table C"
+                    }
+                ]
+            },
+            {
+                "id": 3,
+                "text": "Group 2"
+            }
+        ]
+    }
+]
