@@ -1,0 +1,152 @@
+[
+    {
+        "id": "1",
+        "text": "ProjectName",
+        "icon": true,
+        "li_attr": {
+            "id": "1"
+        },
+        "a_attr": {
+            "href": "#",
+            "id": "1_anchor"
+        },
+        "state": {
+            "loaded": true,
+            "opened": true,
+            "selected": false,
+            "disabled": false
+        },
+        "data": {},
+        "children": [
+            {
+                "id": "2",
+                "text": "Group 1",
+                "icon": true,
+                "li_attr": {
+                    "id": "2"
+                },
+                "a_attr": {
+                    "href": "#",
+                    "id": "2_anchor"
+                },
+                "state": {
+                    "loaded": true,
+                    "opened": true,
+                    "selected": false,
+                    "disabled": false
+                },
+                "data": {},
+                "children": [
+                    {
+                        "id": "4",
+                        "text": "table A",
+                        "icon": true,
+                        "li_attr": {
+                            "id": "4"
+                        },
+                        "a_attr": {
+                            "href": "#",
+                            "id": "4_anchor"
+                        },
+                        "state": {
+                            "loaded": true,
+                            "opened": true,
+                            "selected": false,
+                            "disabled": false
+                        },
+                        "data": {},
+                        "children": [
+                            {
+                                "id": "5",
+                                "text": "id_field",
+                                "icon": true,
+                                "li_attr": {
+                                    "id": "5"
+                                },
+                                "a_attr": {
+                                    "href": "#",
+                                    "id": "5_anchor"
+                                },
+                                "state": {
+                                    "loaded": true,
+                                    "opened": false,
+                                    "selected": true,
+                                    "disabled": false
+                                },
+                                "data": {},
+                                "children": [],
+                                "type": "default"
+                            }
+                        ],
+                        "type": "default"
+                    },
+                    {
+                        "id": "6",
+                        "text": "Table B",
+                        "icon": true,
+                        "li_attr": {
+                            "id": "6"
+                        },
+                        "a_attr": {
+                            "href": "#",
+                            "id": "6_anchor"
+                        },
+                        "state": {
+                            "loaded": true,
+                            "opened": false,
+                            "selected": false,
+                            "disabled": false
+                        },
+                        "data": {},
+                        "children": [],
+                        "type": "default"
+                    },
+                    {
+                        "id": "7",
+                        "text": "Table C",
+                        "icon": true,
+                        "li_attr": {
+                            "id": "7"
+                        },
+                        "a_attr": {
+                            "href": "#",
+                            "id": "7_anchor"
+                        },
+                        "state": {
+                            "loaded": true,
+                            "opened": false,
+                            "selected": false,
+                            "disabled": false
+                        },
+                        "data": {},
+                        "children": [],
+                        "type": "default"
+                    }
+                ],
+                "type": "default"
+            },
+            {
+                "id": "3",
+                "text": "Group 2",
+                "icon": true,
+                "li_attr": {
+                    "id": "3"
+                },
+                "a_attr": {
+                    "href": "#",
+                    "id": "3_anchor"
+                },
+                "state": {
+                    "loaded": true,
+                    "opened": false,
+                    "selected": false,
+                    "disabled": false
+                },
+                "data": {},
+                "children": [],
+                "type": "default"
+            }
+        ],
+        "type": "default"
+    }
+]
