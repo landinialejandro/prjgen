@@ -1,0 +1,13 @@
+{
+    "text": "Max character in table view",
+    "children": [
+        {
+            "text": "Max character in table view value"
+        }
+    ],
+    "type":"field-setting",
+    "icon": "fa fa-cog",
+    "li_attr": {
+        "type": "integer"
+    }
+}

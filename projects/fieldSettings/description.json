@@ -1,0 +1,13 @@
+{
+    "text": "Description",
+    "children": [
+        {
+            "text": "Description and field helper"
+        }
+    ],
+    "type":"field-setting",
+    "icon": "fa fa-cog",
+    "li_attr": {
+        "type": "text"
+    }
+}

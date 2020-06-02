@@ -1,0 +1,23 @@
+{
+    "text": "Default value",
+    "children": [
+        {
+            "text": "Select default value",
+            "children":[
+                "Create by user Name",
+                "Creation Date",
+                "Creation Time",
+                "Creation TimeStamp",
+                "Edited by user Name",
+                "Edition Date",
+                "Edition Time",
+                "Edition TimeStamp"
+            ]
+        }
+    ],
+    "type":"field-setting",
+    "icon": "fa fa-cog",
+    "li_attr": {
+        "type": "option"
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "text": "Precision",
+    "children": [
+        {
+            "text": "Presicion value"
+        }
+    ],
+    "type":"field-setting",
+    "icon": "fa fa-cog",
+    "li_attr": {
+        "type": "integer"
+    }
+}

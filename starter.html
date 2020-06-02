@@ -101,8 +101,9 @@
       </div>
       <div class="content">
         <div class="container-fluid">
+          <button class="btn btn-success getjson"> get json</button>
           <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-5">
               <div class="card">
                 <div class="card-body">
                   <div id="project_tree">
@@ -111,16 +112,21 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-7">
               <div class="card">
+                <div class="card-header">
+                  Item settings
+                </div>
                 <div class="card-body">
-                  <h3 class="card-title">Field options</h3><br>
+                  <h3 class="card-title"></h3><br>
                   <div class="field-options container"></div>
+                </div>
+                <div class="card-footer text-muted">
+                  Footer
                 </div>
               </div>
             </div>
           </div>
-          <button class="btn btn-success getjson"> get json</button>
         </div><!-- container-fluid -->
       </div>
     </div>
@@ -141,9 +147,19 @@
   <script src="dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="dist/dist_L/plugins/jstree/dist/jstree.min.js"></script>
   <script src="dist/dist/js/adminlte.min.js"></script>
-  <!-- <i class=" fa-cog"></i> -->
   <script>
     $(function () {
+      var fields_settings = [];
+      $.getJSON('projects/fieldSettings/_construct.json',function(data){
+        data.forEach(element => {
+            $.getJSON('projects/fieldSettings/'+element+'.json',function(data){
+              fields_settings.push(data); 
+            });
+        });
+      });
+      setTimeout(function(){
+        console.log (fields_settings);
+      },500)
       $('#project_tree').jstree({
         "core": {
           "check_callback": true,
@@ -158,19 +174,19 @@
             "icon": "fas fa-project-diagram"
           },
           "group": {
-            "max_children": 3,
-            "max_depth": 5,
+            "max_children": 15,
+            "max_depth": 10,
             "icon": "far fa-object-group"
           },
           "table": {
-            "max_children": 3,
-            "max_depth": 5,
+            "max_children": 15,
+            "max_depth": 10,
             "icon": "fas fa-table"
           },
           "field": {
             "max_children": 3,
-            "max_depth": 5,
-            "icon": "fas fa-project-diagram"
+            "max_depth": 10,
+            "icon": "fas fa-stream"
           }
         },
         'contextmenu': {
@@ -189,8 +205,8 @@
       }); // set flat:true to get all nodes in 1-level json
       var childrens = tree.get_children_dom(selTreeData);
       var jsonData = JSON.stringify(treeData);
-      // console.log(jsonData);
-      // console.log(childrens);
+      var text = treeData.text + ' settings, id: ' + treeData.id + ', type: ' + treeData.type
+      $('.card-title').html(text);
       doForm(childrens);
 
     });
@@ -204,40 +220,20 @@
           "separator_after": true,
           "label": "Group",
           "action": function (data) { //TODO function to add group
-            var inst = $.jstree.reference(data.reference);
-            var obj = inst.get_node(data.reference);
-            // console.log(data);
-            // console.log(inst);
-            console.log(obj);
+            createNode(data, "group")
           }
         },
         "create_table": {
           "separator_after": true,
           "label": "Table",
           "action": function (data) {
-            var inst = $.jstree.reference(data.reference),
-              obj = inst.get_node(data.reference);
-            inst.create_node(obj, {
-              type: "table"
-            }, "last", function (new_node) {
-              setTimeout(function () {
-                inst.edit(new_node);
-              }, 0);
-            });
+            createNode(data, "table")
           }
         },
         "create_field": {
           "label": "Field",
           "action": function (data) {
-            var inst = $.jstree.reference(data.reference),
-              obj = inst.get_node(data.reference);
-            inst.create_node(obj, {
-              type: "field"
-            }, "last", function (new_node) {
-              setTimeout(function () {
-                inst.edit(new_node);
-              }, 0);
-            });
+            createNode(data, "field")
           }
         }
       }
@@ -247,33 +243,41 @@
       return tmp;
     }
 
+    function createNode(data, type) {
+      var inst = $.jstree.reference(data.reference);
+      var obj = inst.get_node(data.reference);
+      inst.create_node(obj, {
+        type: type
+      }, "last", function (new_node) {
+        setTimeout(function () {
+          inst.edit(new_node);
+        }, 0);
+      });
+    }
+
     function doForm(obj) {
       var tree = $('#project_tree').jstree(true);
-      var html = '<form>';
+      var html = '<form role="form">';
       $(obj).each(function () {
-        //console.log(this);
         var json_obj = tree.get_json(this.id);
-        html += '<div class="form-group row">' +
-          '<label for="' + this.id + '" class="col-sm-1-12 col-form-label">' + json_obj.text +
-          ': </label>' +
-          '<div class="col-sm-1-12">';
+        console.log(json_obj);
+        html += '<div class="form-group">' +
+          '<label for="' + this.id + '" class="">' + json_obj.text +
+          ': </label>';
         if (this.type === 'text' || this.type === 'integer') {
-          json_obj.children.forEach(element => {
             html += '<input type="text" class="form-control" name="' + this.id + '" id="' + this.id +
-              '" placeholder="" value = "' + element.text + '" >'
-          });
+              '" placeholder="' + json_obj.data.placeholder + '" value = "' + json_obj.data.user_value + '" >'
         };
         if (this.type === 'options') {
           json_obj.children.forEach(element => {
             html += '<select class="custom-select" name="' + this.id + '" id="' + this.id + '">'
-              element.children.forEach(element => {
-                html += '<option value="'+element.text+'">'+element.text+'</option>';
-              });
+            element.children.forEach(element => {
+              html += '<option value="' + element.text + '">' + element.text + '</option>';
+            });
             html += '</select>';
           });
         }
-        html += '</div>' +
-          '</div>'
+        html += '</div>'
       })
       html += '</form>';
       $('.field-options').html(html);

@@ -1,0 +1,38 @@
+{
+    "text": "Data Type",
+    "children": [
+        {
+            "text": "select a data type",
+            "children":[
+                "Tiny Integer",
+                "Small Integer",
+                "Medium Integer",
+                "Integer",
+                "Big Integer",
+                "Float",
+                "Double",
+                "Decimal",
+                "Date",
+                "DateTime",
+                "Time",
+                "Time Stamp",
+                "Year",
+                "Char",
+                "VarChar",
+                "Tiny Blob",
+                "Tiny Text",
+                "Text",
+                "BLOB",
+                "Medium BLOB",
+                "Medium Text",
+                "Long BLOB",
+                "Long Text"
+            ]
+        }
+    ],
+    "type":"field-setting",
+    "icon": "fa fa-cog",
+    "li_attr": {
+        "type": "options"
+    }
+}

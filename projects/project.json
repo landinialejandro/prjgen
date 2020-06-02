@@ -22,11 +22,10 @@
                                 "children": [
                                     {
                                         "text": "Caption",
-                                        "children": [
-                                            {
-                                                "text": "Caption field"
-                                            }
-                                        ],
+                                        "data":{
+                                            "placeholder":"Caption Field",
+                                            "user_value":""
+                                        },
                                         "type":"field-setting",
                                         "icon": "fa fa-cog",
                                         "li_attr": {

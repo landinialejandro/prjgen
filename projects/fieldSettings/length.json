@@ -1,0 +1,13 @@
+{
+    "text": "Lenght",
+    "children": [
+        {
+            "text": "Lenght string o value"
+        }
+    ],
+    "type":"field-setting",
+    "icon": "fa fa-cog",
+    "li_attr": {
+        "type": "integer"
+    }
+}
