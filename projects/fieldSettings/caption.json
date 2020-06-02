@@ -1,18 +1,8 @@
 {
     "text": "Caption",
-    "children": [
-        {
-            "text": "Caption field",
-            "type":"default-field-setting"
-        },
-        {
-            "text": "Titulo del campo",
-            "type":"user-field-setting"
-        }
-    ],
     "data":{
         "placeholder":"Caption Field",
-        "user-value":""
+        "user_value":""
     },
     "type":"field-setting",
     "icon": "fa fa-cog",
