@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="dist/plugins/fontawesome-free/css/all.min.css">
   <link rel="stylesheet" href="dist/dist_L/plugins/jstree/dist/themes/default/style.min.css" />
   <link rel="stylesheet" href="dist/dist/css/adminlte.min.css">
-  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <!-- <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet"> -->
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -111,6 +111,14 @@
                 </div>
               </div>
             </div>
+            <div class="col-lg-6">
+              <div class="card">
+                <div class="card-body">
+                  <h3 class="card-title">Field options</h3><br>
+                  <div class="field-options container"></div>
+                </div>
+              </div>
+            </div>
           </div>
           <button class="btn btn-success getjson"> get json</button>
         </div><!-- container-fluid -->
@@ -133,32 +141,143 @@
   <script src="dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="dist/dist_L/plugins/jstree/dist/jstree.min.js"></script>
   <script src="dist/dist/js/adminlte.min.js"></script>
-
+  <!-- <i class=" fa-cog"></i> -->
   <script>
     $(function () {
-      $('#project_tree').jstree(
-        {
-          "core": {
-            "check_callback": true,
-            "data": {
-              "url": "projects/project.json",
-              "dataType": "json" // needed only if you do not supply JSON headers
-            }
+      $('#project_tree').jstree({
+        "core": {
+          "check_callback": true,
+          "data": {
+            "url": "projects/project.json",
+            "dataType": "json" // needed only if you do not supply JSON headers
+          }
+        },
+        "types": {
+          "#": {
+            "max_children": 3,
+            "icon": "fas fa-project-diagram"
           },
-          "types": {
-            "#": {"max_children": 3, "icon" : "fas fa-project-diagram"},
-            "default": { "max_children": 3, "max_depth": 5, "icon" : "fas fa-project-diagram" }
+          "group": {
+            "max_children": 3,
+            "max_depth": 5,
+            "icon": "far fa-object-group"
           },
-          "plugins": [ "dnd", "search", "state", "types", "wholerow","contextmenu" ]
-        }
-      );
+          "table": {
+            "max_children": 3,
+            "max_depth": 5,
+            "icon": "fas fa-table"
+          },
+          "field": {
+            "max_children": 3,
+            "max_depth": 5,
+            "icon": "fas fa-project-diagram"
+          }
+        },
+        'contextmenu': {
+          'items': function (node) {
+            return contextMenu(node, this)
+          }
+        },
+        "plugins": ["dnd", "search", "state", "types", "wholerow", "contextmenu"]
+      });
     });
-    $(".getjson").on('click', function () {
-
-      var treeData = $('#project_tree').jstree(true).get_json('#', { flat: false });// set flat:true to get all nodes in 1-level json
+    $(".getjson").on('click', function (e) {
+      var tree = $('#project_tree').jstree(true);
+      var selTreeData = tree.get_selected(); // set flat:true to get all nodes in 1-level json
+      var treeData = tree.get_json(selTreeData, {
+        flat: false
+      }); // set flat:true to get all nodes in 1-level json
+      var childrens = tree.get_children_dom(selTreeData);
       var jsonData = JSON.stringify(treeData);
-      console.log(jsonData);
-    })
+      // console.log(jsonData);
+      // console.log(childrens);
+      doForm(childrens);
+
+    });
+
+    function contextMenu(node, $this) { //create adtional context menu
+      var tmp = $.jstree.defaults.contextmenu.items();
+      delete tmp.create.action;
+      tmp.create.label = "New object";
+      tmp.create.submenu = {
+        "create_group": {
+          "separator_after": true,
+          "label": "Group",
+          "action": function (data) { //TODO function to add group
+            var inst = $.jstree.reference(data.reference);
+            var obj = inst.get_node(data.reference);
+            // console.log(data);
+            // console.log(inst);
+            console.log(obj);
+          }
+        },
+        "create_table": {
+          "separator_after": true,
+          "label": "Table",
+          "action": function (data) {
+            var inst = $.jstree.reference(data.reference),
+              obj = inst.get_node(data.reference);
+            inst.create_node(obj, {
+              type: "table"
+            }, "last", function (new_node) {
+              setTimeout(function () {
+                inst.edit(new_node);
+              }, 0);
+            });
+          }
+        },
+        "create_field": {
+          "label": "Field",
+          "action": function (data) {
+            var inst = $.jstree.reference(data.reference),
+              obj = inst.get_node(data.reference);
+            inst.create_node(obj, {
+              type: "field"
+            }, "last", function (new_node) {
+              setTimeout(function () {
+                inst.edit(new_node);
+              }, 0);
+            });
+          }
+        }
+      }
+      if ($this.get_type(node) === "field_") {
+        delete tmp.create;
+      }
+      return tmp;
+    }
+
+    function doForm(obj) {
+      var tree = $('#project_tree').jstree(true);
+      var html = '<form>';
+      $(obj).each(function () {
+        //console.log(this);
+        var json_obj = tree.get_json(this.id);
+        html += '<div class="form-group row">' +
+          '<label for="' + this.id + '" class="col-sm-1-12 col-form-label">' + json_obj.text +
+          ': </label>' +
+          '<div class="col-sm-1-12">';
+        if (this.type === 'text' || this.type === 'integer') {
+          json_obj.children.forEach(element => {
+            html += '<input type="text" class="form-control" name="' + this.id + '" id="' + this.id +
+              '" placeholder="" value = "' + element.text + '" >'
+          });
+        };
+        if (this.type === 'options') {
+          json_obj.children.forEach(element => {
+            html += '<select class="custom-select" name="' + this.id + '" id="' + this.id + '">'
+              element.children.forEach(element => {
+                html += '<option value="'+element.text+'">'+element.text+'</option>';
+              });
+            html += '</select>';
+          });
+        }
+        html += '</div>' +
+          '</div>'
+      })
+      html += '</form>';
+      $('.field-options').html(html);
+    };
   </script>
 
 </body>
