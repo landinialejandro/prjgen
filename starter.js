@@ -1,6 +1,5 @@
 var fields_settings = [];
 $(function () {
-  cosntructFieldsSettings();
 
   $('#project_tree').jstree({
     "core": {
@@ -27,18 +26,18 @@ $(function () {
         "icon": "fas fa-project-diagram"
       },
       "group": {
-        "max_children": 15,
-        "max_depth": 10,
+        "max_children": 20,
+        "max_depth": 20,
         "icon": "far fa-object-group"
       },
       "table": {
-        "max_children": 15,
-        "max_depth": 10,
+        "max_children": 20,
+        "max_depth": 20,
         "icon": "fas fa-table"
       },
       "field": {
-        "max_children": 3,
-        "max_depth": 10,
+        "max_children": 20,
+        "max_depth": 20,
         "icon": "fas fa-stream"
       }
     },
@@ -49,6 +48,7 @@ $(function () {
     },
     "plugins": ["dnd", "search", "state", "types", "contextmenu"]
   });
+  cosntructFieldsSettings();
 });
 
 $(".getjson").on('click', function (e) {
@@ -59,7 +59,9 @@ $(".getjson").on('click', function (e) {
   }); // set flat:true to get all nodes in 1-level json
   var childrens = tree.get_children_dom(selTreeData);
   //var jsonData = JSON.stringify(treeData);
-  var text = treeData.text + ' settings, id: ' + treeData.id + ', type: ' + treeData.type;
+  var text = '<span class = "right badge badge-success">'+ treeData.type + 
+            '</span><span class="right badge badge-danger">' + treeData.text + 
+            '</span><span class="right badge badge-warning">' + treeData.id +'</span>';
   $('.card-title').html(text);
   doForm(childrens);
 
@@ -119,8 +121,18 @@ function doForm(obj) {
       '<label for="' + this.id + '" class="">' + json_obj.text +
       ': </label>';
     if (this.type === 'text' || this.type === 'integer') {
-      html += '<input type="text" class="form-control" name="' + this.id + '" id="' + this.id +
-        '" placeholder="' + json_obj.data.placeholder + '" value = "' + json_obj.data.user_value + '" >';
+        var value = json_obj.data.user_value;
+        var placeholder = json_obj.data.placeholder;
+        if (this.lang){
+            json_obj.data.user_value.forEach(element =>{
+                value = element.text;
+                html +='<div class="input-group mb-3"><div class="input-group-prepend"><span class="input-group-text">'+element.id+'</span></div>';
+                html +='<input type="text" class="form-control" placeholder="' + placeholder + '" value = "' + value + '" ></div>';
+            });
+        }else{
+            html += '<input type="text" class="form-control" name="' + this.id + '" id="' + this.id +
+              '" placeholder="' + placeholder + '" value = "' + value + '" >';
+        }
     }
     if (this.type === 'options') {
       json_obj.children.forEach(element => {
@@ -147,5 +159,5 @@ function cosntructFieldsSettings() {
   });
   setTimeout(function () {
     console.log(JSON.stringify(fields_settings));
-  }, 500);
+  }, 1500);
 }

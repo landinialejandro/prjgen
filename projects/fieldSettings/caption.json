@@ -1,12 +1,22 @@
 {
     "text": "Caption",
-    "data":{
-        "placeholder":"Caption Field",
-        "user_value":""
+    "data": {
+        "placeholder": "Caption Field",
+        "user_value": [
+            {
+                "id": "en",
+                "text": ""
+            },
+            {
+                "id": "es",
+                "text": ""
+            }
+        ]
     },
-    "type":"field-setting",
+    "type": "field-setting",
     "icon": "fa fa-cog",
     "li_attr": {
-        "type": "text"
+        "type": "text",
+        "lang": "en"
     }
 }

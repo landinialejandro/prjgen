@@ -1,13 +1,22 @@
 {
     "text": "Description",
-    "children": [
-        {
-            "text": "Description and field helper"
-        }
-    ],
+    "data": {
+        "placeholder": "Description user helper",
+        "user_value": [
+            {
+                "id": "en",
+                "text": ""
+            },
+            {
+                "id": "es",
+                "text": ""
+            }
+        ]
+    },
     "type":"field-setting",
     "icon": "fa fa-cog",
     "li_attr": {
-        "type": "text"
+        "type": "text",
+        "lang":"en"
     }
 }
