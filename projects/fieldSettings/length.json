@@ -1,13 +1,13 @@
 {
     "text": "Lenght",
-    "children": [
-        {
-            "text": "Lenght string o value"
-        }
-    ],
+    "data": {
+        "placeholder": "Lenght string o value",
+        "user_value": ""
+    },
     "type":"field-setting",
     "icon": "fa fa-cog",
     "li_attr": {
         "type": "integer"
-    }
+    },
+    "order":4
 }

@@ -1,13 +1,13 @@
 {
     "text": "Precision",
-    "children": [
-        {
-            "text": "Presicion value"
-        }
-    ],
+    "data": {
+        "placeholder": "Presicion value",
+        "user_value": ""
+    },
     "type":"field-setting",
     "icon": "fa fa-cog",
     "li_attr": {
         "type": "integer"
-    }
+    },
+    "order":6
 }

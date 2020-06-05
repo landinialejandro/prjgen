@@ -18,6 +18,7 @@
     "type":"field-setting",
     "icon": "fa fa-cog",
     "li_attr": {
-        "type": "option"
-    }
+        "type": "options"
+    },
+    "order":7
 }

@@ -34,5 +34,6 @@
     "icon": "fa fa-cog",
     "li_attr": {
         "type": "options"
-    }
+    },
+    "order":3
 }
