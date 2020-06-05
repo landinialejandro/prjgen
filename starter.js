@@ -15,10 +15,18 @@ $(".getjson").on('click', function (e) {
 
 });
 $(".save-app-data").on('click', function (e) {
-
 	$('.form-node').each(function () {
-		console.log(this);
-		console.log(getJsonNode(this.dataset.nodeid));
+		var obj_node = $('#project_tree').jstree(true).get_node(this.dataset.nodeid);
+		console.log(obj_node);
+		if (obj_node.li_attr.lang){
+			console.log('con lang');
+
+		}else{
+			//lang undefined
+			console.log('sin lang');
+			obj_node.data.user_value=$(this).val();
+		}
+
 	});
 
 });
