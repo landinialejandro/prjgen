@@ -34,6 +34,15 @@ if(isset($_GET['operation'])) {
 				$parn = isset($_GET['parent']) && $_GET['parent'] !== '#' ? $_GET['parent'] : '/';
 				$rslt = $fs->copy($node, $parn);
 				break;
+            case 'save_file':
+				$node = isset($_GET['id']) && $_GET['id'] !== '#' ? $_GET['id'] : '/';
+				$parn = isset($_GET['text']) ? $_GET['text'] : '';
+                
+                file_put_contents($node, $param);
+                
+                //$rslt = $fs->save($node, $parn);
+                
+            break;
 			default:
 				throw new Exception('Unsupported operation: ' . $_GET['operation']);
 				break;

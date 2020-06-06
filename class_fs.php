@@ -155,6 +155,9 @@ class fs
 		rename($dir, $new);
 		return array('id' => $this->id($new));
 	}
+	public function save($id, $par){
+
+	}
 	public function copy($id, $par) {
 		$dir = $this->path($id);
 		$par = $this->path($par);

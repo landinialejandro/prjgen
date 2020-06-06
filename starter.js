@@ -30,16 +30,13 @@ $(".saveproject").on('click', function (e) {
 	console.log(jsonData);
 	updateTree();
 
-	$.ajax({
-		type: "POST",
-		url: "starter.php",
-		data: "data",
-		dataType: "json",
-		success: function (res) {
-			
-		}
-	});
-
+	$.get('starter.php?operation=save_file', { 'type': 'json', 'id': 'projects/project.json', 'text': jsonData })
+		.done(function (d) {
+			console.log(d);
+		})
+		.fail(function () {
+			//data.instance.refresh();
+		});
 
 });
 
@@ -51,7 +48,7 @@ function updateData() {
 	$('.form-node').each(function () {
 		var obj_node = $('#project_tree').jstree(true).get_node(this.dataset.nodeid);
 		if (obj_node.li_attr.lang) {
-			obj_node.data.user_value[this.dataset.index].text=$(this).val();
+			obj_node.data.user_value[this.dataset.index].text = $(this).val();
 		} else {
 			//lang undefined
 			obj_node.data.user_value = $(this).val();
@@ -199,7 +196,7 @@ function constructTree(data) {
 			},
 			"types": {
 				"#": {
-					"max_children": 3,
+					"max_children": 9,
 					"icon": "fas fa-project-diagram"
 				},
 				"group": {
@@ -270,12 +267,15 @@ function constructTree(data) {
 			}
 		})
 		.on('rename_node.jstree', function (e, data) {
-			$.get('starter.php?operation=rename_node', { 'id' : data.node.id, 'text' : data.text })
-				.done(function (d) {
-					data.instance.set_id(data.node, d.id);
-				})
-				.fail(function () {
-					data.instance.refresh();
-				});
+			if (data.node.type === "#") {
+				alert('rename project file?')
+				// $.get('starter.php?operation=rename_node', { 'id' : data.node.id, 'text' : data.text })
+				// 	.done(function (d) {
+				// 		data.instance.set_id(data.node, d.id);
+				// 	})
+				// 	.fail(function () {
+				// 		data.instance.refresh();
+				// 	});
+			}
 		});
 }
