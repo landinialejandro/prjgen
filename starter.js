@@ -7,28 +7,45 @@ $(function () {
 	cosntructFieldsSettings();
 });
 
+$('.node-options').on('click', '.btn-expand', function () {
+	var nodeid = this.dataset.nodeid;
+	var container = $('.' + nodeid);
+	if (!container.hasClass('active')) {
+		container.css({
+			opacity: 0
+		}).slideDown("slow").animate({
+			opacity: 1
+		});
+		container.addClass('active');
+		$(this).text('Contract lang options');
+	} else {
+		container.animate({
+			opacity: 0
+		}).slideUp("slow");
+		container.removeClass('active');
+		$(this).text('Expand lang options');
+	}
+});
+
 $(".getjson").on('click', function (e) {
 	var treeData = getJsonNode();
 	var jsonData = JSON.stringify(treeData);
 	console.log(jsonData);
 	updateTree();
-
 });
+
 $(".save-app-data").on('click', function (e) {
 	$('.form-node').each(function () {
 		var obj_node = $('#project_tree').jstree(true).get_node(this.dataset.nodeid);
 		console.log(obj_node);
-		if (obj_node.li_attr.lang){
+		if (obj_node.li_attr.lang) {
 			console.log('con lang');
-
-		}else{
+		} else {
 			//lang undefined
 			console.log('sin lang');
-			obj_node.data.user_value=$(this).val();
+			obj_node.data.user_value = $(this).val();
 		}
-
 	});
-
 });
 
 function getJsonNode(id = '#', flat = false) {
@@ -80,7 +97,6 @@ function createNode(data, type) {
 	} else {
 		childs = [];
 	}
-
 	inst.create_node(obj, {
 		type: type,
 		text: "new_" + type + "_" + (obj.children.length + 1),
@@ -103,11 +119,16 @@ function constructForm(obj) {
 			var value = node_obj.data.user_value;
 			var placeholder = node_obj.data.placeholder;
 			if (this.lang) {
+				html += '<div class="expandableContent ' + this.id + '">';
+				var i = 0;
 				node_obj.data.user_value.forEach(element => {
 					value = element.text;
 					html += '<div class="input-group mb-3"><div class="input-group-prepend"><span class="input-group-text">' + element.id + '</span></div>';
 					html += '<input type="text" class="form-control form-node" data-nodeid="' + this.id + '" placeholder="' + placeholder + '" value = "' + value + '" ></div>';
+					i += 1;
 				});
+				html += '</div>';
+				html += '<button type="button" class="btn btn-block btn-default btn-xs btn-expand" data-nodeid="' + this.id + '" >Expand Lang options</button>';
 			} else {
 				html += '<input type="text" class="form-control form-node" data-nodeid="' + this.id + '" name="' + this.id + '" id="' + this.id +
 					'" placeholder="' + placeholder + '" value = "' + value + '" >';
@@ -125,7 +146,7 @@ function constructForm(obj) {
 		html += '</div>';
 	});
 	html += '</form>';
-	$('.field-options').html(html);
+	$('.node-options').html(html);
 }
 
 function cosntructFieldsSettings() {
@@ -153,7 +174,6 @@ function constructTree(data) {
 			"core": {
 				"data": data,
 				'check_callback': function (o, n, p, i, m) {
-
 					if (m && m.dnd && m.pos !== 'i') {
 						return false;
 					}
