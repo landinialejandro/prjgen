@@ -16,9 +16,11 @@
     .expandableContent {
       display: none;
     }
-    .expandableContent .first {
-      display:block;
+
+    .expandableContent.default {
+      display: block;
     }
+
   </style>
 </head>
 
@@ -115,7 +117,7 @@
               <div class="card card-outline card-success">
                 <div class="card-header">
                   Project tree
-                  <div class=" float-right"><button class="btn btn-success btn-xs getjson"> get json</button></div>
+                  <div class=" float-right"><button class="btn btn-success btn-xs saveproject">save project</button></div>
                 </div>
                 <div class="card-body">
                   <div id="project_tree">
@@ -147,11 +149,14 @@
       <div class="p-3">
         <h5>Title</h5>
         <p>Sidebar content</p>
-      </div>infolass="float-right d-none d-sm-inline">
-      simple php project generator for
-  </div>
-  <strong>Generation 2020 </strong>
-  </footer>
+      </div>
+    </aside>
+    <footer class="main-footer">
+      <div class="float-right d-none d-sm-inline">
+        simple php project generator
+      </div>
+      <strong>Generation 2020 </strong>
+    </footer>
   </div>
   <script src="dist/plugins/jquery/jquery.min.js"></script>
   <script src="dist/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>

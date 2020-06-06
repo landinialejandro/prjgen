@@ -1,4 +1,5 @@
 <?php
+include('class_fs.php');
 class fs
 {
 	protected $base = null;

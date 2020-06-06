@@ -10,43 +10,54 @@ $(function () {
 $('.node-options').on('click', '.btn-expand', function () {
 	var nodeid = this.dataset.nodeid;
 	var container = $('.' + nodeid);
-	if (!container.hasClass('active')) {
-		container.css({
-			opacity: 0
-		}).slideDown("slow").animate({
-			opacity: 1
-		});
-		container.addClass('active');
-		$(this).text('Contract lang options');
-	} else {
-		container.animate({
-			opacity: 0
-		}).slideUp("slow");
+	if (container.hasClass('active')) {
+
+		container.slideUp("slow");
 		container.removeClass('active');
-		$(this).text('Expand lang options');
+		$(this).text('+');
+
+	} else {
+
+		container.slideDown("slow");
+		container.addClass('active');
+		$(this).text('-');
 	}
 });
 
-$(".getjson").on('click', function (e) {
+$(".saveproject").on('click', function (e) {
 	var treeData = getJsonNode();
 	var jsonData = JSON.stringify(treeData);
 	console.log(jsonData);
 	updateTree();
+
+	$.ajax({
+		type: "POST",
+		url: "starter.php",
+		data: "data",
+		dataType: "json",
+		success: function (res) {
+			
+		}
+	});
+
+
 });
 
 $(".save-app-data").on('click', function (e) {
+	updateData();
+});
+
+function updateData() {
 	$('.form-node').each(function () {
 		var obj_node = $('#project_tree').jstree(true).get_node(this.dataset.nodeid);
-		console.log(obj_node);
 		if (obj_node.li_attr.lang) {
-			console.log('con lang');
+			obj_node.data.user_value[this.dataset.index].text=$(this).val();
 		} else {
 			//lang undefined
-			console.log('sin lang');
 			obj_node.data.user_value = $(this).val();
 		}
 	});
-});
+};
 
 function getJsonNode(id = '#', flat = false) {
 	var tree = $('#project_tree').jstree(true);
@@ -119,16 +130,17 @@ function constructForm(obj) {
 			var value = node_obj.data.user_value;
 			var placeholder = node_obj.data.placeholder;
 			if (this.lang) {
-				html += '<div class="expandableContent ' + this.id + '">';
 				var i = 0;
 				node_obj.data.user_value.forEach(element => {
 					value = element.text;
+					var active = i === 0 ? " default " : "";
+					html += '<div class="expandableContent ' + active + this.id + '">';
 					html += '<div class="input-group mb-3"><div class="input-group-prepend"><span class="input-group-text">' + element.id + '</span></div>';
-					html += '<input type="text" class="form-control form-node" data-nodeid="' + this.id + '" placeholder="' + placeholder + '" value = "' + value + '" ></div>';
+					html += '<input type="text" class="form-control form-node" data-nodeid="' + this.id + '" data-index="' + i + '" placeholder="' + placeholder + '" value = "' + value + '" ></div>';
+					html += '</div>';
 					i += 1;
 				});
-				html += '</div>';
-				html += '<button type="button" class="btn btn-block btn-default btn-xs btn-expand" data-nodeid="' + this.id + '" >Expand Lang options</button>';
+				html += '<button type="button" class="btn btn-block btn-default btn-xs btn-expand" data-nodeid="' + this.id + '" >+</button>';
 			} else {
 				html += '<input type="text" class="form-control form-node" data-nodeid="' + this.id + '" name="' + this.id + '" id="' + this.id +
 					'" placeholder="' + placeholder + '" value = "' + value + '" >';
@@ -243,6 +255,7 @@ function constructTree(data) {
 			} else {
 				data.instance.set_id(data.node, data.node.id);
 			}
+			updateTree();
 		})
 		.on('changed.jstree', function (e, data) {
 			//console.log(data);
@@ -256,7 +269,13 @@ function constructTree(data) {
 				constructForm(childrens);
 			}
 		})
-		.on('create_node.jstree', function (e, data) {
-			updateTree();
+		.on('rename_node.jstree', function (e, data) {
+			$.get('starter.php?operation=rename_node', { 'id' : data.node.id, 'text' : data.text })
+				.done(function (d) {
+					data.instance.set_id(data.node, d.id);
+				})
+				.fail(function () {
+					data.instance.refresh();
+				});
 		});
 }
