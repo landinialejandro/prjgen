@@ -46,11 +46,15 @@ function updateData() {
 	});
 };
 function saveProject() {
-	var jsonData = JSON.stringify(getJsonNode());
+	//card-refresh
+	$('.card').CardRefresh('card-refresh');
+	var node = getJsonNode();
+	var file = node[0].text;
+	var jsonData = JSON.stringify(node);
 	$.ajax({
 		type: "POST",
 		url: "starter.php",
-		data: { 'operation': 'save_file', 'type': 'json', 'id': 'projects/project.json', 'text': jsonData },
+		data: { 'operation': 'save_file', 'type': 'json', 'id': 'projects/' + file +'.json', 'text': jsonData },
 		dataType: "json",
 		success: function (res) {
 			if (res == undefined) {
@@ -59,6 +63,7 @@ function saveProject() {
 			else {
 				alert(res.id);
 			}
+			$('.card').CardRefresh('onLoadDone');
 		},
 		error: function (res) {
 			if (res == undefined) {
@@ -67,6 +72,7 @@ function saveProject() {
 			else {
 				alert("Error : 468 " + res.id);
 			}
+			$('.card').CardRefresh('onLoadDone');
 		}
 	});
 }

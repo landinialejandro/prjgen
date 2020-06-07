@@ -155,11 +155,10 @@ class fs
 		return array('id' => $this->id($new));
 	}
 	public function save($id, $par){
-		$dir = $this->path($id);
-		if(is_file($dir)) {
-			file_put_contents($dir, $par);
+		if(!is_dir($id)) {
+			file_put_contents($id, $par);
 		}
-		return array('id' => $this->id($dir));
+		return array('id' => $this->id($id));
 	}
 	public function copy($id, $par) {
 		$dir = $this->path($id);
