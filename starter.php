@@ -1,50 +1,49 @@
 <?php 
-if(isset($_GET['operation'])) {
-	$fs = new fs(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'root' . DIRECTORY_SEPARATOR);
+include ('class_fs.php');
+if(isset($_REQUEST['operation'])) {
+	$fs = new fs('');
 	try {
 		$rslt = null;
-		switch($_GET['operation']) {
+		switch($_REQUEST['operation']) {
 			case 'get_node':
-				$node = isset($_GET['id']) && $_GET['id'] !== '#' ? $_GET['id'] : '/';
-				$rslt = $fs->lst($node, (isset($_GET['id']) && $_GET['id'] === '#'));
+				$node = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
+				$rslt = $fs->lst($node, (isset($_REQUEST['id']) && $_REQUEST['id'] === '#'));
 				break;
 			case "get_content":
-				$node = isset($_GET['id']) && $_GET['id'] !== '#' ? $_GET['id'] : '/';
+				$node = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
 				$rslt = $fs->data($node);
 				break;
 			case 'create_node':
-				$node = isset($_GET['id']) && $_GET['id'] !== '#' ? $_GET['id'] : '/';
-				$rslt = $fs->create($node, isset($_GET['text']) ? $_GET['text'] : '', (!isset($_GET['type']) || $_GET['type'] !== 'file'));
+				$node = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
+				$rslt = $fs->create($node, isset($_REQUEST['text']) ? $_REQUEST['text'] : '', (!isset($_REQUEST['type']) || $_REQUEST['type'] !== 'file'));
 				break;
 			case 'rename_node':
-				$node = isset($_GET['id']) && $_GET['id'] !== '#' ? $_GET['id'] : '/';
-				$rslt = $fs->rename($node, isset($_GET['text']) ? $_GET['text'] : '');
+				$node = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
+				$rslt = $fs->rename($node, isset($_REQUEST['text']) ? $_REQUEST['text'] : '');
 				break;
 			case 'delete_node':
-				$node = isset($_GET['id']) && $_GET['id'] !== '#' ? $_GET['id'] : '/';
+				$node = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
 				$rslt = $fs->remove($node);
 				break;
 			case 'move_node':
-				$node = isset($_GET['id']) && $_GET['id'] !== '#' ? $_GET['id'] : '/';
-				$parn = isset($_GET['parent']) && $_GET['parent'] !== '#' ? $_GET['parent'] : '/';
+				$node = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
+				$parn = isset($_REQUEST['parent']) && $_REQUEST['parent'] !== '#' ? $_REQUEST['parent'] : '/';
 				$rslt = $fs->move($node, $parn);
 				break;
 			case 'copy_node':
-				$node = isset($_GET['id']) && $_GET['id'] !== '#' ? $_GET['id'] : '/';
-				$parn = isset($_GET['parent']) && $_GET['parent'] !== '#' ? $_GET['parent'] : '/';
+				$node = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
+				$parn = isset($_REQUEST['parent']) && $_REQUEST['parent'] !== '#' ? $_REQUEST['parent'] : '/';
 				$rslt = $fs->copy($node, $parn);
 				break;
             case 'save_file':
-				$node = isset($_GET['id']) && $_GET['id'] !== '#' ? $_GET['id'] : '/';
-				$parn = isset($_GET['text']) ? $_GET['text'] : '';
+				$node = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
+				$parn = isset($_REQUEST['text']) ? $_REQUEST['text'] : '';
                 
-                file_put_contents($node, $param);
-                
-                //$rslt = $fs->save($node, $parn);
+                $rslt = $fs->save($node, $parn);
                 
             break;
 			default:
-				throw new Exception('Unsupported operation: ' . $_GET['operation']);
+				throw new Exception('Unsupported operation: ' . $_REQUEST['operation']);
 				break;
 		}
 		header('Content-Type: application/json; charset=utf-8');

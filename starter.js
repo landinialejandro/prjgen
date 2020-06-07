@@ -25,19 +25,9 @@ $('.node-options').on('click', '.btn-expand', function () {
 });
 
 $(".saveproject").on('click', function (e) {
-	var treeData = getJsonNode();
-	var jsonData = JSON.stringify(treeData);
-	console.log(jsonData);
+	updateData();
 	updateTree();
-
-	$.get('starter.php?operation=save_file', { 'type': 'json', 'id': 'projects/project.json', 'text': jsonData })
-		.done(function (d) {
-			console.log(d);
-		})
-		.fail(function () {
-			//data.instance.refresh();
-		});
-
+	saveProject();
 });
 
 $(".save-app-data").on('click', function (e) {
@@ -55,7 +45,31 @@ function updateData() {
 		}
 	});
 };
-
+function saveProject() {
+	var jsonData = JSON.stringify(getJsonNode());
+	$.ajax({
+		type: "POST",
+		url: "starter.php",
+		data: { 'operation': 'save_file', 'type': 'json', 'id': 'projects/project.json', 'text': jsonData },
+		dataType: "json",
+		success: function (res) {
+			if (res == undefined) {
+				alert("Error : 219");
+			}
+			else {
+				alert(res.id);
+			}
+		},
+		error: function (res) {
+			if (res == undefined) {
+				alert("Error : 465");
+			}
+			else {
+				alert("Error : 468 " + res.id);
+			}
+		}
+	});
+}
 function getJsonNode(id = '#', flat = false) {
 	var tree = $('#project_tree').jstree(true);
 	var nodeDataJson = tree.get_json(id, {

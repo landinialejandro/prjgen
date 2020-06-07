@@ -1,5 +1,4 @@
 <?php
-include('class_fs.php');
 class fs
 {
 	protected $base = null;
@@ -156,7 +155,11 @@ class fs
 		return array('id' => $this->id($new));
 	}
 	public function save($id, $par){
-
+		$dir = $this->path($id);
+		if(is_file($dir)) {
+			file_put_contents($dir, $par);
+		}
+		return array('id' => $this->id($dir));
 	}
 	public function copy($id, $par) {
 		$dir = $this->path($id);
@@ -177,4 +180,5 @@ class fs
 		}
 		return array('id' => $this->id($new));
 	}
+	
 }
