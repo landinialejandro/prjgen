@@ -160,6 +160,17 @@ class fs
 		}
 		return array('id' => $this->id($id));
 	}
+
+	public function getContent($id){
+		if(!is_dir($id) && is_file($id)) {
+			$content = file_get_contents($id);
+		}
+		return $content;
+	}
+
+	public function getJson($id){
+		return array('id' => $this->id($id),'content'=>$this->getContent($id));
+	}
 	public function copy($id, $par) {
 		$dir = $this->path($id);
 		$par = $this->path($par);

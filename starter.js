@@ -47,7 +47,7 @@ function updateData() {
 };
 function saveProject() {
 	//card-refresh
-	$('.card').CardRefresh('card-refresh');
+	//$('.card').CardRefresh('card-refresh');
 	var node = getJsonNode();
 	var file = node[0].text;
 	var jsonData = JSON.stringify(node);
@@ -63,7 +63,7 @@ function saveProject() {
 			else {
 				alert(res.id);
 			}
-			$('.card').CardRefresh('onLoadDone');
+			//$('.card').CardRefresh('onLoadDone');
 		},
 		error: function (res) {
 			if (res == undefined) {
@@ -72,7 +72,7 @@ function saveProject() {
 			else {
 				alert("Error : 468 " + res.id);
 			}
-			$('.card').CardRefresh('onLoadDone');
+			//$('.card').CardRefresh('onLoadDone');
 		}
 	});
 }
@@ -179,9 +179,9 @@ function constructForm(obj) {
 }
 
 function cosntructFieldsSettings() {
-	$.getJSON('projects/fieldSettings/_construct.json', function (data) {
+	$.getJSON('settings/fields/_construct.json', function (data) {
 		data.forEach(element => {
-			$.getJSON('projects/fieldSettings/' + element + '.json', function (data) {
+			$.getJSON('settings/fields/' + element + '.json', function (data) {
 				fields_settings.push(data);
 			});
 		});

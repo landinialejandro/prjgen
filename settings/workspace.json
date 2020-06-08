@@ -1,0 +1,17 @@
+[{
+    "text":"Last open",
+    "children":[{
+        "text":""
+    }],
+    "type": "workspace-setting",
+    "order":1
+},
+{
+    "text":"Open recent",
+    "children":[{
+        "text":""
+    }],
+    "type": "workspace-setting",
+    "order":2
+}
+]
