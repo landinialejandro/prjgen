@@ -48,7 +48,7 @@ if (isset($_REQUEST['operation'])) {
 				switch ($parn) {
 					case 'field-setting':
 						//
-						$dir = dirname(__FILE__) . "/settings/files";
+						$dir = dirname(__FILE__) . "/settings/fields";
 						$files = array_diff(scandir($dir), array('.', '..'));
 						$res=[];
 						foreach ($views as $file){
@@ -61,9 +61,7 @@ if (isset($_REQUEST['operation'])) {
 						throw new Exception('Unsupported operation json: ' . $parn);
 						break;
 				}
-
 				
-
 				break;
 			default:
 				throw new Exception('Unsupported operation: ' . $_REQUEST['operation']);
