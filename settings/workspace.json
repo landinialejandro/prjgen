@@ -1,17 +1,49 @@
-[{
-    "text":"Last open",
-    "children":[{
-        "text":""
-    }],
-    "type": "workspace-setting",
-    "order":1
-},
-{
-    "text":"Open recent",
-    "children":[{
-        "text":""
-    }],
-    "type": "workspace-setting",
-    "order":2
-}
+[
+    {
+        "id": "ws",
+        "text": "Workspace",
+        "children": [
+            {
+                "id": "last-open",
+                "text": "Last open",
+                "children": [
+                    {
+                        "text": "ProjectName_a.json",
+                        "state": {
+                            "loaded": true,
+                            "opened": true,
+                            "selected": false,
+                            "disabled": false
+                        }
+                    }
+                ],
+                "type": "ws-setting",
+                "order": 1,
+                "state": {
+                    "loaded": true,
+                    "opened": true,
+                    "selected": false,
+                    "disabled": false
+                }
+            },
+            {
+                "id": "recent-open",
+                "text": "Open recent",
+                "children": [
+                    "ProjectName_a.json",
+                    "Project.json"
+                ],
+                "type": "ws-setting",
+                "order": 2
+            }
+        ],
+        "li_attr" : { "class" : "nav-item has-treeview menu-open" },
+        "icon":"far fa-circle nav-icon",
+        "state": {
+            "loaded": true,
+            "opened": true,
+            "selected": false,
+            "disabled": false
+        }
+    }
 ]

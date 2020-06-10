@@ -61,19 +61,7 @@
                   <i class="right fas fa-angle-left"></i>
                 </p>
               </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="#" class="nav-link active">
-                    <i class="nav-icon far fa-circle text-warning"></i>
-                    <p>App Editor</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="#" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Open Recent</p>
-                  </a>
-                </li>
+              <ul class="nav nav-treeview" id="ws_tree">
               </ul>
             </li>
             <li class="nav-item">
@@ -113,10 +101,10 @@
 
           <div class="row">
             <div class="col-lg-5">
-              <div class="card card-outline card-success">
+              <div class="card card-outline card-success card-project">
                 <div class="card-header">
                   Project tree
-                  <div class=" float-right"><button class="btn btn-success btn-xs saveproject">save project</button>
+                  <div class=" float-right"><button class="btn btn-success btn-xs saveproject" data-card-widget="card-refresh" data-source="starter.html" data-source-selector="#card-refresh-content" data-load-on-init="false" >save project</button>
                   </div>
                 </div>
                 <div class="card-body">
@@ -128,7 +116,7 @@
               <div class="card card-outline card-primary">
                 <div class="card-header">
                   Item settings
-                  <div class=" float-right"><button class="btn btn-info btn-xs save-app-data" data-card-widget="card-refresh" data-source="starter.html" data-load-on-init="false" > update data</button>
+                  <div class=" float-right"><button class="btn btn-info btn-xs save-app-data" > update data</button>
                   </div>
                 </div>
                 <div class="card-body">

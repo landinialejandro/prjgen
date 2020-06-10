@@ -1,5 +1,9 @@
 var fields_settings = [];
 $(function () {
+	$.get("settings/workspace.json")
+	.done(function(data){
+		constructWSTree(data);
+	});
 	$.get("projects/project.json")
 		.done(function (data) {
 			constructTree(data);
@@ -17,7 +21,6 @@ $('.node-options').on('click', '.btn-expand', function () {
 		$(this).text('+');
 
 	} else {
-
 		container.slideDown("slow");
 		container.addClass('active');
 		$(this).text('-');
@@ -46,8 +49,6 @@ function updateData() {
 	});
 };
 function saveProject() {
-	//card-refresh
-	//$('.card').CardRefresh('card-refresh');
 	var node = getJsonNode();
 	var file = node[0].text;
 	var jsonData = JSON.stringify(node);
@@ -63,16 +64,14 @@ function saveProject() {
 			else {
 				alert(res.id);
 			}
-			//$('.card').CardRefresh('onLoadDone');
 		},
 		error: function (res) {
 			if (res == undefined) {
 				alert("Error : 465");
 			}
 			else {
-				alert("Error : 468 " + res.id);
+				alert("Error : 468 " + res.responseText);
 			}
-			//$('.card').CardRefresh('onLoadDone');
 		}
 	});
 }
@@ -289,13 +288,14 @@ function constructTree(data) {
 		.on('rename_node.jstree', function (e, data) {
 			if (data.node.type === "#") {
 				alert('rename project file?')
-				// $.get('starter.php?operation=rename_node', { 'id' : data.node.id, 'text' : data.text })
-				// 	.done(function (d) {
-				// 		data.instance.set_id(data.node, d.id);
-				// 	})
-				// 	.fail(function () {
-				// 		data.instance.refresh();
-				// 	});
 			}
 		});
+}
+function constructWSTree(data){
+	$('#ws_tree')
+		.jstree({
+			"core": {
+				"data": data
+			}
+		})	
 }

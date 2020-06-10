@@ -35,12 +35,13 @@ if (isset($_REQUEST['operation'])) {
 				$parn = isset($_REQUEST['parent']) && $_REQUEST['parent'] !== '#' ? $_REQUEST['parent'] : '/';
 				$rslt = $fs->copy($node, $parn);
 				break;
-			case 'save_file':
-				$node = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
-				$parn = isset($_REQUEST['text']) ? $_REQUEST['text'] : '';
-
-				$rslt = $fs->save($node, $parn);
-
+				case 'save_file':
+					$node = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
+					$parn = isset($_REQUEST['text']) ? $_REQUEST['text'] : '';
+					
+					$rslt = $fs->save($node, $parn);
+					
+				break;
 			case 'get_json':
 				$id = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
 				$parn = isset($_REQUEST['text']) ? $_REQUEST['text'] : '';
