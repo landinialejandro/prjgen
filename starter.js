@@ -3,6 +3,7 @@ $(function () {
 	$.get("settings/workspace.json")
 	.done(function(data){
 		constructWSTree(data);
+		//openPrj();
 	});
 	$.get("projects/project.json")
 		.done(function (data) {
@@ -10,6 +11,13 @@ $(function () {
 		});
 	cosntructFieldsSettings();
 });
+
+function openPrj(lastfile=true){
+	var tree = $('#ws_tree').jstree(true);
+	var childrens = tree.get_node("last-open");
+	console.log(childrens);
+
+};
 
 $('.node-options').on('click', '.btn-expand', function () {
 	var nodeid = this.dataset.nodeid;
@@ -297,5 +305,13 @@ function constructWSTree(data){
 			"core": {
 				"data": data
 			}
-		})	
+		})
+		.on('loaded.jstree',function(e,data){
+			var tree = $('#ws_tree').jstree(true);
+			console.log(data);
+			var lo =data.instance.get_json('last-open', {
+				flat: false
+			});
+			console.log(lo);
+		})
 }

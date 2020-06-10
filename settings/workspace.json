@@ -8,22 +8,13 @@
                 "text": "Last open",
                 "children": [
                     {
-                        "text": "ProjectName_a.json",
-                        "state": {
-                            "loaded": true,
-                            "opened": true,
-                            "selected": false,
-                            "disabled": false
-                        }
+                        "text": "ProjectName_a.json"
                     }
                 ],
                 "type": "ws-setting",
                 "order": 1,
                 "state": {
-                    "loaded": true,
-                    "opened": true,
-                    "selected": false,
-                    "disabled": false
+                    "opened": true
                 }
             },
             {
@@ -40,10 +31,7 @@
         "li_attr" : { "class" : "nav-item has-treeview menu-open" },
         "icon":"far fa-circle nav-icon",
         "state": {
-            "loaded": true,
-            "opened": true,
-            "selected": false,
-            "disabled": false
+            "opened": true
         }
     }
 ]
