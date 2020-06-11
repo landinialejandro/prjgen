@@ -9,7 +9,7 @@
   <title>AdminLTE 3 | Starter</title>
   <link id="browser_favicon" rel="shortcut icon" href="dist/dist_L/logo/logo.png">
   <link rel="stylesheet" href="dist/plugins/fontawesome-free/css/all.min.css">
-  <link rel="stylesheet" href="dist/dist_L/plugins/jstree/dist/themes/default/style.min.css" />
+  <link rel="stylesheet" href="dist/dist_L/plugins/jstree/dist/themes/default/style.css" />
   <link rel="stylesheet" href="dist/dist/css/adminlte.min.css">
   <!-- <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet"> -->
   <style>
@@ -19,6 +19,17 @@
 
     .expandableContent.default {
       display: block;
+    }
+
+    #ws_tree .jstree-ocl {
+      display: none;
+    }
+
+    #ws_tree .jstree-node { background:transparent; } 
+
+    #ws_tree .jstree-default .jstree-anchor {
+      line-height: 24px;
+      height: auto;
     }
   </style>
 </head>
@@ -104,7 +115,9 @@
               <div class="card card-outline card-success card-project">
                 <div class="card-header">
                   Project tree
-                  <div class=" float-right"><button class="btn btn-success btn-xs saveproject" data-card-widget="card-refresh" data-source="starter.html" data-source-selector="#card-refresh-content" data-load-on-init="false" >save project</button>
+                  <div class=" float-right"><button class="btn btn-success btn-xs saveproject"
+                      data-card-widget="card-refresh" data-source="starter.html"
+                      data-source-selector="#card-refresh-content" data-load-on-init="false">save project</button>
                   </div>
                 </div>
                 <div class="card-body">
@@ -116,7 +129,7 @@
               <div class="card card-outline card-primary">
                 <div class="card-header">
                   Item settings
-                  <div class=" float-right"><button class="btn btn-info btn-xs save-app-data" > update data</button>
+                  <div class=" float-right"><button class="btn btn-info btn-xs save-app-data"> update data</button>
                   </div>
                 </div>
                 <div class="card-body">

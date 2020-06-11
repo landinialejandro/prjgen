@@ -11,8 +11,9 @@
                         "text": "ProjectName_a.json"
                     }
                 ],
-                "type": "ws-setting",
+                "type": "lo-setting",
                 "order": 1,
+                "a_attr":{"class":"nav-link"},
                 "state": {
                     "opened": true
                 }
@@ -24,14 +25,17 @@
                     "ProjectName_a.json",
                     "Project.json"
                 ],
-                "type": "ws-setting",
+                "type": "ro-setting",
+                "a_attr":{"class":"nav-link"},
                 "order": 2
+                
             }
         ],
-        "li_attr" : { "class" : "nav-item has-treeview menu-open" },
-        "icon":"far fa-circle nav-icon",
+        "li_attr" : { "class" : "nav-item has-treeview" },
+        "a_attr":{"class":"nav-link"},
         "state": {
             "opened": true
-        }
+        },
+        "type": "#"
     }
 ]

@@ -1,21 +1,20 @@
 var fields_settings = [];
 $(function () {
 	$.get("settings/workspace.json")
-	.done(function(data){
-		constructWSTree(data);
-		//openPrj();
-	});
-	$.get("projects/project.json")
 		.done(function (data) {
-			constructTree(data);
+			constructWSTree(data);
 		});
+
 	cosntructFieldsSettings();
 });
 
-function openPrj(lastfile=true){
-	var tree = $('#ws_tree').jstree(true);
-	var childrens = tree.get_node("last-open");
-	console.log(childrens);
+function openPrj(file) {
+	if (file) {
+		$.get("projects/" + file)
+			.done(function (data) {
+				constructTree(data);
+			});
+	}
 
 };
 
@@ -63,7 +62,7 @@ function saveProject() {
 	$.ajax({
 		type: "POST",
 		url: "starter.php",
-		data: { 'operation': 'save_file', 'type': 'json', 'id': 'projects/' + file +'.json', 'text': jsonData },
+		data: { 'operation': 'save_file', 'type': 'json', 'id': 'projects/' + file + '.json', 'text': jsonData },
 		dataType: "json",
 		success: function (res) {
 			if (res == undefined) {
@@ -299,19 +298,44 @@ function constructTree(data) {
 			}
 		});
 }
-function constructWSTree(data){
+function constructWSTree(data) {
 	$('#ws_tree')
 		.jstree({
+			"check_callback": true,
+			"themes": { "dots": false, "icons":false },
 			"core": {
 				"data": data
+			},
+			"plugins": ["types"],
+			"types": {
+				"#": {
+					"max_children": 9,
+					"icon":"far fa-circle nav-icon"
+				},
+				"lo-setting": {
+					"max_children": 20,
+					"max_depth": 20,
+					"icon":"far fa-circle nav-icon text-warning"
+				},
+				"ro-setting": {
+					"max_children": 20,
+					"max_depth": 20,
+					"icon":"far fa-circle nav-icon text-info"
+				}
 			}
 		})
-		.on('loaded.jstree',function(e,data){
-			var tree = $('#ws_tree').jstree(true);
-			console.log(data);
-			var lo =data.instance.get_json('last-open', {
-				flat: false
-			});
-			console.log(lo);
+		.on('loaded.jstree', function (e, data) {
+			var file = data.instance.get_children_dom('last-open');
+			file = $(file).text();
+			openPrj(file)
+		})
+		.on('select_node.jstree', function (n,data, e) {
+			var type = data.node.type;
+			console.log(data.node);
+			if (type === 'default'){
+				var file = data.node.text;
+				$('#project_tree').jstree(true).destroy();
+				openPrj(file)
+			}
 		})
 }
