@@ -1,0 +1,26 @@
+{
+    "#": {
+        "max_children": 9,
+        "icon": "fas fa-project-diagram"
+    },
+    "group": {
+        "max_children": 20,
+        "max_depth": 20,
+        "icon": "far fa-object-group"
+    },
+    "table": {
+        "max_children": 20,
+        "max_depth": 20,
+        "icon": "fas fa-table"
+    },
+    "field": {
+        "max_children": 20,
+        "max_depth": 20,
+        "icon": "fas fa-stream"
+    },
+    "field-setting": {
+        "max_children": 20,
+        "max_depth": 20,
+        "icon": "fa fa-cog"
+    }
+}

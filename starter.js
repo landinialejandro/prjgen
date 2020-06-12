@@ -2,11 +2,7 @@ var fields_settings = [];
 var prjTree = false;
 
 $(function () {
-	$.get("settings/workspace.json")
-		.done(function (data) {
-			constructWSTree(data);
-		});
-
+	constructWSTree()
 	cosntructFieldsSettings();
 });
 
@@ -35,26 +31,16 @@ $(".saveproject").on('click', function (e) {
 
 $(".newproject").on('click', function (e) {
 	destroyProject();
-	openPrj('settings/blank_project.json');
+	constructTree('settings/blank_project.json')
 });
 
 $(".save-app-data").on('click', function (e) {
 	updateData();
 });
 
-function destroyProject(){
+function destroyProject() {
 	prjTree.destroy();
 }
-
-function openPrj(file) {
-	if (file) {
-		$.get("projects/" + file)
-			.done(function (data) {
-				constructTree(data);
-			});
-	}
-
-};
 
 function updateData() {
 	$('.form-node').each(function () {
@@ -219,151 +205,133 @@ function updateTree() {
 	tree.settings.core.data = treeData;
 }
 
-function constructTree(data) {
-	$('#project_tree')
-		.jstree({
-			"core": {
-				"data": data,
-				'check_callback': function (o, n, p, i, m) {
-					if (m && m.dnd && m.pos !== 'i') {
-						return false;
-					}
-					if (o === "move_node" || o === "copy_node") {
-						if (this.get_node(n).parent === this.get_node(p).id) {
+async function constructTree(file) {
+
+	try {
+		const types = await get_file('settings/prj_types.json');
+		const data = await get_file(file);
+
+		$('#project_tree')
+			.jstree({
+				"core": {
+					"data": data,
+					'check_callback': function (o, n, p, i, m) {
+						if (m && m.dnd && m.pos !== 'i') {
 							return false;
 						}
+						if (o === "move_node" || o === "copy_node") {
+							if (this.get_node(n).parent === this.get_node(p).id) {
+								return false;
+							}
+						}
+						return true;
 					}
-					return true;
+				},
+				"types": types,
+				'contextmenu': {
+					'items': function (node) {
+						return contextMenu(node, this);
+					}
+				},
+				"plugins": ["dnd", "search", "state", "types", "contextmenu"]
+			})
+			.on('create_node.jstree', function (e, data) {
+				var error = true;
+				var parentData = getJsonNode(data.node.parent);
+				if (parentData.type === 'table' && data.node.type === 'field' && error) {
+					error = false;
 				}
-			},
-			"types": {
-				"#": {
-					"max_children": 9,
-					"icon": "fas fa-project-diagram"
-				},
-				"group": {
-					"max_children": 20,
-					"max_depth": 20,
-					"icon": "far fa-object-group"
-				},
-				"table": {
-					"max_children": 20,
-					"max_depth": 20,
-					"icon": "fas fa-table"
-				},
-				"field": {
-					"max_children": 20,
-					"max_depth": 20,
-					"icon": "fas fa-stream"
-				},
-				"field-setting": {
-					"max_children": 20,
-					"max_depth": 20,
-					"icon": "fa fa-cog"
+				if (parentData.type === 'group' && data.node.type === 'table' && error) {
+					error = false;
 				}
-			},
-			'contextmenu': {
-				'items': function (node) {
-					return contextMenu(node, this);
+				if (parentData.type === '#' && data.node.type === 'group' && error) {
+					error = false;
 				}
-			},
-			"plugins": ["dnd", "search", "state", "types", "contextmenu"]
-		})
-		.on('create_node.jstree', function (e, data) {
-			var error = true;
-			var parentData = getJsonNode(data.node.parent);
-			if (parentData.type === 'table' && data.node.type === 'field' && error) {
-				error = false;
-			}
-			if (parentData.type === 'group' && data.node.type === 'table' && error) {
-				error = false;
-			}
-			if (parentData.type === '#' && data.node.type === 'group' && error) {
-				error = false;
-			}
-			if (parentData.type === 'field' && data.node.type === 'field-setting' && error) {
-				error = false;
-			}
-			if (parentData.type === 'field-setting' && data.node.type === 'default' && error) {
-				error = false;
-			}
+				if (parentData.type === 'field' && data.node.type === 'field-setting' && error) {
+					error = false;
+				}
+				if (parentData.type === 'field-setting' && data.node.type === 'default' && error) {
+					error = false;
+				}
 
-			if (error) {
-				data.instance.refresh();
-				console.log("can't add " + data.node.type + " into " + parentData.type);
-			} else {
-				data.instance.set_id(data.node, data.node.id);
-			}
-			updateTree();
-		})
-		.on('changed.jstree', function (e, data) {
-			//console.log(data);
-			if (data.action === "select_node") {
-				var tree = prjTree;
-				var childrens = tree.get_children_dom(data.node.id);
-				var text = '<span class = "right badge badge-success" title="type">' + data.node.type +
-					'</span><span class="right badge badge-danger" title="Name">' + data.node.text +
-					'</span><span class="right badge badge-warning" title="ID">' + data.node.id + '</span>';
-				$('.card-title').html(text);
-				constructForm(childrens);
-			}
-		})
-		.on('rename_node.jstree', function (e, data) {
-			if (data.node.type === "#") {
-				alert('rename project file?')
-			}
-		})
-		.on('loaded.jstree',function(){
-			prjTree = $('#project_tree').jstree(true);
-		});
-		
+				if (error) {
+					data.instance.refresh();
+					console.log("can't add " + data.node.type + " into " + parentData.type);
+				} else {
+					data.instance.set_id(data.node, data.node.id);
+				}
+				updateTree();
+			})
+			.on('changed.jstree', function (e, data) {
+				//console.log(data);
+				if (data.action === "select_node") {
+					var tree = prjTree;
+					var childrens = tree.get_children_dom(data.node.id);
+					var text = '<span class = "right badge badge-success" title="type">' + data.node.type +
+						'</span><span class="right badge badge-danger" title="Name">' + data.node.text +
+						'</span><span class="right badge badge-warning" title="ID">' + data.node.id + '</span>';
+					$('.card-title').html(text);
+					constructForm(childrens);
+				}
+			})
+			.on('rename_node.jstree', function (e, data) {
+				if (data.node.type === "#") {
+					alert('rename project file?')
+				}
+			})
+			.on('loaded.jstree', function () {
+				prjTree = $('#project_tree').jstree(true);
+			});
+
+	} catch (err) {
+		return console.log(err.message);
+	}
 }
 
-async function get_WS_types(){
-	// $.get('settings/ws_types.json')
-	// const myRequest = new Request('settings/ws_types.json');
-	// http://localhost:8080
-	fetch('settings/ws_types.json')
-	.then(response => {
-		if (!response.ok) {
-			throw new Error("HTTP error " + response.status);
+function get_file(file) {
+	const promise = new Promise(function (resolve, reject) {
+		if (file) {
+			$.get(file)
+				.done(function (data) {
+					resolve(data);
+				});
 		}
-		var data = response.json();
-		return data;
+		if (!file) {
+			reject(new Error('Not exist file'));
+		}
 	})
-	.then(json => {
-		this.users = json;
-		//console.log(this.users);
-	})
-	.catch(function () {
-		this.dataError = true;
-	})
+	return promise;
 }
 
+async function constructWSTree() {
+	try {
+		const types = await get_file('settings/ws_types.json');
+		const data = await get_file('settings/workspace.json');
 
-function constructWSTree(data) {
-	var types = get_WS_types();
-	$('#ws_tree')
-		.jstree({
-			"check_callback": true,
-			"core": {
-				"data": data
-			},
-			"plugins": ["types"],
-			"types": types
-		})
-		.on('loaded.jstree', function (e, data) {
-			var file = data.instance.get_children_dom('last-open');
-			file = $(file).text();
-			openPrj(file)
-		})
-		.on('select_node.jstree', function (n,data, e) {
-			var type = data.node.type;
-			console.log(data.node);
-			if (type === 'default'){
-				var file = data.node.text;
-				destroyProject();
-				openPrj(file)
-			}
-		})
+		$('#ws_tree')
+			.jstree({
+				"check_callback": true,
+				"core": {
+					"data": data
+				},
+				"plugins": ["types"],
+				"types": types
+			})
+			.on('loaded.jstree', function (e, data) {
+				var file = data.instance.get_children_dom('last-open');
+				file = $(file).text();
+				constructTree('projects/'+file);
+			})
+			.on('select_node.jstree', function (n, data, e) {
+				var type = data.node.type;
+				console.log(data.node);
+				if (type === 'default') {
+					var file = data.node.text;
+					destroyProject();
+					constructTree('projects/'+file);
+				}
+			})
+	} catch (err) {
+		return console.log(err.message);
+	}
 }
