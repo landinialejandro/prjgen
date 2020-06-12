@@ -1,4 +1,6 @@
 var fields_settings = [];
+var prjTree = false;
+
 $(function () {
 	$.get("settings/workspace.json")
 		.done(function (data) {
@@ -7,16 +9,6 @@ $(function () {
 
 	cosntructFieldsSettings();
 });
-
-function openPrj(file) {
-	if (file) {
-		$.get("projects/" + file)
-			.done(function (data) {
-				constructTree(data);
-			});
-	}
-
-};
 
 $('.node-options').on('click', '.btn-expand', function () {
 	var nodeid = this.dataset.nodeid;
@@ -35,18 +27,38 @@ $('.node-options').on('click', '.btn-expand', function () {
 });
 
 $(".saveproject").on('click', function (e) {
+	$('.card-project').addClass('container-disabled');
 	updateData();
 	updateTree();
 	saveProject();
+});
+
+$(".newproject").on('click', function (e) {
+	destroyProject();
+	openPrj('settings/blank_project.json');
 });
 
 $(".save-app-data").on('click', function (e) {
 	updateData();
 });
 
+function destroyProject(){
+	prjTree.destroy();
+}
+
+function openPrj(file) {
+	if (file) {
+		$.get("projects/" + file)
+			.done(function (data) {
+				constructTree(data);
+			});
+	}
+
+};
+
 function updateData() {
 	$('.form-node').each(function () {
-		var obj_node = $('#project_tree').jstree(true).get_node(this.dataset.nodeid);
+		var obj_node = prjTree.get_node(this.dataset.nodeid);
 		if (obj_node.li_attr.lang) {
 			obj_node.data.user_value[this.dataset.index].text = $(this).val();
 		} else {
@@ -55,6 +67,7 @@ function updateData() {
 		}
 	});
 };
+
 function saveProject() {
 	var node = getJsonNode();
 	var file = node[0].text;
@@ -71,6 +84,7 @@ function saveProject() {
 			else {
 				alert(res.id);
 			}
+			$('.card-project').removeClass('container-disabled');
 		},
 		error: function (res) {
 			if (res == undefined) {
@@ -79,11 +93,13 @@ function saveProject() {
 			else {
 				alert("Error : 468 " + res.responseText);
 			}
+			$('.card-project').removeClass('container-disabled');
 		}
 	});
 }
+
 function getJsonNode(id = '#', flat = false) {
-	var tree = $('#project_tree').jstree(true);
+	var tree = prjTree;
 	var nodeDataJson = tree.get_json(id, {
 		flat: flat
 	}); // set flat:true to get all nodes in 1-level json
@@ -198,7 +214,7 @@ function cosntructFieldsSettings() {
 }
 
 function updateTree() {
-	var tree = $('#project_tree').jstree(true);
+	var tree = prjTree;
 	var treeData = getJsonNode();
 	tree.settings.core.data = treeData;
 }
@@ -283,7 +299,7 @@ function constructTree(data) {
 		.on('changed.jstree', function (e, data) {
 			//console.log(data);
 			if (data.action === "select_node") {
-				var tree = $('#project_tree').jstree(true);
+				var tree = prjTree;
 				var childrens = tree.get_children_dom(data.node.id);
 				var text = '<span class = "right badge badge-success" title="type">' + data.node.type +
 					'</span><span class="right badge badge-danger" title="Name">' + data.node.text +
@@ -296,33 +312,45 @@ function constructTree(data) {
 			if (data.node.type === "#") {
 				alert('rename project file?')
 			}
+		})
+		.on('loaded.jstree',function(){
+			prjTree = $('#project_tree').jstree(true);
 		});
+		
 }
+
+async function get_WS_types(){
+	// $.get('settings/ws_types.json')
+	// const myRequest = new Request('settings/ws_types.json');
+	// http://localhost:8080
+	fetch('settings/ws_types.json')
+	.then(response => {
+		if (!response.ok) {
+			throw new Error("HTTP error " + response.status);
+		}
+		var data = response.json();
+		return data;
+	})
+	.then(json => {
+		this.users = json;
+		//console.log(this.users);
+	})
+	.catch(function () {
+		this.dataError = true;
+	})
+}
+
+
 function constructWSTree(data) {
+	var types = get_WS_types();
 	$('#ws_tree')
 		.jstree({
 			"check_callback": true,
-			"themes": { "dots": false, "icons":false },
 			"core": {
 				"data": data
 			},
 			"plugins": ["types"],
-			"types": {
-				"#": {
-					"max_children": 9,
-					"icon":"far fa-circle nav-icon"
-				},
-				"lo-setting": {
-					"max_children": 20,
-					"max_depth": 20,
-					"icon":"far fa-circle nav-icon text-warning"
-				},
-				"ro-setting": {
-					"max_children": 20,
-					"max_depth": 20,
-					"icon":"far fa-circle nav-icon text-info"
-				}
-			}
+			"types": types
 		})
 		.on('loaded.jstree', function (e, data) {
 			var file = data.instance.get_children_dom('last-open');
@@ -334,7 +362,7 @@ function constructWSTree(data) {
 			console.log(data.node);
 			if (type === 'default'){
 				var file = data.node.text;
-				$('#project_tree').jstree(true).destroy();
+				destroyProject();
 				openPrj(file)
 			}
 		})
