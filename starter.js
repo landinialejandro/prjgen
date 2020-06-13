@@ -1,8 +1,6 @@
-var fields_settings = [];
 var prjTree = false;
 
 $(function () {
-	fieldSettings();
 	constructWSTree();
 });
 
@@ -125,15 +123,21 @@ function contextMenu(node, $this) { //create adtional context menu
 	return tmp;
 }
 
-function createNode(data, type) {
+async function createNode(data, type) {
 	var inst = $.jstree.reference(data.reference);
 	var obj = inst.get_node(data.reference);
-	
+
 	if (type === 'field') {
-		childs = fields_settings;
+		try {
+			var data = { operation: "get_json", id: "#", text: "field-settings" };
+			const childs = await get_data(data);
+		} catch (err) {
+			return console.log(err.message);
+		}
 	} else {
 		childs = [];
 	}
+	
 	inst.create_node(obj, {
 		type: type,
 		text: "new_" + type + "_" + (obj.children.length + 1),
@@ -187,27 +191,13 @@ function constructForm(obj) {
 	$('.node-options').html(html);
 }
 
-async function fieldSettings() {
-	try {
-		var data = { operation: "get_json", id: "#", text: "field-settings" };
-		 fields_settings = await get_data(data);
-	} catch (error) {
-		return console.log(err.message);
-	}
-}
-
 function get_data(data = { operation: "test", id: "#", text: "test ajax works" }) {
 	const promise = new Promise(function (resolve, reject) {
 		if (data) {
-			$.ajax({
-				type: "POST",
-				url: "starter.php",
-				data: data,
-				dataType: "json",
-				success: function (data) {
-					resolve(data.content);
-				}
-			});
+			$.get("starter.php", data)
+				.done(function (res) {
+					resolve(res.content);
+				});
 		}
 		if (!data) {
 			reject(new Error('data needed'));
@@ -339,7 +329,6 @@ async function constructWSTree() {
 			})
 			.on('select_node.jstree', function (n, data, e) {
 				var type = data.node.type;
-				//console.log(data.node);
 				if (type === 'default') {
 					var file = data.node.text;
 					destroyProject();

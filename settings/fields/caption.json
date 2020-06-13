@@ -11,7 +11,8 @@
                 "id": "es",
                 "text": ""
             }
-        ]
+        ],
+        "usershelper":"Este valor se utiliza para identificar el título del campo de l abase de datos, aperece en el formulario de detalle y en la vista de tabla"
     },
     "type": "field-setting",
     "icon": "fa fa-cog",
