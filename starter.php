@@ -35,34 +35,42 @@ if (isset($_REQUEST['operation'])) {
 				$parn = isset($_REQUEST['parent']) && $_REQUEST['parent'] !== '#' ? $_REQUEST['parent'] : '/';
 				$rslt = $fs->copy($node, $parn);
 				break;
-				case 'save_file':
-					$node = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
-					$parn = isset($_REQUEST['text']) ? $_REQUEST['text'] : '';
-					
-					$rslt = $fs->save($node, $parn);
-					
+			case 'save_file':
+				$node = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
+				$parn = isset($_REQUEST['text']) ? $_REQUEST['text'] : '';
+
+				$rslt = $fs->save($node, $parn);
+
 				break;
 			case 'get_json':
 				$id = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
 				$parn = isset($_REQUEST['text']) ? $_REQUEST['text'] : '';
 
 				switch ($parn) {
-					case 'field-setting':
+					case 'field-settings':
 						//
 						$dir = dirname(__FILE__) . "/settings/fields";
 						$files = array_diff(scandir($dir), array('.', '..'));
-						$res=[];
-						foreach ($views as $file){
-							$res = $fs->getContent("$dir/$file");
+						$res = [];
+						foreach ($files as $file) {
+							$ext = pathinfo($file, PATHINFO_EXTENSION);
+							if ($ext === 'json') {
+								$res[] = json_decode($fs->getContent("$dir/$file"), true);
+							}
 						}
-
-						$rslt = array('id' => $parn,'content'=>$res);
+						$order = array_column($res, 'order');
+						array_multisort($order, SORT_ASC, $res);
+						$rslt = array('id' => $parn, 'content' => $res);
 						break;
 					default:
 						throw new Exception('Unsupported operation json: ' . $parn);
 						break;
 				}
-				
+				break;
+			case 'test':
+				$id = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
+				$parn = isset($_REQUEST['text']) ? $_REQUEST['text'] : '';
+				$rslt = array('id' => $id, 'content' => $parn);
 				break;
 			default:
 				throw new Exception('Unsupported operation: ' . $_REQUEST['operation']);

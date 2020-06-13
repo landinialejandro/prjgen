@@ -2,8 +2,8 @@ var fields_settings = [];
 var prjTree = false;
 
 $(function () {
+	fieldSettings();
 	constructWSTree();
-	cosntructFieldsSettings();
 });
 
 $('.node-options').on('click', '.btn-expand', function () {
@@ -39,7 +39,7 @@ $(".save-app-data").on('click', function (e) {
 });
 
 function destroyProject() {
-	if (prjTree){
+	if (prjTree) {
 		prjTree.destroy();
 	}
 }
@@ -128,7 +128,7 @@ function contextMenu(node, $this) { //create adtional context menu
 function createNode(data, type) {
 	var inst = $.jstree.reference(data.reference);
 	var obj = inst.get_node(data.reference);
-
+	
 	if (type === 'field') {
 		childs = fields_settings;
 	} else {
@@ -187,17 +187,33 @@ function constructForm(obj) {
 	$('.node-options').html(html);
 }
 
-function cosntructFieldsSettings() {
-	$.getJSON('settings/fields/_construct.json', function (data) {
-		data.forEach(element => {
-			$.getJSON('settings/fields/' + element + '.json', function (data) {
-				fields_settings.push(data);
+async function fieldSettings() {
+	try {
+		var data = { operation: "get_json", id: "#", text: "field-settings" };
+		 fields_settings = await get_data(data);
+	} catch (error) {
+		return console.log(err.message);
+	}
+}
+
+function get_data(data = { operation: "test", id: "#", text: "test ajax works" }) {
+	const promise = new Promise(function (resolve, reject) {
+		if (data) {
+			$.ajax({
+				type: "POST",
+				url: "starter.php",
+				data: data,
+				dataType: "json",
+				success: function (data) {
+					resolve(data.content);
+				}
 			});
-		});
+		}
+		if (!data) {
+			reject(new Error('data needed'));
+		}
 	});
-	setTimeout(function () {
-		fields_settings = mySort(fields_settings);
-	}, 500);
+	return promise;
 }
 
 function updateTree() {
@@ -319,15 +335,15 @@ async function constructWSTree() {
 			.on('loaded.jstree', function (e, data) {
 				var file = data.instance.get_children_dom('last-open');
 				file = $(file).text();
-				constructTree('projects/'+file);
+				constructTree('projects/' + file);
 			})
 			.on('select_node.jstree', function (n, data, e) {
 				var type = data.node.type;
-				console.log(data.node);
+				//console.log(data.node);
 				if (type === 'default') {
 					var file = data.node.text;
 					destroyProject();
-					constructTree('projects/'+file);
+					constructTree('projects/' + file);
 				}
 			});
 	} catch (err) {
