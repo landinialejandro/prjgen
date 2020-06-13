@@ -5,19 +5,7 @@ $(function () {
 });
 
 $('.node-options').on('click', '.btn-expand', function () {
-	var nodeid = this.dataset.nodeid;
-	var container = $('.' + nodeid);
-	if (container.hasClass('active')) {
-
-		container.slideUp("slow");
-		container.removeClass('active');
-		$(this).text('+');
-
-	} else {
-		container.slideDown("slow");
-		container.addClass('active');
-		$(this).text('-');
-	}
+	expandContainer('.' + this.dataset.nodeid)
 });
 
 $(".saveproject").on('click', function (e) {
@@ -149,64 +137,6 @@ async function createNode(data, type) {
 	});
 }
 
-function constructForm(obj) {
-	//console.log(obj.id);
-	var html = '<form role="form">';
-	$(obj).each(function () {
-		var node_obj = getJsonNode(this.id);
-		html += '<div class="form-group">' +
-			'<label for="' + this.id + '" class="">' + node_obj.text +
-			': </label>';
-		if (this.type === 'text' || this.type === 'integer') {
-			var value = node_obj.data.user_value;
-			var placeholder = node_obj.data.placeholder;
-			if (this.lang) {
-				var i = 0;
-				node_obj.data.user_value.forEach(element => {
-					value = element.text;
-					var active = i === 0 ? " default " : "";
-					html += '<div class="expandableContent ' + active + this.id + '">';
-					html += '<div class="input-group mb-3"><div class="input-group-prepend"><span class="input-group-text">' + element.id + '</span></div>';
-					html += '<input type="text" class="form-control form-node" data-nodeid="' + this.id + '" data-index="' + i + '" placeholder="' + placeholder + '" value = "' + value + '" ></div>';
-					html += '</div>';
-					i += 1;
-				});
-				html += '<button type="button" class="btn btn-block btn-default btn-xs btn-expand" data-nodeid="' + this.id + '" >+</button>';
-			} else {
-				html += '<input type="text" class="form-control form-node" data-nodeid="' + this.id + '" name="' + this.id + '" id="' + this.id +
-					'" placeholder="' + placeholder + '" value = "' + value + '" >';
-			}
-		}
-		if (this.type === 'options') {
-			node_obj.children.forEach(element => {
-				html += '<select class="custom-select form-node" data-nodeid="' + this.id + '" name="' + this.id + '" id="' + this.id + '">';
-				element.children.forEach(element => {
-					html += '<option value="' + element.text + '">' + element.text + '</option>';
-				});
-				html += '</select>';
-			});
-		}
-		html += '</div>';
-	});
-	html += '</form>';
-	$('.node-options').html(html);
-}
-
-function get_data(data = { operation: "test", id: "#", text: "test ajax works" }) {
-	const promise = new Promise(function (resolve, reject) {
-		if (data) {
-			$.get("starter.php", data)
-				.done(function (res) {
-					resolve(res.content);
-				});
-		}
-		if (!data) {
-			reject(new Error('data needed'));
-		}
-	});
-	return promise;
-}
-
 function updateTree() {
 	var treeData = getJsonNode();
 	prjTree.settings.core.data = treeData;
@@ -272,21 +202,10 @@ async function constructTree(file) {
 			})
 			.on('changed.jstree', function (e, data) {
 				if (data.action === "select_node") {
-					
-					
 					var algo = prjTree.get_json(data.node.id);
 					console.log(algo);
 					var template = Handlebars.compile(form);
 					$('.container-new').html(template(algo));
-
-
-
-					var childrens = prjTree.get_children_dom(data.node.id);
-					var text = '<span class = "right badge badge-success" title="type">' + data.node.type +
-						'</span><span class="right badge badge-danger" title="Name">' + data.node.text +
-						'</span><span class="right badge badge-warning" title="ID">' + data.node.id + '</span>';
-					//$('.info').html(text);
-					//constructForm(childrens);
 				}
 			})
 			.on('rename_node.jstree', function (e, data) {
@@ -301,21 +220,6 @@ async function constructTree(file) {
 	} catch (err) {
 		return console.log(err.message);
 	}
-}
-
-function get_file(file) {
-	const promise = new Promise(function (resolve, reject) {
-		if (file) {
-			$.get(file)
-				.done(function (data) {
-					resolve(data);
-				});
-		}
-		if (!file) {
-			reject(new Error('Not exist file'));
-		}
-	});
-	return promise;
 }
 
 async function constructWSTree() {

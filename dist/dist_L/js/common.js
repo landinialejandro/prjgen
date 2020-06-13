@@ -1,13 +1,44 @@
-function mySort(theArray) {
-    theArray.sort(function (a, b) {
-      if (a.order > b.order) {
-        return 1;
-      }
-      if (a.order < b.order) {
-        return -1;
-      }
-      // a must be equal to b
-      return 0;
-    });
-    return theArray;
-  }
+function get_file(file) {
+	const promise = new Promise(function (resolve, reject) {
+		if (file) {
+			$.get(file)
+				.done(function (data) {
+					resolve(data);
+				});
+		}
+		if (!file) {
+			reject(new Error('Not exist file'));
+		}
+	});
+	return promise;
+}
+
+function get_data(url="starter.php", data = { operation: "test", id: "#", text: "test ajax works" }) {
+	const promise = new Promise(function (resolve, reject) {
+		if (data && url) {
+			$.get(url, data)
+				.done(function (res) {
+					resolve(res.content);
+				});
+		}
+		if (!data || !url) {
+			reject(new Error('url/data needed'));
+		}
+	});
+	return promise;
+}
+
+function expandContainer(selector){
+  var container = $(selector);
+	if (container.hasClass('active')) {
+
+		container.slideUp("slow");
+		container.removeClass('active');
+		$(this).text('+');
+
+	} else {
+		container.slideDown("slow");
+		container.addClass('active');
+		$(this).text('-');
+	}
+}
