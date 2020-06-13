@@ -28,17 +28,17 @@ function get_data(url="starter.php", data = { operation: "test", id: "#", text: 
 	return promise;
 }
 
-function expandContainer(selector){
+function expandContainer(selector,$this){
   var container = $(selector);
 	if (container.hasClass('active')) {
 
 		container.slideUp("slow");
 		container.removeClass('active');
-		$(this).text('+');
+		$($this).text('+');
 
 	} else {
 		container.slideDown("slow");
 		container.addClass('active');
-		$(this).text('-');
+		$($this).text('-');
 	}
 }

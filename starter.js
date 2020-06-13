@@ -4,8 +4,8 @@ $(function () {
 	constructWSTree();
 });
 
-$('.node-options').on('click', '.btn-expand', function () {
-	expandContainer('.' + this.dataset.nodeid)
+$('.container-form').on('click', '.btn-expand', function () {
+	expandContainer('.' + this.dataset.nodeid,this)
 });
 
 $(".saveproject").on('click', function (e) {
@@ -205,7 +205,7 @@ async function constructTree(file) {
 					var algo = prjTree.get_json(data.node.id);
 					console.log(algo);
 					var template = Handlebars.compile(form);
-					$('.container-new').html(template(algo));
+					$('.container-form').html(template(algo));
 				}
 			})
 			.on('rename_node.jstree', function (e, data) {

@@ -10,19 +10,20 @@
         <label for="{{id}}" class="">{{text}}: </label>
         {{#if li_attr.lang}}
         <div class="expandableContent- {{id}} active">
-            <div class="input-group mb-3">
-                {{#each data.user_value}}
+            {{#each data.user_value}}
+                <div class="input-group mb-3">
                     <div class="input-group-prepend ">
                         <span class="input-group-text">{{id}}</span>
                     </div>
-                    <input type="text" class="form-control form-node" data-nodeid="{{id}}" placeholder="{{data.placeholder}}" value="{{text}}">
-                {{/each}}
-            </div>
+                    <input type="text" class="form-control form-node" data-nodeid="{{id}}"
+                        placeholder="{{data.placeholder}}" value="{{text}}">
+                </div>
+            {{/each}}
         </div>
         <button type="button" class="btn btn-block btn-default btn-xs btn-expand" data-nodeid="{{id}}">+</button>
         {{else}}
-            <input type="text" class="form-control form-node" data-nodeid="{{id}}" name="{{id}}" id="{{id}}"
-                placeholder="{{data.placeholder}}" value="{{data.user_value}}">
+        <input type="text" class="form-control form-node" data-nodeid="{{id}}" name="{{id}}" id="{{id}}"
+            placeholder="{{data.placeholder}}" value="{{data.user_value}}">
         {{/if}}
     </div>
 
