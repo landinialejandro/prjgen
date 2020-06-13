@@ -2,7 +2,7 @@ var fields_settings = [];
 var prjTree = false;
 
 $(function () {
-	constructWSTree()
+	constructWSTree();
 	cosntructFieldsSettings();
 });
 
@@ -31,7 +31,7 @@ $(".saveproject").on('click', function (e) {
 
 $(".newproject").on('click', function (e) {
 	destroyProject();
-	constructTree('settings/blank_project.json')
+	constructTree('settings/blank_project.json');
 });
 
 $(".save-app-data").on('click', function (e) {
@@ -39,7 +39,9 @@ $(".save-app-data").on('click', function (e) {
 });
 
 function destroyProject() {
-	prjTree.destroy();
+	if (prjTree){
+		prjTree.destroy();
+	}
 }
 
 function updateData() {
@@ -52,7 +54,7 @@ function updateData() {
 			obj_node.data.user_value = $(this).val();
 		}
 	});
-};
+}
 
 function saveProject() {
 	var node = getJsonNode();
@@ -85,8 +87,7 @@ function saveProject() {
 }
 
 function getJsonNode(id = '#', flat = false) {
-	var tree = prjTree;
-	var nodeDataJson = tree.get_json(id, {
+	var nodeDataJson = prjTree.get_json(id, {
 		flat: flat
 	}); // set flat:true to get all nodes in 1-level json
 	return nodeDataJson;
@@ -200,9 +201,8 @@ function cosntructFieldsSettings() {
 }
 
 function updateTree() {
-	var tree = prjTree;
 	var treeData = getJsonNode();
-	tree.settings.core.data = treeData;
+	prjTree.settings.core.data = treeData;
 }
 
 async function constructTree(file) {
@@ -265,8 +265,7 @@ async function constructTree(file) {
 			.on('changed.jstree', function (e, data) {
 				//console.log(data);
 				if (data.action === "select_node") {
-					var tree = prjTree;
-					var childrens = tree.get_children_dom(data.node.id);
+					var childrens = prjTree.get_children_dom(data.node.id);
 					var text = '<span class = "right badge badge-success" title="type">' + data.node.type +
 						'</span><span class="right badge badge-danger" title="Name">' + data.node.text +
 						'</span><span class="right badge badge-warning" title="ID">' + data.node.id + '</span>';
@@ -276,7 +275,7 @@ async function constructTree(file) {
 			})
 			.on('rename_node.jstree', function (e, data) {
 				if (data.node.type === "#") {
-					alert('rename project file?')
+					alert('rename project file?');
 				}
 			})
 			.on('loaded.jstree', function () {
@@ -299,7 +298,7 @@ function get_file(file) {
 		if (!file) {
 			reject(new Error('Not exist file'));
 		}
-	})
+	});
 	return promise;
 }
 
@@ -330,7 +329,7 @@ async function constructWSTree() {
 					destroyProject();
 					constructTree('projects/'+file);
 				}
-			})
+			});
 	} catch (err) {
 		return console.log(err.message);
 	}
