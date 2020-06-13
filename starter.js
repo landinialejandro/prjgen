@@ -137,7 +137,7 @@ async function createNode(data, type) {
 	} else {
 		childs = [];
 	}
-	
+
 	inst.create_node(obj, {
 		type: type,
 		text: "new_" + type + "_" + (obj.children.length + 1),
@@ -150,6 +150,7 @@ async function createNode(data, type) {
 }
 
 function constructForm(obj) {
+	//console.log(obj.id);
 	var html = '<form role="form">';
 	$(obj).each(function () {
 		var node_obj = getJsonNode(this.id);
@@ -216,6 +217,7 @@ async function constructTree(file) {
 	try {
 		const types = await get_file('settings/prj_types.json');
 		const data = await get_file(file);
+		const form = await get_file('templates/fieldForm.html');
 
 		$('#project_tree')
 			.jstree({
@@ -269,14 +271,22 @@ async function constructTree(file) {
 				updateTree();
 			})
 			.on('changed.jstree', function (e, data) {
-				//console.log(data);
 				if (data.action === "select_node") {
+					
+					
+					var algo = prjTree.get_json(data.node.id);
+					console.log(algo);
+					var template = Handlebars.compile(form);
+					$('.container-new').html(template(algo));
+
+
+
 					var childrens = prjTree.get_children_dom(data.node.id);
 					var text = '<span class = "right badge badge-success" title="type">' + data.node.type +
 						'</span><span class="right badge badge-danger" title="Name">' + data.node.text +
 						'</span><span class="right badge badge-warning" title="ID">' + data.node.id + '</span>';
-					$('.card-title').html(text);
-					constructForm(childrens);
+					//$('.info').html(text);
+					//constructForm(childrens);
 				}
 			})
 			.on('rename_node.jstree', function (e, data) {

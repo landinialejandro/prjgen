@@ -1,40 +1,43 @@
-<div class="container">
-    <form>
-        <div class="form-group row">
-            <label for="inputName" class="col-sm-1-12 col-form-label"></label>
-            <div class="col-sm-1-12">
-                <input type="text" class="form-control" name="inputName" id="inputName" placeholder="">
+<h3 class="card-title float-right">
+    <span class="badge badge-info" title="field type">{{type}}</span>
+    <span class="badge badge-danger" title="field Name">{{text}}</span>
+    <span class="badge badge-warning" title="field node ID">{{id}}</span>
+</h3>
+<br>
+<form role="form">
+    {{#each children}}
+    <div class="form-group">
+        <label for="{{id}}" class="">{{text}}: </label>
+        {{#if li_attr.lang}}
+        <div class="expandableContent- {{id}} active">
+            <div class="input-group mb-3">
+                {{#each data.user_value}}
+                    <div class="input-group-prepend ">
+                        <span class="input-group-text">{{id}}</span>
+                    </div>
+                    <input type="text" class="form-control form-node" data-nodeid="{{id}}" placeholder="{{data.placeholder}}" value="{{text}}">
+                {{/each}}
             </div>
         </div>
-        <fieldset class="form-group row">
-            <legend class="col-form-legend col-sm-1-12">Group name</legend>
-            <div class="col-sm-1-12">
-                
-            </div>
-        </fieldset>
-        <div class="form-group row">
-            <div class="offset-sm-2 col-sm-10">
-                <button type="submit" class="btn btn-primary">Action</button>
-            </div>
-        </div>
-    </form>
-</div>
+        <button type="button" class="btn btn-block btn-default btn-xs btn-expand" data-nodeid="{{id}}">+</button>
+        {{else}}
+            <input type="text" class="form-control form-node" data-nodeid="{{id}}" name="{{id}}" id="{{id}}"
+                placeholder="{{data.placeholder}}" value="{{data.user_value}}">
+        {{/if}}
+    </div>
 
-<div class="form-group">
-    <label for=""></label>
-    <select class="custom-select" name="" id="">
-        <option selected>Select one</option>
-        <option value=""></option>
-        <option value=""></option>
-        <option value=""></option>
-    </select>
-</div>
-<div class="form-group">
-    <label for=""></label>
-    <select class="custom-select" name="" id="">
-        <option selected>Select one</option>
-        <option value=""></option>
-        <option value=""></option>
-        <option value=""></option>
-    </select>
-</div>
+    {{/each}}
+    <div class="form-group">
+        <label for="j1_38" class="">Default value: </label>
+        <select class="custom-select form-node" data-nodeid="j1_38" name="j1_38" id="j1_38_">
+            <option value="Create by user Name">Create by user Name</option>
+            <option value="Creation Date">Creation Date</option>
+            <option value="Creation Time">Creation Time</option>
+            <option value="Creation TimeStamp">Creation TimeStamp</option>
+            <option value="Edited by user Name">Edited by user Name</option>
+            <option value="Edition Date">Edition Date</option>
+            <option value="Edition Time">Edition Time</option>
+            <option value="Edition TimeStamp">Edition TimeStamp</option>
+        </select>
+    </div>
+</form>
