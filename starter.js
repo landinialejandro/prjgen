@@ -206,7 +206,6 @@ async function constructTree(file) {
 					var selectedID = prjTree.get_json(data.node.id);
 					console.log(selectedID);
 
-
 					Handlebars.registerHelper('getchildren', function(id, opciones)
 					{
 						var nodeID = prjTree.get_json(id);
@@ -217,7 +216,6 @@ async function constructTree(file) {
 
 						var template = Handlebars.compile(form);
 					$('.container-form').html(template(selectedID));
-
 
 				}
 			})
