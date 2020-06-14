@@ -1,34 +1,29 @@
-<h3 class="card-title float-right">
-    <span class="badge badge-info" title="field type">{{type}}</span>
-    <span class="badge badge-danger" title="field Name">{{text}}</span>
-    <span class="badge badge-warning" title="field node ID">{{id}}</span>
-</h3>
-<br>
-<form role="form">
-    {{#each children}}
-    <div class="form-group">
-        <label for="{{id}}" class="">{{text}}: </label>
-        {{#if li_attr.lang}}
-        <div class="expandableContent- {{id}} active">
-            {{#each data.user_value}}
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend ">
-                        <span class="input-group-text">{{id}}</span>
+        <div class="form-group">
+            <label for="{{id}}" class="">{{text}}: </label>
+            {{#if li_attr.lang}}
+            <div class="expandableContent- {{id}} active">
+                {{#each data.user_value}}
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend ">
+                            <span class="input-group-text">{{id}}</span>
+                        </div>
+                        <input type="text" class="form-control form-node" data-nodeid="{{id}}"
+                            placeholder="{{data.placeholder}}" value="{{text}}">
                     </div>
-                    <input type="text" class="form-control form-node" data-nodeid="{{id}}"
-                        placeholder="{{data.placeholder}}" value="{{text}}">
-                </div>
-            {{/each}}
+                {{/each}}
+            </div>
+            <button type="button" class="btn btn-block btn-default btn-xs btn-expand" data-nodeid="{{id}}">+</button>
+            {{else}}
+                {{#if data.placeholder}}
+                    <input type="text" class="form-control form-node" data-nodeid="{{id}}" name="{{id}}" id="{{id}}"
+                        placeholder="{{data.placeholder}}" value="{{data.user_value}}">
+                {{else}}
+                    <input type="text" class="form-control form-node" data-nodeid="{{id}}" name="{{id}}" id="{{id}}"
+                            placeholder="children value" value="{{text}}">
+                {{/if}}
+            {{/if}}
         </div>
-        <button type="button" class="btn btn-block btn-default btn-xs btn-expand" data-nodeid="{{id}}">+</button>
-        {{else}}
-        <input type="text" class="form-control form-node" data-nodeid="{{id}}" name="{{id}}" id="{{id}}"
-            placeholder="{{data.placeholder}}" value="{{data.user_value}}">
-        {{/if}}
-    </div>
-
-    {{/each}}
-    <div class="form-group">
+    <!-- <div class="form-group">
         <label for="j1_38" class="">Default value: </label>
         <select class="custom-select form-node" data-nodeid="j1_38" name="j1_38" id="j1_38_">
             <option value="Create by user Name">Create by user Name</option>
@@ -40,5 +35,4 @@
             <option value="Edition Time">Edition Time</option>
             <option value="Edition TimeStamp">Edition TimeStamp</option>
         </select>
-    </div>
-</form>
+    </div> -->

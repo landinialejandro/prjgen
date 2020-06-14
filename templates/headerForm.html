@@ -1,0 +1,15 @@
+<h3 class="card-title float-right">
+    <span class="badge badge-info" title="field type">{{type}}</span>
+    <span class="badge badge-danger" title="field Name">{{text}}</span>
+    <span class="badge badge-warning" title="field node ID">{{id}}</span>
+</h3>
+<br>
+<form class="{{id}}" role="form">
+    {{#if children}}
+        {{#each children}}
+            {{#getchildren id}}{{/getchildren}}
+        {{/each}}
+    {{else}}
+        {{#getchildren id}}{{/getchildren}}
+    {{/if}}
+</form>

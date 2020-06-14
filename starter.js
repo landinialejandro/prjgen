@@ -147,7 +147,8 @@ async function constructTree(file) {
 	try {
 		const types = await get_file('settings/prj_types.json');
 		const data = await get_file(file);
-		const form = await get_file('templates/fieldForm.html');
+		const form = await get_file('templates/headerForm.html');
+		const fieldform = await get_file('templates/fieldForm.html');
 
 		$('#project_tree')
 			.jstree({
@@ -202,10 +203,22 @@ async function constructTree(file) {
 			})
 			.on('changed.jstree', function (e, data) {
 				if (data.action === "select_node") {
-					var algo = prjTree.get_json(data.node.id);
-					console.log(algo);
-					var template = Handlebars.compile(form);
-					$('.container-form').html(template(algo));
+					var selectedID = prjTree.get_json(data.node.id);
+					console.log(selectedID);
+
+
+					Handlebars.registerHelper('getchildren', function(id, opciones)
+					{
+						var nodeID = prjTree.get_json(id);
+						var template = Handlebars.compile(fieldform);
+						var respuesta = template(nodeID);
+						return respuesta;
+					});
+
+						var template = Handlebars.compile(form);
+					$('.container-form').html(template(selectedID));
+
+
 				}
 			})
 			.on('rename_node.jstree', function (e, data) {
