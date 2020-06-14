@@ -1,38 +1,30 @@
-        <div class="form-group">
-            <label for="{{id}}" class="">{{text}}: </label>
-            {{#if li_attr.lang}}
-            <div class="expandableContent- {{id}} active">
-                {{#each data.user_value}}
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend ">
-                            <span class="input-group-text">{{id}}</span>
-                        </div>
-                        <input type="text" class="form-control form-node" data-nodeid="{{id}}"
-                            placeholder="{{data.placeholder}}" value="{{text}}">
-                    </div>
-                {{/each}}
+<div class="form-group">
+    <label for="{{id}}" class="">{{text}}: </label>
+    {{#if li_attr.lang}}
+        {{#each data.user_value}}
+        <div class="expandableContent {{../id}} {{#if default}}default{{/if}}">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend ">
+                    <span class="input-group-text">{{id}}</span>
+                </div>
+                <input type="text" class="form-control form-node" data-index="{{@index}}" data-nodeid="{{../id}}" name="{{id}}" placeholder="{{data.placeholder}}" value="{{text}}">
             </div>
-            <button type="button" class="btn btn-block btn-default btn-xs btn-expand" data-nodeid="{{id}}">+</button>
-            {{else}}
-                {{#if data.placeholder}}
-                    <input type="text" class="form-control form-node" data-nodeid="{{id}}" name="{{id}}" id="{{id}}"
-                        placeholder="{{data.placeholder}}" value="{{data.user_value}}">
-                {{else}}
-                    <input type="text" class="form-control form-node" data-nodeid="{{id}}" name="{{id}}" id="{{id}}"
-                            placeholder="children value" value="{{text}}">
-                {{/if}}
-            {{/if}}
         </div>
-    <!-- <div class="form-group">
-        <label for="j1_38" class="">Default value: </label>
-        <select class="custom-select form-node" data-nodeid="j1_38" name="j1_38" id="j1_38_">
-            <option value="Create by user Name">Create by user Name</option>
-            <option value="Creation Date">Creation Date</option>
-            <option value="Creation Time">Creation Time</option>
-            <option value="Creation TimeStamp">Creation TimeStamp</option>
-            <option value="Edited by user Name">Edited by user Name</option>
-            <option value="Edition Date">Edition Date</option>
-            <option value="Edition Time">Edition Time</option>
-            <option value="Edition TimeStamp">Edition TimeStamp</option>
-        </select>
-    </div> -->
+        {{/each}}
+        <button type="button" class="btn btn-block btn-default btn-xs btn-expand" data-nodeid="{{id}}">+</button>
+    {{else}}
+        {{#if data.placeholder}}
+            <input type="text" class="form-control form-node" data-index="{{@index}}" data-nodeid="{{id}}" name="{{id}}" placeholder="{{data.placeholder}}" value="{{data.user_value}}">
+        {{else}}
+        {{#if data.option}}
+            <select class="custom-select form-node" data-nodeid="{{id}}" name="{{id}}">
+                {{#each data.options}}
+                <option value="{{this}}">{{this}}</option>
+                {{/each}}
+            </select>
+        {{else}}
+            <input type="text" class="form-control form-node" data-index="{{@index}}" data-nodeid="{{id}}" name="{{id}}"  placeholder="Node children value" value="{{text}}">
+        {{/if}}
+        {{/if}}
+    {{/if}}
+</div>

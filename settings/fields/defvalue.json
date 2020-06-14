@@ -1,24 +1,20 @@
 {
     "text": "Default value",
-    "children": [
-        {
-            "text": "Select default value",
-            "children":[
-                "Create by user Name",
-                "Creation Date",
-                "Creation Time",
-                "Creation TimeStamp",
-                "Edited by user Name",
-                "Edition Date",
-                "Edition Time",
-                "Edition TimeStamp"
-            ]
-        }
-    ],
-    "type":"field-setting",
-    "icon": "fa fa-cog",
-    "li_attr": {
-        "type": "options"
+    "data": {
+        "user_value":"",
+        "option": true,
+        "options": [
+            "Create by user Name",
+            "Creation Date",
+            "Creation Time",
+            "Creation TimeStamp",
+            "Edited by user Name",
+            "Edition Date",
+            "Edition Time",
+            "Edition TimeStamp"
+        ]
     },
-    "order":7
+    "type": "field-setting",
+    "icon": "fas fa-stream",
+    "order": 7
 }

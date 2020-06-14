@@ -1,39 +1,35 @@
 {
     "text": "Data Type",
-    "children": [
-        {
-            "text": "select a data type",
-            "children":[
-                "Tiny Integer",
-                "Small Integer",
-                "Medium Integer",
-                "Integer",
-                "Big Integer",
-                "Float",
-                "Double",
-                "Decimal",
-                "Date",
-                "DateTime",
-                "Time",
-                "Time Stamp",
-                "Year",
-                "Char",
-                "VarChar",
-                "Tiny Blob",
-                "Tiny Text",
-                "Text",
-                "BLOB",
-                "Medium BLOB",
-                "Medium Text",
-                "Long BLOB",
-                "Long Text"
-            ]
-        }
-    ],
-    "type":"field-setting",
-    "icon": "fa fa-cog",
-    "li_attr": {
-        "type": "options"
+    "data": {
+        "user_value":"",
+        "option": true,
+        "options": [
+            "Tiny Integer",
+            "Small Integer",
+            "Medium Integer",
+            "Integer",
+            "Big Integer",
+            "Float",
+            "Double",
+            "Decimal",
+            "Date",
+            "DateTime",
+            "Time",
+            "Time Stamp",
+            "Year",
+            "Char",
+            "VarChar",
+            "Tiny Blob",
+            "Tiny Text",
+            "Text",
+            "BLOB",
+            "Medium BLOB",
+            "Medium Text",
+            "Long BLOB",
+            "Long Text"
+        ]
     },
-    "order":3
+    "type": "field-setting",
+    "icon": "fas fa-stream",
+    "order": 3
 }

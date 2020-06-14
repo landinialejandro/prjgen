@@ -5,7 +5,8 @@
         "user_value": [
             {
                 "id": "en",
-                "text": ""
+                "text": "",
+                "default":true
             },
             {
                 "id": "es",
@@ -15,7 +16,7 @@
         "usershelper":"Este valor se utiliza para identificar el título del campo de l abase de datos, aperece en el formulario de detalle y en la vista de tabla"
     },
     "type": "field-setting",
-    "icon": "fa fa-cog",
+    "icon": "fas fa-font",
     "li_attr": {
         "type": "text",
         "lang": "en"

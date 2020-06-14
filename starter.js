@@ -5,7 +5,7 @@ $(function () {
 });
 
 $('.container-form').on('click', '.btn-expand', function () {
-	expandContainer('.' + this.dataset.nodeid,this)
+	expandContainer('.' + this.dataset.nodeid, this)
 });
 
 $(".saveproject").on('click', function (e) {
@@ -45,11 +45,15 @@ function updateData() {
 function saveProject() {
 	var node = getJsonNode();
 	var file = node[0].text;
-	var jsonData = JSON.stringify(node);
+	save_file('projects/' + file + '.json', JSON.stringify(node));
+	updateWS(file);
+}
+
+function save_file(url,data){
 	$.ajax({
 		type: "POST",
 		url: "starter.php",
-		data: { 'operation': 'save_file', 'type': 'json', 'id': 'projects/' + file + '.json', 'text': jsonData },
+		data: { 'operation': 'save_file', 'type': 'json', 'id':  url, 'text': data },
 		dataType: "json",
 		success: function (res) {
 			if (res == undefined) {
@@ -118,7 +122,7 @@ async function createNode(data, type) {
 	if (type === 'field') {
 		try {
 			var data = { operation: "get_json", id: "#", text: "field-settings" };
-			const childs = await get_data(data);
+			childs = await get_data("starter.php",data);
 		} catch (err) {
 			return console.log(err.message);
 		}
@@ -204,7 +208,7 @@ async function constructTree(file) {
 			.on('changed.jstree', function (e, data) {
 				if (data.action === "select_node") {
 					var selectedID = prjTree.get_json(data.node.id);
-					console.log(selectedID);
+					//console.log(selectedID);
 
 					Handlebars.registerHelper('getchildren', function(id, opciones)
 					{
@@ -254,6 +258,7 @@ async function constructWSTree() {
 			})
 			.on('select_node.jstree', function (n, data, e) {
 				var type = data.node.type;
+				console.log(data);
 				if (type === 'default') {
 					var file = data.node.text;
 					destroyProject();
@@ -263,4 +268,25 @@ async function constructWSTree() {
 	} catch (err) {
 		return console.log(err.message);
 	}
+}
+
+async function updateWS(file){
+
+	try {
+
+		var dataWS = await get_file('settings/workspace.json');
+		dataWS.children.forEach(data => {
+			if (data.id = 'last-open'){
+				console.log(data.children);
+				//data.children = file;
+				console.log(data.children);
+			}
+		});
+
+	} catch (error) {
+		
+	}
+
+	save_file('settings/workspace.json', JSON.stringify(dataWS));
+
 }
