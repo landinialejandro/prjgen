@@ -1,12 +1,1 @@
-    {
-        "id": "ws",
-        "text": "Workspace",
-        "children": [
-            "ProjectName_a.json",
-            "Project.json"
-        ],
-        "state": {
-            "opened": true
-        },
-        "type": "#"
-    }
+{"text":"Alejandro.json"}

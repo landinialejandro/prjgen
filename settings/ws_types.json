@@ -1,14 +1,10 @@
 {
-    "#": {
-        "max_children": 9,
-        "icon":"far fa-circle nav-icon"
-    },
-    "lo-setting": {
+    "default": {
         "max_children": 20,
         "max_depth": 20,
         "icon":"far fa-circle nav-icon text-warning"
     },
-    "ro-setting": {
+    "file": {
         "max_children": 20,
         "max_depth": 20,
         "icon":"far fa-circle nav-icon text-info"

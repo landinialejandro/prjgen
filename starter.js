@@ -1,5 +1,6 @@
 var prjTree = false;
 var wsTree = false;
+var loadedWS = false;
 
 $(function () {
 	constructWSTree();
@@ -10,19 +11,20 @@ $('.container-form').on('click', '.btn-expand', function () {
 });
 
 $(".saveproject").on('click', function (e) {
-	$('.card-project').addClass('container-disabled');
 	updateData();
+	$('.card-project').addClass('container-disabled');
 	updateTree();
 	saveProject();
 });
 
 $(".newproject").on('click', function (e) {
-	destroyProject();
-	constructTree('settings/blank_project.json');
+	loadProject('settings/blank_project.json')
 });
 
 $(".save-app-data").on('click', function (e) {
+	$('.card-project').addClass('container-disabled');
 	updateData();
+	$('.container-disabled').removeClass('container-disabled');
 });
 
 function destroyProject() {
@@ -34,11 +36,13 @@ function destroyProject() {
 function updateData() {
 	$('.form-node').each(function () {
 		var obj_node = prjTree.get_node(this.dataset.nodeid);
-		if (obj_node.li_attr.lang) {
-			obj_node.data.user_value[this.dataset.index].text = $(this).val();
-		} else {
-			//lang undefined
-			obj_node.data.user_value = $(this).val();
+		if (obj_node) {
+			if (obj_node.li_attr.lang) {
+				obj_node.data.user_value[this.dataset.index].text = $(this).val();
+			} else {
+				//lang undefined
+				obj_node.data.user_value = $(this).val();
+			}
 		}
 	});
 }
@@ -46,31 +50,31 @@ function updateData() {
 function saveProject() {
 	var node = getJsonNode();
 	var file = node[0].text;
-	save_file('projects/' + file + '.json', JSON.stringify(node));
-	updateWS(file);
+	save_file(file + '.json', node);
 }
 
-function save_file(url,data){
+function save_file(url, data, folder = 'projects') {
 	$.ajax({
 		type: "POST",
 		url: "starter.php",
-		data: { 'operation': 'save_file', 'type': 'json', 'id':  url, 'text': data },
+		data: { 'operation': 'save_file', 'type': 'json', 'id': url, 'text': JSON.stringify(data), folder: folder },
 		dataType: "json",
 		success: function (res) {
 			if (res == undefined) {
 				alert("Error: unexpected response");
-			}else{
-				alert(res.id);
+			} else {
+				console.log("%c saved file: ", "background: white; color: green")
+				console.log(res.id);
 			}
 		},
 		error: function (res) {
 			if (res == undefined) {
 				alert("Error: undefined");
-			}else{
+			} else {
 				alert("Error: " + res.responseText);
 			}
 		},
-		complete: function(){
+		complete: function () {
 			$('.container-disabled').removeClass('container-disabled');
 		}
 	})
@@ -122,7 +126,7 @@ async function createNode(data, type) {
 	if (type === 'field') {
 		try {
 			var data = { operation: "get_json", id: "#", text: "field-settings" };
-			childs = await get_data("starter.php",data);
+			childs = await get_data("starter.php", data);
 		} catch (err) {
 			return console.log(err.message);
 		}
@@ -210,15 +214,14 @@ async function constructTree(file) {
 					var selectedID = prjTree.get_json(data.node.id);
 					//console.log(selectedID);
 
-					Handlebars.registerHelper('getchildren', function(id, opciones)
-					{
+					Handlebars.registerHelper('getchildren', function (id, opciones) {
 						var nodeID = prjTree.get_json(id);
 						var template = Handlebars.compile(fieldform);
 						var respuesta = template(nodeID);
 						return respuesta;
 					});
 
-						var template = Handlebars.compile(form);
+					var template = Handlebars.compile(form);
 					$('.container-form').html(template(selectedID));
 
 				}
@@ -240,34 +243,88 @@ async function constructTree(file) {
 async function constructWSTree() {
 	try {
 		const types = await get_file('settings/ws_types.json');
-		const data = await get_file('settings/workspace.json');
+		const ws = await get_file('settings/workspace.json');
 
 		$('#ws_tree')
 			.jstree({
-				"check_callback": true,
-				"core": {
-					"data": data
+				'core': {
+					'data': {
+						'url': 'starter.php?operation=get_node',
+						'data': function (node) {
+							return { 'id': node.id };
+						}
+					},
+					'check_callback': function (o, n, p, i, m) {
+						if (m && m.dnd && m.pos !== 'i') { return false; }
+						if (o === "move_node" || o === "copy_node") {
+							if (this.get_node(n).parent === this.get_node(p).id) { return false; }
+						}
+						return true;
+					}
 				},
-				"plugins": ["types"],
-				"types": types
+				'sort': function (a, b) {
+					return this.get_type(a) === this.get_type(b) ? (this.get_text(a) > this.get_text(b) ? 1 : -1) : (this.get_type(a) >= this.get_type(b) ? 1 : -1);
+				},
+				'contextmenu': {
+					'items': function (node) {
+						var tmp = $.jstree.defaults.contextmenu.items();
+						delete tmp.create.action;
+						tmp.create.label = "New";
+						tmp.create.submenu = {
+							"create_folder": {
+								"separator_after": true,
+								"label": "Folder",
+								"action": function (data) {
+									var inst = $.jstree.reference(data.reference),
+										obj = inst.get_node(data.reference);
+									inst.create_node(obj, { type: "default" }, "last", function (new_node) {
+										setTimeout(function () { inst.edit(new_node); }, 0);
+									});
+								}
+							},
+							"create_file": {
+								"label": "File",
+								"action": function (data) {
+									var inst = $.jstree.reference(data.reference),
+										obj = inst.get_node(data.reference);
+									inst.create_node(obj, { type: "file" }, "last", function (new_node) {
+										setTimeout(function () { inst.edit(new_node); }, 0);
+									});
+								}
+							}
+						};
+						if (this.get_type(node) === "file_") {
+							delete tmp.create;
+						}
+						return tmp;
+					}
+				},
+				"types": types,
+				"unique": {
+					"duplicate": function (name, counter) {
+						return name + ' ' + counter;
+					}
+				},
+				"plugins": ["state","sort", "types", "contextmenu", "unique"]
 			})
 			.on('loaded.jstree', function (e, data) {
-				if (e.type === 'loaded'){
-					var file = data.instance.get_json('ws', {flat: false});
-					file = file.children[0].text;
-					constructTree('projects/' + file);
-					wsTree = $('#ws_tree').jstree(true);
+				if (ws.text && ws.text !== "" && ws.text !== 'undefined') {
+					loadedWS = ws.text;
+					loadProject('projects/' + loadedWS)
+					console.log($('#ws_tree').jstree(true).get_json('#'));
 				}
 			})
 			.on('select_node.jstree', function (n, data, e) {
 				var type = data.node.type;
-				// var listArray = wsTree.get_prev_dom (data.node.id);
-				// console.log(data);
-				// console.log(listArray);
-				if (type === 'default') {
+				if (type === 'file') {
+					//id="ws_tree"
 					var file = data.node.text;
-					destroyProject();
-					constructTree('projects/' + file);
+					if (file !== loadedWS) {
+						$('#ws_tree').addClass('container-disabled')
+						loadedWS = file;
+						loadProject('projects/' + file)
+						save_file('workspace.json', { text: file }, "settings");
+					}
 				}
 			});
 	} catch (err) {
@@ -275,25 +332,7 @@ async function constructWSTree() {
 	}
 }
 
-async function updateWS(file){
-
-var obj_node = wsTree.get_node('last-open');
-
-	try {
-
-		var dataWS = await get_file('settings/workspace.json');
-		dataWS.children.forEach(data => {
-			if (data.id = 'last-open'){
-				console.log(data.children);
-				//data.children = file;
-				//console.log(data.children);
-			}
-		});
-
-	} catch (error) {
-		
-	}
-
-	save_file('settings/workspace.json', JSON.stringify(dataWS));
-
+function loadProject(file) {
+	destroyProject();
+	constructTree(file);
 }

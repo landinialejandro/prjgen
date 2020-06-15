@@ -39,14 +39,14 @@ class fs
 			$tmp = preg_match('([^ a-zа-я-_0-9.]+)ui', $item);
 			if($tmp === false || $tmp === 1) { continue; }
 			if(is_dir($dir . DIRECTORY_SEPARATOR . $item)) {
-				$res[] = array('text' => $item, 'children' => true,  'id' => $this->id($dir . DIRECTORY_SEPARATOR . $item), 'icon' => 'folder');
+				$res[] = array('text' => $item, 'children' => true,  'id' => $this->id($dir . DIRECTORY_SEPARATOR . $item), 'type' => 'folder');
 			}
 			else {
-				$res[] = array('text' => $item, 'children' => false, 'id' => $this->id($dir . DIRECTORY_SEPARATOR . $item), 'type' => 'file', 'icon' => 'file file-'.substr($item, strrpos($item,'.') + 1));
+				$res[] = array('text' => $item, 'children' => false, 'id' => $this->id($dir . DIRECTORY_SEPARATOR . $item), 'type' => 'file');
 			}
 		}
 		if($with_root && $this->id($dir) === '/') {
-			$res = array(array('text' => basename($this->base), 'children' => $res, 'id' => '/', 'icon'=>'folder', 'state' => array('opened' => true, 'disabled' => true)));
+			$res = array(array('text' => basename($this->base), 'children' => $res, 'id' => '/',  'state' => array('opened' => true, 'disabled' => true)));
 		}
 		return $res;
 	}
@@ -154,11 +154,15 @@ class fs
 		rename($dir, $new);
 		return array('id' => $this->id($new));
 	}
-	public function save($id, $par){
-		if(!is_dir($id)) {
-			file_put_contents($id, $par);
+	public function save($name, $par){
+		if(preg_match('/^[A-Za-z0-9]_.*\.[a-z]{0,4}$/', $name) || !strlen($name)) {
+			throw new Exception('Invalid name: ' . $name);
 		}
-		return array('id' => $this->id($id));
+		$dir = $this->path($name);
+		if(!is_dir($dir)) {
+			file_put_contents($dir, $par);
+		}
+		return array('id' => $dir);
 	}
 
 	public function getContent($id){

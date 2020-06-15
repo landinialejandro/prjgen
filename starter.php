@@ -1,7 +1,8 @@
 <?php
 include('class_fs.php');
 if (isset($_REQUEST['operation'])) {
-	$fs = new fs('');
+	$folder = isset($_REQUEST['folder']) ? $_REQUEST['folder']."/" : 'projects/';
+	$fs = new fs($folder);
 	try {
 		$rslt = null;
 		switch ($_REQUEST['operation']) {
