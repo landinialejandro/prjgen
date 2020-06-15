@@ -2,28 +2,8 @@
         "id": "ws",
         "text": "Workspace",
         "children": [
-            {
-                "id": "last-open",
-                "text": "Last open",
-                "children": [
-                    "ProjectName_a.json"
-                ],
-                "type": "lo-setting",
-                "order": 1,
-                "state": {
-                    "opened": true
-                }
-            },
-            {
-                "id": "recent-open",
-                "text": "Open recent",
-                "children": [
-                    "ProjectName_a.json",
-                    "Project.json"
-                ],
-                "type": "ro-setting",
-                "order": 2
-            }
+            "ProjectName_a.json",
+            "Project.json"
         ],
         "state": {
             "opened": true

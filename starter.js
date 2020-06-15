@@ -1,4 +1,5 @@
 var prjTree = false;
+var wsTree = false;
 
 $(function () {
 	constructWSTree();
@@ -57,23 +58,22 @@ function save_file(url,data){
 		dataType: "json",
 		success: function (res) {
 			if (res == undefined) {
-				alert("Error : 219");
-			}
-			else {
+				alert("Error: unexpected response");
+			}else{
 				alert(res.id);
 			}
-			$('.card-project').removeClass('container-disabled');
 		},
 		error: function (res) {
 			if (res == undefined) {
-				alert("Error : 465");
+				alert("Error: undefined");
+			}else{
+				alert("Error: " + res.responseText);
 			}
-			else {
-				alert("Error : 468 " + res.responseText);
-			}
-			$('.card-project').removeClass('container-disabled');
+		},
+		complete: function(){
+			$('.container-disabled').removeClass('container-disabled');
 		}
-	});
+	})
 }
 
 function getJsonNode(id = '#', flat = false) {
@@ -252,13 +252,18 @@ async function constructWSTree() {
 				"types": types
 			})
 			.on('loaded.jstree', function (e, data) {
-				var file = data.instance.get_children_dom('last-open');
-				file = $(file).text();
-				constructTree('projects/' + file);
+				if (e.type === 'loaded'){
+					var file = data.instance.get_json('ws', {flat: false});
+					file = file.children[0].text;
+					constructTree('projects/' + file);
+					wsTree = $('#ws_tree').jstree(true);
+				}
 			})
 			.on('select_node.jstree', function (n, data, e) {
 				var type = data.node.type;
-				console.log(data);
+				// var listArray = wsTree.get_prev_dom (data.node.id);
+				// console.log(data);
+				// console.log(listArray);
 				if (type === 'default') {
 					var file = data.node.text;
 					destroyProject();
@@ -272,6 +277,8 @@ async function constructWSTree() {
 
 async function updateWS(file){
 
+var obj_node = wsTree.get_node('last-open');
+
 	try {
 
 		var dataWS = await get_file('settings/workspace.json');
@@ -279,7 +286,7 @@ async function updateWS(file){
 			if (data.id = 'last-open'){
 				console.log(data.children);
 				//data.children = file;
-				console.log(data.children);
+				//console.log(data.children);
 			}
 		});
 
