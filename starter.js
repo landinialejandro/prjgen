@@ -293,7 +293,7 @@ async function constructWSTree() {
 								}
 							}
 						};
-						if (this.get_type(node) === "file_") {
+						if (this.get_type(node) === "file") {
 							delete tmp.create;
 						}
 						return tmp;
@@ -316,7 +316,14 @@ async function constructWSTree() {
 			})
 			.on('select_node.jstree', function (n, data, e) {
 				var type = data.node.type;
-				if (type === 'file') {
+				var event = false;
+				if (typeof data.event !== 'undefined' ) {
+					
+					event = (data.event.type === 'contextmenu' ? false : true);
+
+				}
+				//console.log(event);
+				if (type === 'file' && event) {
 					//id="ws_tree"
 					var file = data.node.text;
 					if (file !== loadedWS) {
