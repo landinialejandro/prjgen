@@ -318,11 +318,8 @@ async function constructWSTree() {
 				var type = data.node.type;
 				var event = false;
 				if (typeof data.event !== 'undefined' ) {
-					
 					event = (data.event.type === 'contextmenu' ? false : true);
-
 				}
-				//console.log(event);
 				if (type === 'file' && event) {
 					//id="ws_tree"
 					var file = data.node.text;
