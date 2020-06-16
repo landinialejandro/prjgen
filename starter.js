@@ -22,9 +22,7 @@ $(".newproject").on('click', function (e) {
 });
 
 $(".save-app-data").on('click', function (e) {
-	$('.card-project').addClass('container-disabled');
 	updateData();
-	$('.container-disabled').removeClass('container-disabled');
 });
 
 function destroyProject() {
@@ -34,6 +32,7 @@ function destroyProject() {
 }
 
 function updateData() {
+	$('.card-project').addClass('container-disabled');
 	$('.form-node').each(function () {
 		var obj_node = prjTree.get_node(this.dataset.nodeid);
 		if (obj_node) {
@@ -41,10 +40,15 @@ function updateData() {
 				obj_node.data.user_value[this.dataset.index].text = $(this).val();
 			} else {
 				//lang undefined
-				obj_node.data.user_value = $(this).val();
+				if ($(this).hasClass('custom-control-input')) {
+					obj_node.data.options[this.dataset.index].checked = this.checked;
+				} else {
+					obj_node.data.user_value = $(this).val();
+				}
 			}
 		}
 	});
+	$('.container-disabled').removeClass('container-disabled');
 }
 
 function saveProject() {
@@ -180,46 +184,18 @@ async function constructTree(file) {
 						return contextMenu(node, this);
 					}
 				},
-				"plugins": ["dnd", "search", "state", "types", "contextmenu"]
+				"plugins": ["dnd", "search", "state", "types", "contextmenu","unique"]
 			})
 			.on('create_node.jstree', function (e, data) {
-				var error = true;
-				var parentData = getJsonNode(data.node.parent);
-				if (parentData.type === 'table' && data.node.type === 'field' && error) {
-					error = false;
-				}
-				if (parentData.type === 'group' && data.node.type === 'table' && error) {
-					error = false;
-				}
-				if (parentData.type === '#' && data.node.type === 'group' && error) {
-					error = false;
-				}
-				if (parentData.type === 'field' && data.node.type === 'field-setting' && error) {
-					error = false;
-				}
-				if (parentData.type === 'field-setting' && data.node.type === 'default' && error) {
-					error = false;
-				}
-
-				if (error) {
-					data.instance.refresh();
-					console.log("can't add " + data.node.type + " into " + parentData.type);
-				} else {
-					data.instance.set_id(data.node, data.node.id);
-				}
+				data.instance.set_id(data.node, data.node.id);
 				updateTree();
 			})
 			.on('changed.jstree', function (e, data) {
 				if (data.action === "select_node") {
 					var selectedID = prjTree.get_json(data.node.id);
 					//console.log(selectedID);
-
-					Handlebars.registerHelper('getchildren', function (id, opciones) {
-						var nodeID = prjTree.get_json(id);
-						var template = Handlebars.compile(fieldform);
-						var respuesta = template(nodeID);
-						return respuesta;
-					});
+					whenHelper();
+					getChildrenHelper(fieldform);
 
 					var template = Handlebars.compile(form);
 					$('.container-form').html(template(selectedID));
@@ -305,19 +281,19 @@ async function constructWSTree() {
 						return name + ' ' + counter;
 					}
 				},
-				"plugins": ["state","sort", "types", "contextmenu", "unique"]
+				"plugins": ["state", "sort", "types", "contextmenu", "unique"]
 			})
 			.on('loaded.jstree', function (e, data) {
 				if (ws.text && ws.text !== "" && ws.text !== 'undefined') {
 					loadedWS = ws.text;
 					loadProject('projects/' + loadedWS)
-					console.log($('#ws_tree').jstree(true).get_json('#'));
+					//console.log($('#ws_tree').jstree(true).get_json('#'));
 				}
 			})
 			.on('select_node.jstree', function (n, data, e) {
 				var type = data.node.type;
 				var event = false;
-				if (typeof data.event !== 'undefined' ) {
+				if (typeof data.event !== 'undefined') {
 					event = (data.event.type === 'contextmenu' ? false : true);
 				}
 				if (type === 'file' && event) {
@@ -340,3 +316,36 @@ function loadProject(file) {
 	destroyProject();
 	constructTree(file);
 }
+
+function whenHelper() {
+	Handlebars.registerHelper("when", function (operand_1, operator, operand_2, options) {
+		var operators = {
+			'eq': function (l, r) { return l == r; },
+			'noteq': function (l, r) { return l != r; },
+			'gt': function (l, r) { return Number(l) > Number(r); },
+			'or': function (l, r) { return l || r; },
+			'and': function (l, r) { return l && r; },
+			'%': function (l, r) { return (l % r) === 0; }
+		}
+			, result = operators[operator](operand_1, operand_2);
+
+		if (result) return options.fn(this);
+		else return options.inverse(this);
+	});
+}
+
+function getChildrenHelper(fieldform) {
+	Handlebars.registerHelper('getchildren', function (id, opciones) {
+		var nodeID = prjTree.get_json(id);
+		var template = Handlebars.compile(fieldform);
+		var respuesta = template(nodeID);
+		return respuesta;
+	});
+}
+
+/*
+TODO: 
+	actualizar la definicion del seteo.
+	no permitir borrar un seteo
+
+*/

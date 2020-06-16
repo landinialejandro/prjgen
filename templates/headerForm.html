@@ -12,4 +12,8 @@
     {{else}}
         {{#getchildren id}}{{/getchildren}}
     {{/if}}
+    <div class="form-group">
+        <label for="{{id}}" class="">Set {{type}} icon: </label>
+        <input type="text" class="form-control form-node" data-index="{{@index}}" data-nodeid="{{id}}" name="{{id}}"  placeholder="set new icon" value="{{icon}}">
+    </div>
 </form>

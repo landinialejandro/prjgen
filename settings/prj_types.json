@@ -1,26 +1,31 @@
 {
     "#": {
         "max_children": 9,
-        "icon": "fas fa-project-diagram"
+        "icon": "fas fa-project-diagram",
+        "valid_children":["group"]
     },
     "group": {
         "max_children": 20,
         "max_depth": 20,
-        "icon": "far fa-object-group"
+        "icon": "far fa-object-group",
+        "valid_children":["table"]
     },
     "table": {
         "max_children": 20,
         "max_depth": 20,
-        "icon": "fas fa-table"
+        "icon": "fas fa-table",
+        "valid_children":["field"]
     },
     "field": {
         "max_children": 20,
         "max_depth": 20,
-        "icon": "fas fa-stream"
+        "icon": "fas fa-stream",
+        "valid_children":["field-setting"]
     },
     "field-setting": {
         "max_children": 20,
         "max_depth": 20,
-        "icon": "fa fa-cog"
+        "icon": "fa fa-cog",
+        "valid_children":["none"]
     }
 }
