@@ -179,10 +179,14 @@ async function constructTree(file) {
 								return false;
 							}
 						}
+						if (o === "delete_node"){
+							if(n.type === 'field-setting'){
+								return false;
+							}else{
+								return confirm('Are you sure you want to delete?');
+							}
+						}
 						return true;
-					},
-					"themes": {
-						"responsive": false
 					}
 				},
 				"types": types,
@@ -216,6 +220,9 @@ async function constructTree(file) {
 			})
 			.on('loaded.jstree', function () {
 				prjTree = $('#project_tree').jstree(true);
+			})
+			.on('delete_node.jstree',function(){
+				//before delete
 			});
 
 	} catch (err) {
@@ -348,7 +355,6 @@ function getChildrenHelper(fieldform) {
 		var type = options.data.root.type;
 		if (type != 'filed' && type != 'field-setting'){
 			nodeID['readonly']=true;
-			console.log(nodeID);
 		}
 		var res = template(nodeID);
 		return res;
@@ -357,7 +363,6 @@ function getChildrenHelper(fieldform) {
 
 /*
 TODO:
-	actualizar la definicion del seteo.
 	no permitir borrar un seteo
 
 */
