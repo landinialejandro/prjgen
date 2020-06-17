@@ -1,7 +1,7 @@
 <h3 class="card-title float-right">
-    <span class="badge badge-info" title="field type">{{type}}</span>
-    <span class="badge badge-danger" title="field Name">{{text}}</span>
-    <span class="badge badge-warning" title="field node ID">{{id}}</span>
+    <span class="badge badge-info" title="Selected node type">{{type}}</span>
+    <span class="badge badge-danger" title="Selected node Name">{{text}}</span>
+    <span class="badge badge-warning" title="Selected node ID">{{id}}</span>
 </h3>
 <br>
 <form class="{{id}}" role="form">
@@ -14,6 +14,6 @@
     {{/if}}
     <div class="form-group">
         <label for="{{id}}" class="">Set {{type}} icon: </label>
-        <input type="text" class="form-control form-node" data-index="{{@index}}" data-nodeid="{{id}}" name="{{id}}"  placeholder="set new icon" value="{{icon}}">
+        <input type="text" class="form-control form-node node-setting" data-index="{{@index}}" data-nodeid="{{id}}" name="icon"  placeholder="set new icon" value="{{icon}}">
     </div>
 </form>

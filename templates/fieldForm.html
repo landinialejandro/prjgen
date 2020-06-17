@@ -35,7 +35,7 @@
                     {{/each}}
                     </div>
                 {{else}}
-                    <input type="text" class="form-control form-node" data-index="{{@index}}" data-nodeid="{{id}}" name="{{id}}"  placeholder="Node children value" value="{{text}}">
+                    <input type="text" class="form-control form-node" data-index="{{@index}}" data-nodeid="{{id}}" name="{{id}}"  placeholder="Node children value" value="{{text}}" {{#if readonly}}readonly{{/if}} >
                 {{/if}}
             {{/if}}
         {{/if}}
