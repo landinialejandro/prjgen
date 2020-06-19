@@ -4,6 +4,22 @@ var loadedWS = false;
 
 $(function () {
 	constructWSTree();
+
+
+
+	$.get('settings/icons.json', function(data){    
+		$.get('templates/iconlist.html',function(form){
+			var template = Handlebars.compile(form);
+			$('.container-icons').html(template(data));
+		})
+	});
+
+
+
+
+
+
+
 });
 
 $('.container-form').on('click', '.btn-expand', function () {
@@ -34,21 +50,25 @@ function destroyProject() {
 function updateData() {
 	$('.card-project').addClass('container-disabled');
 	$('.form-node').each(function () {
-		var obj_node = prjTree.get_node(this.dataset.nodeid);
+		var $this = $(this);
+		var obj_node = prjTree.get_node($this.data("nodeid"));
 		if (obj_node) {
-			if (obj_node.li_attr.lang) {
-				obj_node.data.user_value[this.dataset.index].text = $(this).val();
+			var data = obj_node.data;
+			if (Array.isArray(data.user_value)) {
+				data.user_value[$this.data("index")].text = $this.val();
+			} else if ($this.hasClass('custom-control-input')) {
+				data.options[$this.data("index")].checked = this.checked;
+			} else if ($this.hasClass('node-setting')) {
+
+				var setting = $this.attr('name');
+				obj_node[setting] = $this.val();
+				//TODO: si cambia un setting habría que hacer un refresh del objeto tree.
 			} else {
-				//lang undefined
-				if ($(this).hasClass('custom-control-input')) {
-					obj_node.data.options[this.dataset.index].checked = this.checked;
-				} else {
-					obj_node.data.user_value = $(this).val();
-				}
+				data.user_value =  $this.val();
 			}
 		}
 	});
-	$('.container-disabled').removeClass('container-disabled');
+$('.container-disabled').removeClass('container-disabled');
 }
 
 function saveProject() {
@@ -175,6 +195,13 @@ async function constructTree(file) {
 								return false;
 							}
 						}
+						if (o === "delete_node"){
+							if(n.type === 'field-setting'){
+								return false;
+							}else{
+								return confirm('Are you sure you want to delete?');
+							}
+						}
 						return true;
 					}
 				},
@@ -184,7 +211,7 @@ async function constructTree(file) {
 						return contextMenu(node, this);
 					}
 				},
-				"plugins": ["dnd", "search", "state", "types", "contextmenu","unique"]
+				"plugins": ["dnd", "search", "state", "types", "contextmenu", "unique"]
 			})
 			.on('create_node.jstree', function (e, data) {
 				data.instance.set_id(data.node, data.node.id);
@@ -209,6 +236,9 @@ async function constructTree(file) {
 			})
 			.on('loaded.jstree', function () {
 				prjTree = $('#project_tree').jstree(true);
+			})
+			.on('delete_node.jstree',function(){
+				//before delete
 			});
 
 	} catch (err) {
@@ -335,17 +365,20 @@ function whenHelper() {
 }
 
 function getChildrenHelper(fieldform) {
-	Handlebars.registerHelper('getchildren', function (id, opciones) {
+	Handlebars.registerHelper('getchildren', function (id, options) {
 		var nodeID = prjTree.get_json(id);
 		var template = Handlebars.compile(fieldform);
-		var respuesta = template(nodeID);
-		return respuesta;
+		var type = options.data.root.type;
+		if (type != 'filed' && type != 'field-setting'){
+			nodeID['readonly']=true;
+		}
+		var res = template(nodeID);
+		return res;
 	});
 }
 
 /*
-TODO: 
-	actualizar la definicion del seteo.
+TODO:
 	no permitir borrar un seteo
 
 */
