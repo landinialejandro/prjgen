@@ -5,14 +5,7 @@ class fs
 
 	protected function real($path) {
 		$temp = realpath($path);
-		if(!$temp) { 
-			
-			$temp = $this->create("",$path,true);
-			if (!$temp){
-				throw new Exception('Path does not exist: ' . $path);
-			}
-		
-		}
+		if(!$temp) { throw new Exception('Path does not exist: ' . $path); }
 		if($this->base && strlen($this->base)) {
 			if(strpos($temp, $this->base) !== 0) { throw new Exception('Path is not inside base ('.$this->base.'): ' . $temp); }
 		}
