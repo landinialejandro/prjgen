@@ -7,7 +7,7 @@ $(function () {
 });
 
 $('.container-form').on('click', '.btn-expand', function () {
-	expandContainer('.' + this.dataset.nodeid, this)
+	expandContainer('.' + this.dataset.nodeid, this);
 });
 
 $(".saveproject").on('click', function (e) {
@@ -18,7 +18,7 @@ $(".saveproject").on('click', function (e) {
 });
 
 $(".newproject").on('click', function (e) {
-	loadProject('settings/blank_project.json')
+	loadProject('settings/blank_project.json');
 });
 
 $(".save-app-data").on('click', function (e) {
@@ -67,7 +67,7 @@ function save_file(url, data, folder = 'projects') {
 			if (res == undefined) {
 				alert("Error: unexpected response");
 			} else {
-				console.log("%c saved file: ", "background: white; color: green")
+				console.log("%c saved file: ", "background: white; color: green");
 				console.log(res.id);
 			}
 		},
@@ -81,7 +81,7 @@ function save_file(url, data, folder = 'projects') {
 		complete: function () {
 			$('.container-disabled').removeClass('container-disabled');
 		}
-	})
+	});
 }
 
 function getJsonNode(id = '#', flat = false) {
@@ -286,7 +286,7 @@ async function constructWSTree() {
 			.on('loaded.jstree', function (e, data) {
 				if (ws.text && ws.text !== "" && ws.text !== 'undefined') {
 					loadedWS = ws.text;
-					loadProject('projects/' + loadedWS)
+					loadProject('projects/' + loadedWS);
 					//console.log($('#ws_tree').jstree(true).get_json('#'));
 				}
 			})
@@ -300,9 +300,9 @@ async function constructWSTree() {
 					//id="ws_tree"
 					var file = data.node.text;
 					if (file !== loadedWS) {
-						$('#ws_tree').addClass('container-disabled')
+						$('#ws_tree').addClass('container-disabled');
 						loadedWS = file;
-						loadProject('projects/' + file)
+						loadProject('projects/' + file);
 						save_file('workspace.json', { text: file }, "settings");
 					}
 				}
