@@ -7,16 +7,12 @@ $(function () {
 
 
 
-	$.get('settings/icons.json', function(data){    
-		$.get('templates/iconlist.html',function(form){
-			var template = Handlebars.compile(form);
-			$('.container-icons').html(template(data));
-		})
-	});
-
-
-
-
+	// $.get('settings/icons.json', function(data){    
+	// 	$.get('templates/iconlist.html',function(form){
+	// 		var template = Handlebars.compile(form);
+	// 		$('.container-icons').html(template(data));
+	// 	})
+	// });
 
 
 
