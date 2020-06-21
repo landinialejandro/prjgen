@@ -5,20 +5,12 @@ var loadedWS = false;
 $(function () {
 	constructWSTree();
 
-
-
-	$.get('settings/icons.json', function(data){    
-		$.get('templates/iconlist.html',function(form){
-			var template = Handlebars.compile(form);
-			$('.container-icons').html(template(data));
-		})
-	});
-
-
-
-
-
-
+	// $.get('settings/icons/icons.json', function(data){    
+	// 	$.get('templates/iconlist.html',function(form){
+	// 		var template = Handlebars.compile(form);
+	// 		$('.container-icons').html(template(data));
+	// 	})
+	// });
 
 });
 
@@ -52,23 +44,25 @@ function updateData() {
 	$('.form-node').each(function () {
 		var $this = $(this);
 		var obj_node = prjTree.get_node($this.data("nodeid"));
-		if (obj_node) {
+		if (!$.isEmptyObject(obj_node)) {
 			var data = obj_node.data;
-			if (Array.isArray(data.user_value)) {
-				data.user_value[$this.data("index")].text = $this.val();
-			} else if ($this.hasClass('custom-control-input')) {
-				data.options[$this.data("index")].checked = this.checked;
-			} else if ($this.hasClass('node-setting')) {
-
+			if (data != null){
+				if (Array.isArray(data.user_value)) {
+					data.user_value[$this.data("index")].text = $this.val();
+				} else if ($this.hasClass('custom-control-input')) {
+					data.options[$this.data("index")].checked = this.checked;
+				} else {
+					data.user_value = $this.val();
+				}
+			}
+			if ($this.hasClass('node-setting')) {
 				var setting = $this.attr('name');
 				obj_node[setting] = $this.val();
 				//TODO: si cambia un setting habría que hacer un refresh del objeto tree.
-			} else {
-				data.user_value =  $this.val();
-			}
+			} 
 		}
 	});
-$('.container-disabled').removeClass('container-disabled');
+	$('.container-disabled').removeClass('container-disabled');
 }
 
 function saveProject() {
@@ -81,7 +75,13 @@ function save_file(url, data, folder = 'projects') {
 	$.ajax({
 		type: "POST",
 		url: "starter.php",
-		data: { 'operation': 'save_file', 'type': 'json', 'id': url, 'text': JSON.stringify(data), folder: folder },
+		data: {
+			'operation': 'save_file',
+			'type': 'json',
+			'id': url,
+			'text': JSON.stringify(data),
+			folder: folder
+		},
 		dataType: "json",
 		success: function (res) {
 			if (res == undefined) {
@@ -149,7 +149,11 @@ async function createNode(data, type) {
 
 	if (type === 'field') {
 		try {
-			var data = { operation: "get_json", id: "#", text: "field-settings" };
+			data = {
+				operation: "get_json",
+				id: "#",
+				text: "field-settings"
+			};
 			childs = await get_data("starter.php", data);
 		} catch (err) {
 			return console.log(err.message);
@@ -195,10 +199,10 @@ async function constructTree(file) {
 								return false;
 							}
 						}
-						if (o === "delete_node"){
-							if(n.type === 'field-setting'){
+						if (o === "delete_node") {
+							if (n.type === 'field-setting') {
 								return false;
-							}else{
+							} else {
 								return confirm('Are you sure you want to delete?');
 							}
 						}
@@ -237,7 +241,7 @@ async function constructTree(file) {
 			.on('loaded.jstree', function () {
 				prjTree = $('#project_tree').jstree(true);
 			})
-			.on('delete_node.jstree',function(){
+			.on('delete_node.jstree', function () {
 				//before delete
 			});
 
@@ -257,13 +261,19 @@ async function constructWSTree() {
 					'data': {
 						'url': 'starter.php?operation=get_node',
 						'data': function (node) {
-							return { 'id': node.id };
+							return {
+								'id': node.id
+							};
 						}
 					},
 					'check_callback': function (o, n, p, i, m) {
-						if (m && m.dnd && m.pos !== 'i') { return false; }
+						if (m && m.dnd && m.pos !== 'i') {
+							return false;
+						}
 						if (o === "move_node" || o === "copy_node") {
-							if (this.get_node(n).parent === this.get_node(p).id) { return false; }
+							if (this.get_node(n).parent === this.get_node(p).id) {
+								return false;
+							}
 						}
 						return true;
 					}
@@ -283,8 +293,12 @@ async function constructWSTree() {
 								"action": function (data) {
 									var inst = $.jstree.reference(data.reference),
 										obj = inst.get_node(data.reference);
-									inst.create_node(obj, { type: "default" }, "last", function (new_node) {
-										setTimeout(function () { inst.edit(new_node); }, 0);
+									inst.create_node(obj, {
+										type: "default"
+									}, "last", function (new_node) {
+										setTimeout(function () {
+											inst.edit(new_node);
+										}, 0);
 									});
 								}
 							},
@@ -293,8 +307,12 @@ async function constructWSTree() {
 								"action": function (data) {
 									var inst = $.jstree.reference(data.reference),
 										obj = inst.get_node(data.reference);
-									inst.create_node(obj, { type: "file" }, "last", function (new_node) {
-										setTimeout(function () { inst.edit(new_node); }, 0);
+									inst.create_node(obj, {
+										type: "file"
+									}, "last", function (new_node) {
+										setTimeout(function () {
+											inst.edit(new_node);
+										}, 0);
 									});
 								}
 							}
@@ -333,7 +351,9 @@ async function constructWSTree() {
 						$('#ws_tree').addClass('container-disabled');
 						loadedWS = file;
 						loadProject('projects/' + file);
-						save_file('workspace.json', { text: file }, "settings");
+						save_file('workspace.json', {
+							text: file
+						}, "settings");
 					}
 				}
 			});
@@ -350,14 +370,26 @@ function loadProject(file) {
 function whenHelper() {
 	Handlebars.registerHelper("when", function (operand_1, operator, operand_2, options) {
 		var operators = {
-			'eq': function (l, r) { return l == r; },
-			'noteq': function (l, r) { return l != r; },
-			'gt': function (l, r) { return Number(l) > Number(r); },
-			'or': function (l, r) { return l || r; },
-			'and': function (l, r) { return l && r; },
-			'%': function (l, r) { return (l % r) === 0; }
-		}
-			, result = operators[operator](operand_1, operand_2);
+				'eq': function (l, r) {
+					return l == r;
+				},
+				'noteq': function (l, r) {
+					return l != r;
+				},
+				'gt': function (l, r) {
+					return Number(l) > Number(r);
+				},
+				'or': function (l, r) {
+					return l || r;
+				},
+				'and': function (l, r) {
+					return l && r;
+				},
+				'%': function (l, r) {
+					return (l % r) === 0;
+				}
+			},
+			result = operators[operator](operand_1, operand_2);
 
 		if (result) return options.fn(this);
 		else return options.inverse(this);
@@ -369,8 +401,8 @@ function getChildrenHelper(fieldform) {
 		var nodeID = prjTree.get_json(id);
 		var template = Handlebars.compile(fieldform);
 		var type = options.data.root.type;
-		if (type != 'filed' && type != 'field-setting'){
-			nodeID['readonly']=true;
+		if (type != 'filed' && type != 'field-setting') {
+			nodeID['readonly'] = true;
 		}
 		var res = template(nodeID);
 		return res;
