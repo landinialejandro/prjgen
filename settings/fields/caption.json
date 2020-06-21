@@ -13,7 +13,7 @@
                 "text": ""
             }
         ],
-        "usershelper":"Este valor se utiliza para identificar el título del campo de l abase de datos, aperece en el formulario de detalle y en la vista de tabla"
+        "usershelper":"Este valor se utiliza para identificar el título del campo de la base de datos, aperece en el formulario de detalle y en la vista de tabla"
     },
     "type": "field-setting",
     "icon": "fas fa-font",
