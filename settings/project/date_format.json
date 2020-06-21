@@ -1,0 +1,16 @@
+{
+    "text": "Date order format",
+    "data": {
+        "user_value":"",
+        "option": true,
+        "options": [
+            "Month, Day, Year",
+            "Day, Month, Year",
+            "Year, Day, Month"
+        ],
+        "usershelper":"Indique el separador para la fecha"
+    },
+    "type": "prj-setting",
+    "icon": "fas fa-stream",
+    "order": 1
+}
