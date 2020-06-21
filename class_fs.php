@@ -5,7 +5,15 @@ class fs
 
 	protected function real($path) {
 		$temp = realpath($path);
-		if(!$temp) { throw new Exception('Path does not exist: ' . $path); }
+		if(!$temp) { 
+			try {
+				$this->create(__DIR__, $path,true);
+				$temp=true;
+			} catch (\Throwable $th) {
+				throw new Exception($th . ' : ' . $path); 
+			}
+		}
+			
 		if($this->base && strlen($this->base)) {
 			if(strpos($temp, $this->base) !== 0) { throw new Exception('Path is not inside base ('.$this->base.'): ' . $temp); }
 		}
@@ -24,7 +32,6 @@ class fs
 		$path = trim($path, '/');
 		return strlen($path) ? $path : '/';
 	}
-
 	public function __construct($base) {
 		$this->base = $this->real($base);
 		if(!$this->base) { throw new Exception('Base directory does not exist'); }
@@ -98,16 +105,16 @@ class fs
 		}
 		throw new Exception('Not a valid selection: ' . $dir);
 	}
-	public function create($id, $name, $mkdir = false) {
+	public function create($id, $name, $mkdir = false, $par = "") {
 		$dir = $this->path($id);
-		if(preg_match('([^ a-zа-я-_0-9.]+)ui', $name) || !strlen($name)) {
+		if(!preg_match("/^[a-zA-Z-_0-9.]*$/", $name) || !strlen($name)) {
 			throw new Exception('Invalid name: ' . $name);
 		}
 		if($mkdir) {
 			mkdir($dir . DIRECTORY_SEPARATOR . $name);
 		}
 		else {
-			file_put_contents($dir . DIRECTORY_SEPARATOR . $name, '');
+			file_put_contents($dir . DIRECTORY_SEPARATOR . $name, $par);
 		}
 		return array('id' => $this->id($dir . DIRECTORY_SEPARATOR . $name));
 	}
@@ -116,7 +123,7 @@ class fs
 		if($dir === $this->base) {
 			throw new Exception('Cannot rename root');
 		}
-		if(preg_match('([^ a-zа-я-_0-9.]+)ui', $name) || !strlen($name)) {
+		if(preg_match('/[a-zA-Z-_0-9.]*$/', $name) || !strlen($name)) {
 			throw new Exception('Invalid name: ' . $name);
 		}
 		$new = explode(DIRECTORY_SEPARATOR, $dir);
@@ -154,24 +161,12 @@ class fs
 		rename($dir, $new);
 		return array('id' => $this->id($new));
 	}
-	public function save($name, $par){
-		if(preg_match('/^[A-Za-z0-9]_.*\.[a-z]{0,4}$/', $name) || !strlen($name)) {
-			throw new Exception('Invalid name: ' . $name);
-		}
-		$dir = $this->path($name);
-		if(!is_dir($dir)) {
-			file_put_contents($dir, $par);
-		}
-		return array('id' => $dir);
-	}
-
 	public function getContent($id){
 		if(!is_dir($id) && is_file($id)) {
 			$content = file_get_contents($id);
 		}
 		return $content;
 	}
-
 	public function getJson($id){
 		return array('id' => $this->id($id),'content'=>$this->getContent($id));
 	}
@@ -194,5 +189,4 @@ class fs
 		}
 		return array('id' => $this->id($new));
 	}
-	
 }

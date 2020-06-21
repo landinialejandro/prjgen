@@ -1,7 +1,7 @@
 <?php
 include('class_fs.php');
 if (isset($_REQUEST['operation'])) {
-	$folder = isset($_REQUEST['folder']) ? $_REQUEST['folder']."/" : 'projects/';
+	$folder = isset($_REQUEST['folder']) ? $_REQUEST['folder']: 'projects';
 	$fs = new fs($folder);
 	try {
 		$rslt = null;
@@ -40,7 +40,7 @@ if (isset($_REQUEST['operation'])) {
 				$node = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
 				$parn = isset($_REQUEST['text']) ? $_REQUEST['text'] : '';
 
-				$rslt = $fs->save($node, $parn);
+				$rslt = $fs->create("",$node,false, $parn);
 
 				break;
 			case 'get_json':
