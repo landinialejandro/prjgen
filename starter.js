@@ -1,5 +1,4 @@
 var prjTree = false;
-var wsTree = false;
 var loadedWS = false;
 
 $(function () {
@@ -101,6 +100,8 @@ function save_file(url, data, folder = 'projects') {
 		complete: function () {
 			$('.container-disabled').removeClass('container-disabled');
 		}
+	}).always(function () {
+		$('#ws_tree').jstree(true).refresh();
 	});
 }
 
@@ -116,25 +117,34 @@ function contextMenu(node, $this) { //create adtional context menu
 	delete tmp.create.action;
 	tmp.create.label = "New object";
 	tmp.create.submenu = {
-		"create_group": {
-			"separator_after": true,
-			"label": "Group",
-			"action": function (data) {
-				createNode(data, "group");
-			}
-		},
 		"create_prj_setings": {
 			"separator_after": true,
 			"label": "Project Settings",
 			"action": function (data) {
 				createNode(data, "project-settings");
+			},
+			"_disabled": function (data) {
+				return compare_type('#',data);
+			}
+		},
+		"create_group": {
+			"separator_after": false,
+			"label": "Group",
+			"action": function (data) {
+				createNode(data, "group");
+			},
+			"_disabled": function (data) {
+				return compare_type('#',data);
 			}
 		},
 		"create_grp_setings": {
-			"separator_after": false,
+			"separator_after": true,
 			"label": "Group Settings",
 			"action": function (data) {
 				createNode(data, "group-settings");
+			},
+			"_disabled": function (data) {
+				return compare_type('group',data);
 			}
 		},
 		"create_table": {
@@ -142,12 +152,18 @@ function contextMenu(node, $this) { //create adtional context menu
 			"label": "Table",
 			"action": function (data) {
 				createNode(data, "table");
+			},
+			"_disabled": function (data) {
+				return compare_type('group',data);
 			}
 		},
 		"create_field": {
 			"label": "Field",
 			"action": function (data) {
 				createNode(data, "field");
+			},
+			"_disabled": function (data) {
+				return compare_type('table',data);
 			}
 		}
 	};
@@ -155,6 +171,16 @@ function contextMenu(node, $this) { //create adtional context menu
 		delete tmp.create;
 	}
 	return tmp;
+}
+
+function get_reference(data) { //return reference node
+	var inst = $.jstree.reference(data.reference);
+	return inst.get_node(data.reference);
+}
+
+function compare_type(type,data){
+	var obj = get_reference(data);
+	return obj.type != type;
 }
 
 async function createNode(data, type) {
@@ -175,13 +201,17 @@ async function createNode(data, type) {
 	if (type === 'project-settings') {
 		options.text = "project-settings";
 		text = "Project Settings";
-		a_attr = {'style':'background-color: yellow'};
+		a_attr = {
+			'style': 'background-color: yellow'
+		};
 		position = "first";
 	}
 	if (type === 'group-settings') {
 		options.text = "group-settings";
 		text = "Group Settings";
-		a_attr = {'style':'background-color: yellow'};
+		a_attr = {
+			'style': 'background-color: yellow'
+		};
 		position = "first";
 	}
 	if (options.text != "") {
@@ -236,9 +266,9 @@ async function constructTree(file) {
 								return confirm('Are you sure you want to delete?');
 							}
 						}
-						if (o === "rename_node"){
-							var no_rename =['field-setting','prj-setting','grp-setting','group-settings','project-settings'];
-							if ($.inArray(n.type,no_rename) >= 0){
+						if (o === "rename_node") {
+							var no_rename = ['field-setting', 'prj-setting', 'grp-setting', 'group-settings', 'project-settings'];
+							if ($.inArray(n.type, no_rename) >= 0) {
 								console.log("%c ERROR! yo can't rename: " + n.type, "background: white; color: red");
 								return false;
 							}
@@ -372,7 +402,6 @@ async function constructWSTree() {
 				if (ws.text && ws.text !== "" && ws.text !== 'undefined') {
 					loadedWS = ws.text;
 					loadProject('projects/' + loadedWS);
-					//console.log($('#ws_tree').jstree(true).get_json('#'));
 				}
 			})
 			.on('select_node.jstree', function (n, data, e) {
