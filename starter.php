@@ -1,7 +1,7 @@
 <?php
 include('class_fs.php');
 if (isset($_REQUEST['operation'])) {
-	$folder = isset($_REQUEST['folder']) ? $_REQUEST['folder']: 'projects';
+	$folder = isset($_REQUEST['folder']) ? $_REQUEST['folder'] : 'projects';
 	$fs = new fs($folder);
 	try {
 		$rslt = null;
@@ -40,7 +40,7 @@ if (isset($_REQUEST['operation'])) {
 				$node = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
 				$parn = isset($_REQUEST['text']) ? $_REQUEST['text'] : '';
 
-				$rslt = $fs->create("",$node,false, $parn);
+				$rslt = $fs->create("", $node, false, $parn);
 
 				break;
 			case 'get_json':
@@ -49,24 +49,26 @@ if (isset($_REQUEST['operation'])) {
 
 				switch ($parn) {
 					case 'field-settings':
-						//
 						$dir = dirname(__FILE__) . "/settings/fields";
-						$files = array_diff(scandir($dir), array('.', '..'));
-						$res = [];
-						foreach ($files as $file) {
-							$ext = pathinfo($file, PATHINFO_EXTENSION);
-							if ($ext === 'json') {
-								$res[] = json_decode($fs->getContent("$dir/$file"), true);
-							}
-						}
-						$order = array_column($res, 'order');
-						array_multisort($order, SORT_ASC, $res);
-						$rslt = array('id' => $parn, 'content' => $res);
+						break;
+					case 'project-settings':
+						$dir = dirname(__FILE__) . "/settings/project";
 						break;
 					default:
 						throw new Exception('Unsupported operation json: ' . $parn);
 						break;
 				}
+				$files = array_diff(scandir($dir), array('.', '..'));
+				$res = [];
+				foreach ($files as $file) {
+					$ext = pathinfo($file, PATHINFO_EXTENSION);
+					if ($ext === 'json') {
+						$res[] = json_decode($fs->getContent("$dir/$file"), true);
+					}
+				}
+				$order = array_column($res, 'order');
+				array_multisort($order, SORT_ASC, $res);
+				$rslt = array('id' => $parn, 'content' => $res);
 				break;
 			case 'test':
 				$id = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';

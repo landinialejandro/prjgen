@@ -46,7 +46,7 @@ function updateData() {
 		var obj_node = prjTree.get_node($this.data("nodeid"));
 		if (!$.isEmptyObject(obj_node)) {
 			var data = obj_node.data;
-			if (data != null){
+			if (data != null) {
 				if (Array.isArray(data.user_value)) {
 					data.user_value[$this.data("index")].text = $this.val();
 				} else if ($this.hasClass('custom-control-input')) {
@@ -59,7 +59,7 @@ function updateData() {
 				var setting = $this.attr('name');
 				obj_node[setting] = $this.val();
 				//TODO: si cambia un setting habría que hacer un refresh del objeto tree.
-			} 
+			}
 		}
 	});
 	$('.container-disabled').removeClass('container-disabled');
@@ -123,6 +123,13 @@ function contextMenu(node, $this) { //create adtional context menu
 				createNode(data, "group");
 			}
 		},
+		"create_prj_setings": {
+			"separator_after": true,
+			"label": "Project Settings",
+			"action": function (data) {
+				createNode(data, "project-settings");
+			}
+		},
 		"create_table": {
 			"separator_after": true,
 			"label": "Table",
@@ -146,27 +153,37 @@ function contextMenu(node, $this) { //create adtional context menu
 async function createNode(data, type) {
 	var inst = $.jstree.reference(data.reference);
 	var obj = inst.get_node(data.reference);
-
+	var text = "new_" + type + "_" + (obj.children.length + 1);
+	var childs = [];
+	var options = {
+		operation: "get_json",
+		id: "#",
+		text: ""
+	};
+	var a_attr = {};
+	var position = "last";
 	if (type === 'field') {
+		options.text = "field-settings";
+	}
+	if (type === 'project-settings') {
+		options.text = "project-settings";
+		text = "Project Settings";
+		a_attr = {'style':'background-color: yellow'};
+		position = "first";
+	}
+	if (options.text != "") {
 		try {
-			data = {
-				operation: "get_json",
-				id: "#",
-				text: "field-settings"
-			};
-			childs = await get_data("starter.php", data);
+			childs = await get_data("starter.php", options);
 		} catch (err) {
 			return console.log(err.message);
 		}
-	} else {
-		childs = [];
 	}
-
 	inst.create_node(obj, {
 		type: type,
-		text: "new_" + type + "_" + (obj.children.length + 1),
-		children: childs
-	}, "last", function (new_node) {
+		text: text,
+		children: childs,
+		a_attr: a_attr
+	}, position, function (new_node) {
 		setTimeout(function () {
 			inst.edit(new_node);
 		}, 0);
@@ -411,6 +428,6 @@ function getChildrenHelper(fieldform) {
 
 /*
 TODO:
-	no permitir borrar un seteo
+	
 
 */

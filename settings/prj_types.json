@@ -2,7 +2,7 @@
     "#": {
         "max_children": 9,
         "icon": "fas fa-project-diagram",
-        "valid_children":["group"]
+        "valid_children":["group","project-settings"]
     },
     "group": {
         "max_children": 20,
@@ -27,5 +27,17 @@
         "max_depth": 20,
         "icon": "fa fa-cog",
         "valid_children":["none"]
+    },
+    "prj-setting": {
+        "max_children": 20,
+        "max_depth": 20,
+        "icon": "fa fa-cog",
+        "valid_children":["none"]
+    },
+    "project-settings": {
+        "max_children": 20,
+        "max_depth": 20,
+        "icon": "fa fa-cog",
+        "valid_children":["prj-setting"]
     }
 }
