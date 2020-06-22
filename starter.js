@@ -196,47 +196,44 @@ function compare_type(type,data){
 async function createNode(data, type) {
 	var inst = $.jstree.reference(data.reference);
 	var obj = inst.get_node(data.reference);
-	var text = "new_" + type + "_" + (obj.children.length + 1);
-	var childs = [];
 	var options = {
 		operation: "get_json",
 		id: "#",
 		text: ""
 	};
-	var a_attr = {};
+	var newNode = {
+		type: type,
+		text: "new_" + type + "_" + (obj.children.length + 1),
+		children: []
+	};
 	var position = "last";
 	if (type === 'field') {
 		options.text = "field-settings";
 	}
 	if (type === 'project-settings') {
 		options.text = type;
-		text = "Project Settings";
+		newNode.text = "Project Settings";
 		position = "first";
 	}
 	if (type === 'group-settings') {
 		options.text = type;
-		text = "Group Settings";
+		newNode.text = "Group Settings";
 		position = "first";
 	}
 	if (type === 'table-settings') {
 		options.text = type;
-		text = "Table Settings";
+		newNode.text = "Table Settings";
 		position = "first";
 	}
 
 	if (options.text != "") {
 		try {
-			childs = await get_data("starter.php", options);
+			newNode.children = await get_data("starter.php", options);
 		} catch (err) {
 			return console.log(err.message);
 		}
 	}
-	inst.create_node(obj, {
-		type: type,
-		text: text,
-		children: childs,
-		a_attr: a_attr
-	}, position, function (new_node) {
+	inst.create_node(obj, newNode, position, function (new_node) {
 		setTimeout(function () {
 			inst.edit(new_node);
 		}, 0);

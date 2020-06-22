@@ -52,7 +52,7 @@
         "icon": "fa fa-cog",
         "valid_children":["prj-setting"],
         "a_attr" : {
-			"style": "background-color: #f9e79f"
+			"style": "background-color: #fff59d"
 		}
     },
     "table-settings": {
@@ -61,7 +61,7 @@
         "icon": "fa fa-cog",
         "valid_children":["tbl-setting"],
         "a_attr" : {
-			"style": "background-color: #f9e79f"
+			"style": "background-color: #fff59d"
 		}
     },
     "group-settings": {
@@ -70,7 +70,7 @@
         "icon": "fa fa-cog",
         "valid_children":["grp-setting"],
         "a_attr" : {
-			"style": "background-color: #f9e79f"
+			"style": "background-color:#fff59d"
 		}
     }
 }
