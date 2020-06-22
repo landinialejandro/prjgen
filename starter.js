@@ -209,27 +209,18 @@ async function createNode(data, type) {
 		options.text = "field-settings";
 	}
 	if (type === 'project-settings') {
-		options.text = "project-settings";
+		options.text = type;
 		text = "Project Settings";
-		a_attr = {
-			'style': 'background-color: yellow'
-		};
 		position = "first";
 	}
 	if (type === 'group-settings') {
-		options.text = "group-settings";
+		options.text = type;
 		text = "Group Settings";
-		a_attr = {
-			'style': 'background-color: yellow'
-		};
 		position = "first";
 	}
 	if (type === 'table-settings') {
-		options.text = "table-settings";
+		options.text = type;
 		text = "Table Settings";
-		a_attr = {
-			'style': 'background-color: yellow'
-		};
 		position = "first";
 	}
 
@@ -472,6 +463,12 @@ function whenHelper() {
 				},
 				'%': function (l, r) {
 					return (l % r) === 0;
+				},
+				"inString": function (l,r) {
+					return r.indexOf( l ) !== -1;
+				},
+				"notInString": function (l,r) {
+					return r.indexOf( l ) === -1;
 				}
 			},
 			result = operators[operator](operand_1, operand_2);

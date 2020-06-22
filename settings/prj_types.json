@@ -50,18 +50,27 @@
         "max_children": 20,
         "max_depth": 20,
         "icon": "fa fa-cog",
-        "valid_children":["prj-setting"]
+        "valid_children":["prj-setting"],
+        "a_attr" : {
+			"style": "background-color: #f9e79f"
+		}
     },
     "table-settings": {
         "max_children": 20,
         "max_depth": 20,
         "icon": "fa fa-cog",
-        "valid_children":["tbl-setting"]
+        "valid_children":["tbl-setting"],
+        "a_attr" : {
+			"style": "background-color: #f9e79f"
+		}
     },
     "group-settings": {
         "max_children": 20,
         "max_depth": 20,
         "icon": "fa fa-cog",
-        "valid_children":["grp-setting"]
+        "valid_children":["grp-setting"],
+        "a_attr" : {
+			"style": "background-color: #f9e79f"
+		}
     }
 }
