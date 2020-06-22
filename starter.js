@@ -148,13 +148,23 @@ function contextMenu(node, $this) { //create adtional context menu
 			}
 		},
 		"create_table": {
-			"separator_after": true,
+			"separator_after": false,
 			"label": "Table",
 			"action": function (data) {
 				createNode(data, "table");
 			},
 			"_disabled": function (data) {
 				return compare_type('group',data);
+			}
+		},
+		"create_tbl_settings": {
+			"separator_after": true,
+			"label": "Table Settings",
+			"action": function (data) {
+				createNode(data, "table-settings");
+			},
+			"_disabled": function (data) {
+				return compare_type('table',data);
 			}
 		},
 		"create_field": {
@@ -214,6 +224,15 @@ async function createNode(data, type) {
 		};
 		position = "first";
 	}
+	if (type === 'table-settings') {
+		options.text = "table-settings";
+		text = "Table Settings";
+		a_attr = {
+			'style': 'background-color: yellow'
+		};
+		position = "first";
+	}
+
 	if (options.text != "") {
 		try {
 			childs = await get_data("starter.php", options);

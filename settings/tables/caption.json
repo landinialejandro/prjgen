@@ -1,0 +1,25 @@
+{
+    "text": "Caption",
+    "data": {
+        "placeholder": "Caption Table",
+        "user_value": [
+            {
+                "id": "en",
+                "text": "",
+                "default":true
+            },
+            {
+                "id": "es",
+                "text": ""
+            }
+        ],
+        "usershelper":"Este valor se utiliza para identificar el título de la Tabla, aprece en el menu"
+    },
+    "type": "tbl-setting",
+    "icon": "fas fa-font",
+    "li_attr": {
+        "type": "text",
+        "lang": "en"
+    },
+    "order":1
+}

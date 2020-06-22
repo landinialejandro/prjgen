@@ -57,6 +57,9 @@ if (isset($_REQUEST['operation'])) {
 					case 'group-settings':
 						$dir = dirname(__FILE__) . "/settings/groups";
 						break;
+					case 'table-settings':
+						$dir = dirname(__FILE__) . "/settings/tables";
+						break;
 					default:
 						throw new Exception('Unsupported operation json: ' . $parn);
 						break;
