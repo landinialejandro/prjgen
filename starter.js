@@ -130,6 +130,13 @@ function contextMenu(node, $this) { //create adtional context menu
 				createNode(data, "project-settings");
 			}
 		},
+		"create_grp_setings": {
+			"separator_after": false,
+			"label": "Group Settings",
+			"action": function (data) {
+				createNode(data, "group-settings");
+			}
+		},
 		"create_table": {
 			"separator_after": true,
 			"label": "Table",
@@ -168,6 +175,12 @@ async function createNode(data, type) {
 	if (type === 'project-settings') {
 		options.text = "project-settings";
 		text = "Project Settings";
+		a_attr = {'style':'background-color: yellow'};
+		position = "first";
+	}
+	if (type === 'group-settings') {
+		options.text = "group-settings";
+		text = "Group Settings";
 		a_attr = {'style':'background-color: yellow'};
 		position = "first";
 	}
@@ -221,6 +234,13 @@ async function constructTree(file) {
 								return false;
 							} else {
 								return confirm('Are you sure you want to delete?');
+							}
+						}
+						if (o === "rename_node"){
+							var no_rename =['field-setting','prj-setting','grp-setting','group-settings','project-settings'];
+							if ($.inArray(n.type,no_rename) >= 0){
+								console.log("%c ERROR! yo can't rename: " + n.type, "background: white; color: red");
+								return false;
 							}
 						}
 						return true;

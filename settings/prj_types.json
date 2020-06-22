@@ -8,7 +8,7 @@
         "max_children": 20,
         "max_depth": 20,
         "icon": "far fa-object-group",
-        "valid_children":["table"]
+        "valid_children":["table","group-settings"]
     },
     "table": {
         "max_children": 20,
@@ -34,10 +34,22 @@
         "icon": "fa fa-cog",
         "valid_children":["none"]
     },
+    "grp-setting": {
+        "max_children": 20,
+        "max_depth": 20,
+        "icon": "fa fa-cog",
+        "valid_children":["none"]
+    },
     "project-settings": {
         "max_children": 20,
         "max_depth": 20,
         "icon": "fa fa-cog",
         "valid_children":["prj-setting"]
+    },
+    "group-settings": {
+        "max_children": 20,
+        "max_depth": 20,
+        "icon": "fa fa-cog",
+        "valid_children":["grp-setting"]
     }
 }

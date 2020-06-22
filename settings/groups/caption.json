@@ -1,0 +1,25 @@
+{
+    "text": "Caption",
+    "data": {
+        "placeholder": "Caption Field",
+        "user_value": [
+            {
+                "id": "en",
+                "text": "",
+                "default":true
+            },
+            {
+                "id": "es",
+                "text": ""
+            }
+        ],
+        "usershelper":"Este valor se utiliza para identificar el título del grupo, aprece en el menu"
+    },
+    "type": "grp-setting",
+    "icon": "fas fa-font",
+    "li_attr": {
+        "type": "text",
+        "lang": "en"
+    },
+    "order":1
+}
