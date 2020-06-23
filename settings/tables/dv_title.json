@@ -1,0 +1,25 @@
+{
+    "text": "Detail view title",
+    "data": {
+        "placeholder": "Detail view title",
+        "user_value": [
+            {
+                "id": "en",
+                "text": "",
+                "default":true
+            },
+            {
+                "id": "es",
+                "text": ""
+            }
+        ],
+        "usershelper":"This value is used to identify the title of the deatil view, it appears in the menu"
+    },
+    "type": "tbl-setting",
+    "icon": "fas fa-font",
+    "li_attr": {
+        "type": "text",
+        "lang": "en"
+    },
+    "order":8
+}

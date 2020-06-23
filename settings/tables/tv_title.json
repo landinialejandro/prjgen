@@ -1,7 +1,7 @@
 {
-    "text": "Caption",
+    "text": "Table view title",
     "data": {
-        "placeholder": "Caption Table",
+        "placeholder": "Table view title",
         "user_value": [
             {
                 "id": "en",
@@ -13,7 +13,7 @@
                 "text": ""
             }
         ],
-        "usershelper":"Este valor se utiliza para identificar el título de la Tabla, aprece en el menu"
+        "usershelper":"This value is used to identify the title of the Table, it appears in the menu"
     },
     "type": "tbl-setting",
     "icon": "fas fa-font",
@@ -21,5 +21,5 @@
         "type": "text",
         "lang": "en"
     },
-    "order":1
+    "order":2
 }

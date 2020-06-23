@@ -13,7 +13,7 @@ $(function () {
 
 });
 
-$('.container-form').on('click', '.btn-expand', function () {
+$(".container-form").on('click', '.btn-expand', function () {
 	expandContainer('.' + this.dataset.nodeid, this);
 });
 
