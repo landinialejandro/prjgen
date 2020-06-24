@@ -14,7 +14,7 @@ $(function () {
 });
 
 $(".container-form").on('click', '.btn-expand', function () {
-	expandContainer('.' + this.dataset.nodeid, this);
+	$(this).text(expandContainer('.' + this.dataset.nodeid));
 });
 
 $(".saveproject").on('click', function (e) {
@@ -38,6 +38,9 @@ function destroyProject() {
 	}
 }
 
+/**
+ * udpdate user data in project tree 
+ */
 function updateData() {
 	$('.card-project').addClass('container-disabled');
 	$('.form-node').each(function () {
@@ -64,52 +67,26 @@ function updateData() {
 	$('.container-disabled').removeClass('container-disabled');
 }
 
+/** 
+ * save project data to file, get de file name from  name of root tree
+*/
 function saveProject() {
-	var node = getJsonNode();
+	var node = get_json_node();
 	var file = node[0].text;
 	save_file(file + '.json', node);
 }
 
-function save_file(url, data, folder = 'projects') {
-	$.ajax({
-		type: "POST",
-		url: "starter.php",
-		data: {
-			'operation': 'save_file',
-			'type': 'json',
-			'id': url,
-			'text': JSON.stringify(data),
-			folder: folder
-		},
-		dataType: "json",
-		success: function (res) {
-			if (res == undefined) {
-				alert("Error: unexpected response");
-			} else {
-				console.log("%c saved file: ", "background: white; color: green");
-				console.log(res.id);
-			}
-		},
-		error: function (res) {
-			if (res == undefined) {
-				alert("Error: undefined");
-			} else {
-				alert("Error: " + res.responseText);
-			}
-		},
-		complete: function () {
-			$('.container-disabled').removeClass('container-disabled');
-		}
-	}).always(function () {
-		$('#ws_tree').jstree(true).refresh();
-	});
-}
-
-function getJsonNode(id = '#', flat = false) {
-	var nodeDataJson = prjTree.get_json(id, {
+/**
+ * get json data node
+ * @param {String} id node, by default get root id
+ * @param {boolean} flat false get structured tree json data, true: get plain data
+ * @return {Object} json object 
+ */
+function get_json_node(id = '#', flat = false) {
+	var json_node = prjTree.get_json(id, {
 		flat: flat
 	}); // set flat:true to get all nodes in 1-level json
-	return nodeDataJson;
+	return json_node;
 }
 
 function contextMenu(node, $this) { //create adtional context menu
@@ -183,6 +160,11 @@ function contextMenu(node, $this) { //create adtional context menu
 	return tmp;
 }
 
+/**
+ * get json node from data reference
+ * @param {Object} data tree to get reference
+ * @return {Object} json node data
+ */
 function get_reference(data) { //return reference node
 	var inst = $.jstree.reference(data.reference);
 	return inst.get_node(data.reference);
@@ -191,6 +173,10 @@ function get_reference(data) { //return reference node
 function compare_type(type,data){
 	var obj = get_reference(data);
 	return obj.type != type;
+}
+
+function updateTree() {
+	prjTree.settings.core.data = get_json_node();
 }
 
 async function createNode(data, type) {
@@ -240,16 +226,11 @@ async function createNode(data, type) {
 	});
 }
 
-function updateTree() {
-	var treeData = getJsonNode();
-	prjTree.settings.core.data = treeData;
-}
-
 async function constructTree(file) {
 
 	try {
-		const types = await get_file('settings/prj_types.json');
 		const data = await get_file(file);
+		const types = await get_file('settings/prj_types.json');
 		const form = await get_file('templates/headerForm.html');
 		const fieldform = await get_file('templates/fieldForm.html');
 
@@ -291,20 +272,17 @@ async function constructTree(file) {
 				},
 				"plugins": ["dnd", "search", "state", "types", "contextmenu", "unique"]
 			})
-			.on('create_node.jstree', function (e, data) {
+			.on('create_node.jstree', function (e, data,pos,callback,loaded) {
 				data.instance.set_id(data.node, data.node.id);
 				updateTree();
 			})
 			.on('changed.jstree', function (e, data) {
 				if (data.action === "select_node") {
-					var selectedID = prjTree.get_json(data.node.id);
-					//console.log(selectedID);
+					var selectedID = get_json_node(data.node.id);
 					whenHelper();
 					getChildrenHelper(fieldform);
-
 					var template = Handlebars.compile(form);
 					$('.container-form').html(template(selectedID));
-
 				}
 			})
 			.on('rename_node.jstree', function (e, data) {
@@ -440,56 +418,9 @@ function loadProject(file) {
 	constructTree(file);
 }
 
-function whenHelper() {
-	Handlebars.registerHelper("when", function (operand_1, operator, operand_2, options) {
-		var operators = {
-				'eq': function (l, r) {
-					return l == r;
-				},
-				'noteq': function (l, r) {
-					return l != r;
-				},
-				'gt': function (l, r) {
-					return Number(l) > Number(r);
-				},
-				'or': function (l, r) {
-					return l || r;
-				},
-				'and': function (l, r) {
-					return l && r;
-				},
-				'%': function (l, r) {
-					return (l % r) === 0;
-				},
-				"inString": function (l,r) {
-					return r.indexOf( l ) !== -1;
-				},
-				"notInString": function (l,r) {
-					return r.indexOf( l ) === -1;
-				}
-			},
-			result = operators[operator](operand_1, operand_2);
-
-		if (result) return options.fn(this);
-		else return options.inverse(this);
-	});
-}
-
-function getChildrenHelper(fieldform) {
-	Handlebars.registerHelper('getchildren', function (id, options) {
-		var nodeID = prjTree.get_json(id);
-		var template = Handlebars.compile(fieldform);
-		var type = options.data.root.type;
-		if (type != 'filed' && type != 'field-setting') {
-			nodeID['readonly'] = true;
-		}
-		var res = template(nodeID);
-		return res;
-	});
-}
-
 /*
-TODO:
+TODO:	lista de campos de una tabla
+		lista de tablas
 	
 
 */
