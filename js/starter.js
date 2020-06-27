@@ -2,15 +2,8 @@ var prjTree = false;
 var loadedWS = false;
 
 $(function () {
+	load_page($('.project-page'));
 	constructWSTree();
-
-	// $.get('settings/icons/icons.json', function(data){    
-	// 	$.get('templates/iconlist.html',function(form){
-	// 		var template = Handlebars.compile(form);
-	// 		$('.container-icons').html(template(data));
-	// 	})
-	// });
-
 });
 
 $(".container-form").on('click', '.btn-expand', function () {
@@ -30,6 +23,11 @@ $(".newproject").on('click', function (e) {
 
 $(".save-app-data").on('click', function (e) {
 	updateData();
+});
+
+$(".nav-link").on('click', function (e) {
+	e.preventDefault();
+	load_page($(this));
 });
 
 function destroyProject() {
@@ -234,7 +232,7 @@ async function constructTree(file) {
 		const form = await get_file('templates/headerForm.html');
 		const fieldform = await get_file('templates/fieldForm.html');
 
-		$('#project_tree')
+		$('.card-starter #project_tree')
 			.jstree({
 				"core": {
 					"data": data,
@@ -292,7 +290,7 @@ async function constructTree(file) {
 				}
 			})
 			.on('loaded.jstree', function () {
-				prjTree = $('#project_tree').jstree(true);
+				prjTree = $('.card-starter #project_tree').jstree(true);
 			})
 			.on('delete_node.jstree', function () {
 				//before delete
@@ -399,8 +397,10 @@ async function constructWSTree() {
 				if (type === 'file' && event) {
 					//id="ws_tree"
 					var file = data.node.text;
-					if (file !== loadedWS) {
+					var active = $('.project-page').hasClass('active') ;
+					if (file !== loadedWS || !active) {
 						$('#ws_tree').addClass('container-disabled');
+						load_page($('.project-page'));
 						loadedWS = file;
 						loadProject('projects/' + file);
 						save_file('workspace.json', {
@@ -412,6 +412,21 @@ async function constructWSTree() {
 	} catch (err) {
 		return console.log(err.message);
 	}
+}
+
+async function load_page(object) {
+	var url = object.attr('href');
+	var active = object.hasClass('active') ;
+	if (url !== "#") {
+		var page = await get_file(url);
+		$('.nav-sidebar .active').removeClass('active');
+		object.addClass('active');
+		$('.breadcrumb-item.active').text(object.children('p').text());
+		$('.card-starter').html(page);
+	} else {
+		location.reload();
+	}
+	return active;
 }
 
 function loadProject(file) {
@@ -427,17 +442,17 @@ function fieldList() {
 			var jsonParent = get_json_node(parent);
 			var tbl_list = ["None"];
 			$.each(jsonParent.children, function (i, obj) {
-				if (obj.type === 'field'){
+				if (obj.type === 'field') {
 					tbl_list.push(obj.text);
 				}
 			});
 			var table_settings = get_json_node(data.id);
-			$.each(table_settings.children, function (i, obj) { 
-				 if (obj.text === 'Default sortby'){
-					 var list = prjTree.get_node(obj.id);
-					 list.data.options = tbl_list;
-					 return false;
-				 }
+			$.each(table_settings.children, function (i, obj) {
+				if (obj.text === 'Default sortby') {
+					var list = prjTree.get_node(obj.id);
+					list.data.options = tbl_list;
+					return false;
+				}
 			});
 			updateTree();
 		}

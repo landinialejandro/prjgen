@@ -45,7 +45,7 @@
         <nav class="mt-2">
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <li class="nav-item has-treeview menu-open">
-              <a href="#" class="nav-link active">
+              <a href="pages/project_page.html" class="nav-link active project-page">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                   Starter Pages
@@ -119,28 +119,6 @@
   <script src="js/common.js"></script>
   <script src="js/helpers.js"></script>
   <script src="js/starter.js"></script>
-  <script>
-    $(function(){
-
-    })
-    $(".nav-link").on('click',function(e){
-      e.preventDefault();
-      load_page($(this));
-    });
-    
-    async function load_page(object){
-      var url = object.attr('href');
-      if (url !=="#"){
-        var page =  await get_file(url);  
-        $('.nav-sidebar .active').removeClass('active');
-        object.addClass('active');
-        $('.breadcrumb-item.active').text(object.children('p').text());
-        $('.card-starter').html(page);
-      }else{
-        location.reload();
-      }
-    }
-  </script>
 </body>
 
 </html>
