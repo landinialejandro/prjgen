@@ -69,7 +69,7 @@ function updateData() {
 
 /** 
  * save project data to file, get de file name from  name of root tree
-*/
+ */
 function saveProject() {
 	var node = get_json_node();
 	var file = node[0].text;
@@ -101,7 +101,7 @@ function contextMenu(node, $this) { //create adtional context menu
 				createNode(data, "project-settings");
 			},
 			"_disabled": function (data) {
-				return compare_type('#',data);
+				return compare_type('#', data);
 			}
 		},
 		"create_group": {
@@ -111,7 +111,7 @@ function contextMenu(node, $this) { //create adtional context menu
 				createNode(data, "group");
 			},
 			"_disabled": function (data) {
-				return compare_type('#',data);
+				return compare_type('#', data);
 			}
 		},
 		"create_grp_setings": {
@@ -121,7 +121,7 @@ function contextMenu(node, $this) { //create adtional context menu
 				createNode(data, "group-settings");
 			},
 			"_disabled": function (data) {
-				return compare_type('group',data);
+				return compare_type('group', data);
 			}
 		},
 		"create_table": {
@@ -131,7 +131,7 @@ function contextMenu(node, $this) { //create adtional context menu
 				createNode(data, "table");
 			},
 			"_disabled": function (data) {
-				return compare_type('group',data);
+				return compare_type('group', data);
 			}
 		},
 		"create_tbl_settings": {
@@ -141,7 +141,7 @@ function contextMenu(node, $this) { //create adtional context menu
 				createNode(data, "table-settings");
 			},
 			"_disabled": function (data) {
-				return compare_type('table',data);
+				return compare_type('table', data);
 			}
 		},
 		"create_field": {
@@ -150,7 +150,7 @@ function contextMenu(node, $this) { //create adtional context menu
 				createNode(data, "field");
 			},
 			"_disabled": function (data) {
-				return compare_type('table',data);
+				return compare_type('table', data);
 			}
 		}
 	};
@@ -170,7 +170,7 @@ function get_reference(data) { //return reference node
 	return inst.get_node(data.reference);
 }
 
-function compare_type(type,data){
+function compare_type(type, data) {
 	var obj = get_reference(data);
 	return obj.type != type;
 }
@@ -272,17 +272,18 @@ async function constructTree(file) {
 				},
 				"plugins": ["dnd", "search", "state", "types", "contextmenu", "unique"]
 			})
-			.on('create_node.jstree', function (e, data,pos,callback,loaded) {
+			.on('create_node.jstree', function (e, data, pos, callback, loaded) {
 				data.instance.set_id(data.node, data.node.id);
 				updateTree();
 			})
 			.on('changed.jstree', function (e, data) {
 				if (data.action === "select_node") {
-					var selectedID = get_json_node(data.node.id);
+					var json_selected = get_json_node(data.node.id);
+					var template = Handlebars.compile(form);
 					whenHelper();
 					getChildrenHelper(fieldform);
-					var template = Handlebars.compile(form);
-					$('.container-form').html(template(selectedID));
+					$('.container-form').html(template(json_selected));
+					fieldList(json_selected);
 				}
 			})
 			.on('rename_node.jstree', function (e, data) {
@@ -418,8 +419,33 @@ function loadProject(file) {
 	constructTree(file);
 }
 
+function fieldList() {
+	var flatnode = get_json_node("#", true);
+	$.each(flatnode, function (i, data) {
+		if (data.type === 'table-settings') {
+			var parent = prjTree.get_parent(data.id);
+			var jsonParent = get_json_node(parent);
+			var tbl_list = ["None"];
+			$.each(jsonParent.children, function (i, obj) {
+				if (obj.type === 'field'){
+					tbl_list.push(obj.text);
+				}
+			});
+			var table_settings = get_json_node(data.id);
+			$.each(table_settings.children, function (i, obj) { 
+				 if (obj.text === 'Default sortby'){
+					 var list = prjTree.get_node(obj.id);
+					 list.data.options = tbl_list;
+					 return false;
+				 }
+			});
+			updateTree();
+		}
+	});
+}
+
 /*
-TODO:	lista de campos de una tabla
+TODO:	lista de campos de una tabla en proceso
 		lista de tablas
 	
 
