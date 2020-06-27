@@ -24,7 +24,7 @@
           <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-          <a href="index3.html" class="nav-link">Home</a>
+          <a href="starter.html" class="nav-link">Home</a>
         </li>
       </ul>
     </nav>
@@ -56,11 +56,20 @@
               </ul>
             </li>
             <li class="nav-item">
-              <a href="#" class="nav-link">
+              <a href="pages/docs-page.html" class="nav-link docs-page">
                 <i class="nav-icon fas fa-th"></i>
                 <p>
                   Documentation
                   <span class="right badge badge-danger">New</span>
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="pages/icons_page.html" class="nav-link icons-page">
+                <i class="nav-icon far fa-circle"></i>
+                <p>
+                  Icons page
+                  <span class="right badge badge-info">fa</span>
                 </p>
               </a>
             </li>
@@ -80,7 +89,7 @@
             </div>
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a href="starter.html">Home</a></li>
                 <li class="breadcrumb-item active">Starter Page</li>
               </ol>
             </div>
@@ -89,52 +98,8 @@
       </div>
       <div class="content">
         <div class="container-fluid">
-
-          <div class="col card card-outline card-project">
-            <div class="card-header">
-              Project
-              <div class="card-tools">
-                <button type="button" class="btn btn-warning btn-xs newproject"> new project</button>
-                <button type="button" class="btn btn-success btn-xs saveproject">save project</button>
-                <button type="button" class="btn btn-tool" data-card-widget="maximize"><i
-                    class="fas fa-expand"></i></button>
-                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
-                    class="fas fa-minus"></i></button>
-              </div>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-lg-5">
-                  <div class="card card-outline card-success">
-                    <div class="card-header">
-                      Tree
-                    </div>
-                    <div class="card-body">
-                      <div id="project_tree"></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-7">
-                  <div class="card card-outline card-danger">
-                    <div class="card-header">
-                      Selected item settings
-                      <div class=" float-right"><button class="btn btn-info btn-xs save-app-data"> update data</button>
-                      </div>
-                    </div>
-                    <div class="card-body">
-                      <div class="container-form"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col card card-outline card-icons">
-            <div class="card-header"> Icon List </div>
-            <div class="card-body">
-              <div class="container-icons"></div>
-            </div>
-
+          <div class="col card card-outline card-starter">
+           
           </div>
         </div>
       </div>
@@ -154,6 +119,28 @@
   <script src="js/common.js"></script>
   <script src="js/helpers.js"></script>
   <script src="js/starter.js"></script>
+  <script>
+    $(function(){
+
+    })
+    $(".nav-link").on('click',function(e){
+      e.preventDefault();
+      load_page($(this));
+    });
+    
+    async function load_page(object){
+      var url = object.attr('href');
+      if (url !=="#"){
+        var page =  await get_file(url);  
+        $('.nav-sidebar .active').removeClass('active');
+        object.addClass('active');
+        $('.breadcrumb-item.active').text(object.children('p').text());
+        $('.card-starter').html(page);
+      }else{
+        location.reload();
+      }
+    }
+  </script>
 </body>
 
 </html>

@@ -19,7 +19,7 @@ $(".container-form").on('click', '.btn-expand', function () {
 
 $(".saveproject").on('click', function (e) {
 	updateData();
-	$('.card-project').addClass('container-disabled');
+	$('.card-starter').addClass('container-disabled');
 	updateTree();
 	saveProject();
 });
@@ -42,7 +42,7 @@ function destroyProject() {
  * udpdate user data in project tree 
  */
 function updateData() {
-	$('.card-project').addClass('container-disabled');
+	$('.card-starter').addClass('container-disabled');
 	$('.form-node').each(function () {
 		var $this = $(this);
 		var obj_node = prjTree.get_node($this.data("nodeid"));

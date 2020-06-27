@@ -1,0 +1,16 @@
+<div class="card-header"> Icon List </div>
+<div class="card-body">
+    <div class="container-icons"></div>
+</div>
+<script>
+    $(function () {
+
+	$.get('settings/icons/icons.json', function(data){    
+		$.get('templates/iconlist.html',function(form){
+			var template = Handlebars.compile(form);
+			$('.container-icons').html(template(data));
+		})
+	});
+
+});
+</script>
