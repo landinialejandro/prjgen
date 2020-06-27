@@ -13,9 +13,9 @@
                 "text": ""
             }
         ],
-        "usershelper":"Este valor se utiliza para identificar el título del campo de la base de datos, aperece en el formulario de detalle y en la vista de tabla"
+        "usershelper":"Este valor se utiliza para identificar el título del grupo, aprece en el menu"
     },
-    "type": "field-setting",
+    "type": "grp-setting",
     "icon": "fas fa-font",
     "li_attr": {
         "type": "text",

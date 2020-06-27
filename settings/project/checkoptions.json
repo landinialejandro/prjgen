@@ -1,0 +1,16 @@
+{
+    "text": "Check options value",
+    "data": {
+        "check": true,
+        "options": [
+            {"text":"Use 24Hs time format", "checked":false},
+            {"text":"Don't enforce MYSQL encoding", "checked":false},
+            {"text":"Hide the login/menbership system ", "checked":false},
+            {"text":"Allow admin access to server status page", "checked":false},
+            {"text":"Show technical documentation page in the admin area", "checked":false}
+        ]
+    },
+    "type": "prj-setting",
+    "icon": "fas fa-stream",
+    "order": 3
+}

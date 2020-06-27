@@ -2,19 +2,19 @@
     "#": {
         "max_children": 9,
         "icon": "fas fa-project-diagram",
-        "valid_children":["group"]
+        "valid_children":["group","project-settings"]
     },
     "group": {
         "max_children": 20,
         "max_depth": 20,
         "icon": "far fa-object-group",
-        "valid_children":["table"]
+        "valid_children":["table","group-settings"]
     },
     "table": {
         "max_children": 20,
         "max_depth": 20,
         "icon": "fas fa-table",
-        "valid_children":["field"]
+        "valid_children":["field","table-settings"]
     },
     "field": {
         "max_children": 20,
@@ -27,5 +27,50 @@
         "max_depth": 20,
         "icon": "fa fa-cog",
         "valid_children":["none"]
+    },
+    "prj-setting": {
+        "max_children": 20,
+        "max_depth": 20,
+        "icon": "fa fa-cog",
+        "valid_children":["none"]
+    },
+    "grp-setting": {
+        "max_children": 20,
+        "max_depth": 20,
+        "icon": "fa fa-cog",
+        "valid_children":["none"]
+    },
+    "tbl-setting": {
+        "max_children": 20,
+        "max_depth": 20,
+        "icon": "fa fa-cog",
+        "valid_children":["none"]
+    },
+    "project-settings": {
+        "max_children": 20,
+        "max_depth": 20,
+        "icon": "fa fa-cog",
+        "valid_children":["prj-setting"],
+        "a_attr" : {
+			"style": "background-color: #fff59d"
+		}
+    },
+    "table-settings": {
+        "max_children": 20,
+        "max_depth": 20,
+        "icon": "fa fa-cog",
+        "valid_children":["tbl-setting"],
+        "a_attr" : {
+			"style": "background-color: #fff59d"
+		}
+    },
+    "group-settings": {
+        "max_children": 20,
+        "max_depth": 20,
+        "icon": "fa fa-cog",
+        "valid_children":["grp-setting"],
+        "a_attr" : {
+			"style": "background-color:#fff59d"
+		}
     }
 }

@@ -7,14 +7,20 @@
                 <div class="input-group-prepend ">
                     <span class="input-group-text">{{id}}</span>
                 </div>
-                <input type="text" class="form-control form-node" data-index="{{@index}}" data-nodeid="{{../id}}" name="{{id}}" placeholder="{{data.placeholder}}" value="{{text}}">
+                <input  type="text" class="form-control form-node" data-index="{{@index}}" 
+                        data-nodeid="{{../id}}" name="{{id}}" placeholder="{{../data.placeholder}}" 
+                        value="{{text}}" title="{{../data.usershelper}}">
             </div>
         </div>
         {{/each}}
         <button type="button" class="btn btn-block btn-default btn-xs btn-expand" data-nodeid="{{id}}">+</button>
     {{else}}
         {{#if data.placeholder}}
-            <input type="text" class="form-control form-node" data-index="{{@index}}" data-nodeid="{{id}}" name="{{id}}" placeholder="{{data.placeholder}}" value="{{data.user_value}}">
+            <input  type="text" class="form-control form-node" 
+                    data-index="{{@index}}" data-nodeid="{{id}}" 
+                    name="{{id}}" placeholder="{{data.placeholder}}" 
+                    value="{{data.user_value}}" 
+                    title="{{data.usershelper}}">
         {{else}}
             {{#if data.option}}
                 <select class="custom-select form-node" data-nodeid="{{id}}" name="{{id}}">
@@ -28,14 +34,21 @@
                     {{#each data.options}}
                             <div class="col col-6 col-md-4">
                                 <div class="custom-control custom-switch custom-switch-off-default custom-switch-on-success">
-                                    <input type="checkbox" class="custom-control-input form-node" data-index="{{@index}}" id="check{{@index}}" name="check{{@index}}" data-nodeid="{{../id}}" {{#if checked}}checked{{/if}} >
+                                    <input  type="checkbox" class="custom-control-input form-node" 
+                                            data-index="{{@index}}" id="check{{@index}}" 
+                                            name="check{{@index}}" data-nodeid="{{../id}}" 
+                                            {{#if checked}}checked{{/if}} >
                                     <label class="custom-control-label" for="check{{@index}}">{{this.text}}</label>
                                 </div>
                             </div>
                     {{/each}}
                     </div>
                 {{else}}
-                    <input type="text" class="form-control form-node" data-index="{{@index}}" data-nodeid="{{id}}" name="{{id}}"  placeholder="Node children value" value="{{text}}" {{#if readonly}}readonly{{/if}} >
+                    <input  type="text" class="form-control form-node" 
+                            data-index="{{@index}}" data-nodeid="{{id}}" 
+                            name="{{id}}"  placeholder="Node children value" 
+                            value="{{text}}" {{#if readonly}}readonly{{/if}} 
+                            title="{{usershelper}}">
                 {{/if}}
             {{/if}}
         {{/if}}

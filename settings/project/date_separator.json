@@ -1,0 +1,11 @@
+{
+    "text": "Separator",
+    "data": {
+        "placeholder": "/",
+        "user_value": "/",
+        "usershelper":"Indique el separador para la fecha"
+    },
+    "type": "prj-setting",
+    "icon": "fas fa-font",
+    "order":2
+}

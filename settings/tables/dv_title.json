@@ -1,7 +1,7 @@
 {
-    "text": "Caption",
+    "text": "Detail view title",
     "data": {
-        "placeholder": "Caption Field",
+        "placeholder": "Detail view title",
         "user_value": [
             {
                 "id": "en",
@@ -13,13 +13,13 @@
                 "text": ""
             }
         ],
-        "usershelper":"Este valor se utiliza para identificar el título del campo de la base de datos, aperece en el formulario de detalle y en la vista de tabla"
+        "usershelper":"This value is used to identify the title of the deatil view, it appears in the menu"
     },
-    "type": "field-setting",
+    "type": "tbl-setting",
     "icon": "fas fa-font",
     "li_attr": {
         "type": "text",
         "lang": "en"
     },
-    "order":1
+    "order":8
 }
