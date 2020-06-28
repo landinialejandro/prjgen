@@ -61,7 +61,7 @@ function get_data(url="starter.php", data = { operation: "test", id: "#", text: 
 
 /**
  * save a file with ajax 
- * @param {String} url to file, starter.php default
+ * @param {String} url to file to save
  * @param {Element} data object json data
  * @param {String} folder to file
  */

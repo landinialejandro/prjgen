@@ -76,6 +76,12 @@ if (isset($_REQUEST['operation'])) {
 				array_multisort($order, SORT_ASC, $res);
 				$rslt = array('id' => $parn, 'content' => $res);
 				break;
+			case 'version':
+				$id = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
+				exec('git rev-parse --verify HEAD 2> /dev/null', $output);
+				$parn = $output[0];
+				$rslt = array('id' => $id, 'content' => $parn);
+				break;
 			case 'test':
 				$id = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
 				$parn = isset($_REQUEST['text']) ? $_REQUEST['text'] : '';
