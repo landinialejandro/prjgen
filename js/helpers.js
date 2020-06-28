@@ -33,10 +33,10 @@ function whenHelper() {
 	});
 }
 
-function getChildrenHelper(fieldform) {
+function getChildrenHelper(form_group) {
 	Handlebars.registerHelper('getchildren', function (id, options) {
 		var nodeID = prjTree.get_json(id);
-		var template = Handlebars.compile(fieldform);
+		var template = Handlebars.compile(form_group);
 		var type = options.data.root.type;
 		if (type != 'filed' && type != 'field-setting') {
 			nodeID['readonly'] = true;

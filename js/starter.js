@@ -74,6 +74,7 @@ function updateData() {
 function saveProject() {
 	var node = get_json_node();
 	var file = node[0].text;
+	//TODO: se puede controlar si el nombre es valido antes de pasarlo a la función
 	save_file(file + '.json', node);
 }
 
@@ -233,7 +234,7 @@ async function constructTree(file) {
 		const data = await get_file(file);
 		const types = await get_file('settings/prj_types.json');
 		const form = await get_file('templates/headerForm.html');
-		const fieldform = await get_file('templates/fieldForm.html');
+		const form_group = await get_file('templates/form_group.html');
 
 		$('.card-starter #project_tree')
 			.jstree({
@@ -282,7 +283,7 @@ async function constructTree(file) {
 					var json_selected = get_json_node(data.node.id);
 					var template = Handlebars.compile(form);
 					whenHelper();
-					getChildrenHelper(fieldform);
+					getChildrenHelper(form_group);
 					$('.container-form').html(template(json_selected));
 					fieldList(json_selected);
 				}
