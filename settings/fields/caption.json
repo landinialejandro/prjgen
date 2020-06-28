@@ -1,5 +1,5 @@
 {
-    "text": "Caption",
+    "text": "Multilingual Caption",
     "data": {
         "placeholder": "Caption Field",
         "user_value": [
@@ -13,7 +13,7 @@
                 "text": ""
             }
         ],
-        "usershelper":"Este valor se utiliza para identificar el título del campo de la base de datos, aperece en el formulario de detalle y en la vista de tabla"
+        "usershelper":"This value is used to identify the title of the field in the database, it appears in the detail form and in the table view"
     },
     "type": "field-setting",
     "icon": "fas fa-font",

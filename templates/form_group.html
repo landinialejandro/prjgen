@@ -1,20 +1,28 @@
 <div class="form-group">
-    <label for="{{id}}" class="">{{text}}: </label>
     {{#if li_attr.lang}}
-        {{#each data.user_value}}
-        <div class="expandableContent {{../id}} {{#if default}}default{{/if}}">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend ">
-                    <span class="input-group-text">{{id}}</span>
-                </div>
-                <input  type="text" class="form-control form-node" data-index="{{@index}}" 
-                        data-nodeid="{{../id}}" name="{{id}}" placeholder="{{../data.placeholder}}" 
-                        value="{{text}}" title="{{../data.usershelper}}">
-            </div>
+    <div class="card card-outline card-yellow">
+        <div class="card-header">
+            <h3 class="card-title">{{text}}</h3>
+            <div class="card-tools">
+                <button class="btn btn-warning btn-xs add-new-lang"> Add new</button>
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+              </div>
         </div>
-        {{/each}}
-        <button type="button" class="btn btn-block btn-default btn-xs btn-expand" data-nodeid="{{id}}">+</button>
+        {{#each data.user_value}}
+            <div class=" card-body">
+                <div class="input-group">
+                    <div class="input-group-prepend ">
+                        <span class="input-group-text">{{id}}</span>
+                    </div>
+                    <input  type="text" class="form-control form-node" data-index="{{@index}}" 
+                            data-nodeid="{{../id}}" name="{{id}}" placeholder="{{../data.placeholder}}" 
+                            value="{{text}}" title="{{../data.usershelper}}">
+                </div>
+            </div>
+            {{/each}}
+        </div>
     {{else}}
+        <label for="{{id}}" class="">{{text}}: </label>    
         {{#if data.placeholder}}
             <input  type="text" class="form-control form-node" 
                     data-index="{{@index}}" data-nodeid="{{id}}" 

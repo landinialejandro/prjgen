@@ -14,7 +14,9 @@
         </a>
         {{#if has_treeview}}
         <ul class="nav nav-treeview">
-            <div id="ws_tree"></div>
+            {{#each has_treeview.children}}
+                {{{this}}}
+            {{/each}}
         </ul>
         {{/if}}
     </li>
