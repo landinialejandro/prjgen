@@ -1,0 +1,21 @@
+{{#each this}}
+    <li class="nav-item {{#if has_treeview}}has-treeview{{/if}} {{#if has_treeview.menu_open}}menu-open{{/if}}">
+        <a href="{{url}}" class="nav-link {{#if active}}active{{/if}} {{a_class}}">
+            <i class="nav-icon {{icon}}"></i>
+            <p>
+                {{caption}}
+                {{#if has_treeview}}
+                    <i class="right fas fa-angle-left"></i>
+                {{/if}}
+            </p>
+            {{#if badge}}
+                <span class="right badge badge-{{badge.color}}">{{badge.text}}</span>
+            {{/if}}
+        </a>
+        {{#if has_treeview}}
+        <ul class="nav nav-treeview">
+            <div id="ws_tree"></div>
+        </ul>
+        {{/if}}
+    </li>
+{{/each}}

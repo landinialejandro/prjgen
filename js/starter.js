@@ -2,8 +2,11 @@ var prjTree = false;
 var loadedWS = false;
 
 $(function () {
-	load_page($('.project-page'));
-	constructWSTree();
+	load_menu();
+	setTimeout(() => {
+		load_page($('.nav-sidebar').find('.project-page'));
+		constructWSTree();
+	}, 300);
 });
 
 $(".container-form").on('click', '.btn-expand', function () {
@@ -25,7 +28,7 @@ $(".save-app-data").on('click', function (e) {
 	updateData();
 });
 
-$(".nav-link").on('click', function (e) {
+$(".nav-sidebar").on('click','.nav-link', function (e) {
 	e.preventDefault();
 	load_page($(this));
 });
@@ -427,6 +430,14 @@ async function load_page(object) {
 		location.reload();
 	}
 	return active;
+}
+
+async function load_menu(){
+	var data = await get_file('settings/nav_sidebar.json');
+	var html = await get_file('templates/nav_sidebar.html');
+	var template = Handlebars.compile(html);
+	$('.nav-sidebar').html(template(data));
+
 }
 
 function loadProject(file) {

@@ -1,0 +1,37 @@
+[
+    {
+        "has_treeview": {
+            "menu_open": true,
+            "children": [
+                "<div id='ws_tree'></div>"
+            ]
+        },
+        "caption": "Starter Page",
+        "url": "pages/project_page.html",
+        "active": true,
+        "icon": "fas fa-tachometer-alt",
+        "a_class": "project-page"
+    },
+    {
+        "caption": "Documentation",
+        "url": "pages/docs_page.html",
+        "active": false,
+        "icon": "fas fa-th",
+        "a_class": "docs-page",
+        "badge": {
+            "text": "New",
+            "color":"danger"
+        }
+    },
+    {
+        "caption": "Icons page",
+        "url": "pages/icons_page.html",
+        "active": false,
+        "icon": "far fa-circle",
+        "a_class": "docs-page",
+        "badge": {
+            "text": "fa",
+            "color":"info"
+        }
+    }
+]
