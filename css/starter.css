@@ -1,10 +1,3 @@
-    .expandableContent {
-        display: none;
-    }
-
-    .expandableContent.default {
-        display: block;
-    }
 
     #ws_tree .jstree-ocl {
         display: none;

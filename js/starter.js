@@ -13,18 +13,18 @@ $(".container-form").on('click', '.btn-expand', function () {
 	$(this).text(expandContainer('.' + this.dataset.nodeid));
 });
 
-$(".saveproject").on('click', function (e) {
+$(".card-starter").on('click','.saveproject', function (e) {
 	updateData();
 	$('.card-starter').addClass('container-disabled');
 	updateTree();
 	saveProject();
 });
 
-$(".newproject").on('click', function (e) {
+$(".card-starter").on('click','.newproject', function (e) {
 	loadProject('settings/blank_project.json');
 });
 
-$(".save-app-data").on('click', function (e) {
+$(".card-strater").on('click','.save-app-data', function (e) {
 	updateData();
 });
 
@@ -50,10 +50,11 @@ function updateData() {
 		if (!$.isEmptyObject(obj_node)) {
 			var data = obj_node.data;
 			if (data != null) {
+				var i = $this.data("index");
 				if (Array.isArray(data.user_value)) {
-					data.user_value[$this.data("index")].text = $this.val();
+					data.user_value[i].text = $this.val();
 				} else if ($this.hasClass('custom-control-input')) {
-					data.options[$this.data("index")].checked = this.checked;
+					data.options[i].checked = this.checked;
 				} else {
 					data.user_value = $this.val();
 				}

@@ -1,0 +1,50 @@
+{
+    "text": "Database config",
+    "data": {
+        "user_value": [
+            {
+                "id": "dbServer",
+                "usershelper":"Database host",
+                "placeholder": "localhost",
+                "text": ""
+            },
+            {
+                "id": "dbUsername",
+                "usershelper":"Database login user name",
+                "placeholder": "root",
+                "text": ""
+            },
+            {
+                "id": "dbPassword",
+                "usershelper":"Database login user password",
+                "placeholder": "****",
+                "text": ""
+            },
+            {
+                "id": "dbDatabase",
+                "usershelper":"Database name",
+                "placeholder": "your database name",
+                "text": ""
+            },
+            {
+                "id": "appURI",
+                "usershelper":"Aplication url",
+                "placeholder": "yourprjname",
+                "text": ""
+            },
+            {
+                "id": "host",
+                "usershelper":"Aplication host",
+                "placeholder": "localhost",
+                "text": ""
+            }
+        ]
+    },
+    "type": "field-setting",
+    "icon": "fas fa-font",
+    "li_attr": {
+        "type": "text",
+        "lang": "en"
+    },
+    "order":4
+}
