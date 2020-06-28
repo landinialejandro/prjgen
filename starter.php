@@ -77,6 +77,7 @@ if (isset($_REQUEST['operation'])) {
 				$rslt = array('id' => $parn, 'content' => $res);
 				break;
 			case 'version':
+				//TODO: end version function
 				$id = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
 				exec('git rev-parse --verify HEAD 2> /dev/null', $output);
 				$parn = $output[0];
