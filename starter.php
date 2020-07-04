@@ -80,7 +80,9 @@ if (isset($_REQUEST['operation'])) {
 				//TODO: end version function
 				$id = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
 				exec('git rev-parse --verify HEAD 2> /dev/null', $output);
-				$parn = $output[0];
+				$hash = $output[0];
+				exec("git show $hash", $output);
+				$parn = $output;
 				$rslt = array('id' => $id, 'content' => $parn);
 				break;
 			case 'test':

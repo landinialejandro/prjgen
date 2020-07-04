@@ -7,6 +7,7 @@ $(function () {
 		load_page($('.nav-sidebar').find('.project-page'));
 		constructWSTree();
 	}, 300);
+	getVersion();
 });
 
 $(".container-form").on('click', '.btn-expand', function () {
@@ -441,6 +442,17 @@ async function load_menu(){
 	$('.nav-sidebar').html(template(data));
 
 }
+
+async function getVersion(){
+	options = {
+		operation:"version",
+		id:"#",
+		text:"get-version"
+	};
+	var version = await get_data("starter.php", options);
+	console.log(version);
+}
+
 
 function loadProject(file) {
 	destroyProject();
