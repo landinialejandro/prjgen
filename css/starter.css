@@ -1,23 +1,22 @@
+#ws_tree .jstree-ocl {
+    display: none;
+}
 
-    #ws_tree .jstree-ocl {
-        display: none;
-    }
+#ws_tree .jstree-clicked {
+    background-color: #007BFF;
+    color: white;
+}
 
-    #ws_tree .jstree-clicked {
-        background-color: #007BFF;
-        color: white;
-    }
+#ws_tree .jstree-node {
+    background: transparent;
+}
 
-    #ws_tree .jstree-node {
-        background: transparent;
-    }
+.vakata-context,
+.vakata-context ul {
+    z-index: 2000;
+}
 
-    .vakata-context {
-        display: none;
-        z-index: 99999;
-    }
-
-    .container-disabled {
-        pointer-events: none;
-        opacity: 0.4;
-    }
+.container-disabled {
+    pointer-events: none;
+    opacity: 0.4;
+}

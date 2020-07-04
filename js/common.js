@@ -81,8 +81,7 @@ function save_file(url, data, folder = 'projects') {
 			if (res == undefined) {
 				alert("Error: unexpected response");
 			} else {
-				console.log("%c saved file: ", "background: white; color: green");
-				console.log(res.id);
+				console.log("%c saved file: "+res.id, "background: white; color: green");
 			}
 		},
 		error: function (res) {
@@ -98,4 +97,12 @@ function save_file(url, data, folder = 'projects') {
 	}).always(function () {
 		$('#ws_tree').jstree(true).refresh();
 	});
+}
+
+function LoadModule(script) {
+    $.ajax({
+        url: script,
+        dataType: "script",
+        async: false
+    });
 }
