@@ -22,7 +22,7 @@ function get_file(url) {
  * simple get file with a promise. use $.get jquery whit command selector 
  * @param {String} url to file, starter.php default
  * @param {Element} data object data { operation: "test", id: "#", text: "test ajax works" }
- * @returns {String} primise data
+ * @returns {String} promise data
  */
 function get_data(url="starter.php", data = { operation: "test", id: "#", text: "test ajax works" }) {
 	const promise = new Promise(function (resolve, reject) {
@@ -61,7 +61,7 @@ function save_file(url, data, folder = 'projects') {
 			if (res == undefined) {
 				alert("Error: unexpected response");
 			} else {
-				console.log("%c saved file: "+res.id, "background: white; color: green");
+				console.log("%c saved file: "+ "%c"+res.id, "background: white; color: green");
 			}
 		},
 		error: function (res) {
@@ -72,7 +72,7 @@ function save_file(url, data, folder = 'projects') {
 			}
 		},
 		complete: function () {
-			$('.container-disabled').removeClass('container-disabled');
+			Container();
 		}
 	}).always(function () {
 		$('#ws_tree').jstree(true).refresh();

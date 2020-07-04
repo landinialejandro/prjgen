@@ -16,7 +16,7 @@ $(function () { //loaded page function.
  */
 $(".card-starter").on('click','.saveproject', function (e) {
 	updateData();
-	$('.card-starter').addClass('container-disabled');
+	Container(false);
 	updateTree();
 	saveProject();
 });
@@ -42,6 +42,21 @@ $(".nav-sidebar").on('click','.nav-link', function (e) {
 	e.preventDefault();
 	load_page($(this));
 });
+
+/**
+ * enable or disable containers
+ * @param {boolean} enable or disable a container
+ */
+function Container(enable = true){
+	if (enable){
+		setTimeout(() => {
+			$('.container-disabled').removeClass('container-disabled');
+		}, 200);
+	}else{
+		$('.card-starter').addClass('container-disabled');
+		$('#ws_tree').addClass('container-disabled');
+	}
+}
 
 /**
  * 
@@ -85,8 +100,3 @@ async function getVersion(){
 	var version = await get_data("starter.php", options);
 	$(options.text).html(version[3]);
 }
-
-/*
-TODO:	lista de campos de una tabla en proceso
-
-*/

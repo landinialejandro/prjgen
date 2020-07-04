@@ -98,7 +98,7 @@ async function constructWSTree() {
 					var file = data.node.text;
 					var active = $('.project-page').hasClass('active') ;
 					if (file !== loadedWS || !active) {
-						$('#ws_tree').addClass('container-disabled');
+						Container(false);
 						load_page($('.project-page'));
 						loadedWS = file;
 						loadProject('projects/' + file);

@@ -1,5 +1,12 @@
 var prjTree = false;
 
+
+/*
+TODO:	lista de campos de una tabla en proceso
+
+*/
+
+
 /**
  * Load a project
  * @param {string} file name project to load 
@@ -22,7 +29,7 @@ function destroyProject() {
  * udpdate user data in project tree 
  */
 function updateData() {
-	$('.card-starter').addClass('container-disabled');
+	Container(false);
 	$('.form-node').each(function () {
 		var $this = $(this);
 		var obj_node = prjTree.get_node($this.data("nodeid"));
@@ -45,7 +52,7 @@ function updateData() {
 			}
 		}
 	});
-	$('.container-disabled').removeClass('container-disabled');
+	Container();
 }
 
 /** 
