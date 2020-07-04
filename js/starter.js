@@ -31,8 +31,15 @@ $(".card-starter").on('click','.newproject', function (e) {
 /**
  * click on update project
  */
-$(".card-strater").on('click','.updateproject', function (e) {
+$(".card-starter").on('click','.updateproject', function (e) {
 	updateData();
+});
+
+/**
+ * click on make project
+ */
+$(".card-starter").on('click','.makeproject', function (e) {
+	tableList();
 });
 
 /**
@@ -59,7 +66,7 @@ function Container(enable = true){
 }
 
 /**
- * 
+ * load page from links left menu
  * @param {object} object data menu link item
  * @returns {boolean} class active object
  */

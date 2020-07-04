@@ -316,3 +316,12 @@ function fieldList() {
 		}
 	});
 }
+
+function tableList() {
+	var flatnode = get_json_node("#", true);
+	$.each(flatnode, function (i, data) {
+		if (data.type === 'table'){
+			console.log(data.text);
+		}
+	});
+}
