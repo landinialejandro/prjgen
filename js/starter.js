@@ -2,7 +2,7 @@ LoadModule('js/alert.js');
 LoadModule('js/starter.project.js');
 LoadModule('js/starter.ws.js');
 
-$(function () {
+$(function () { //loaded page function.
 	load_menu();
 	getVersion();
 	setTimeout(() => {
@@ -11,10 +11,9 @@ $(function () {
 	}, 300);
 });
 
-$(".container-form").on('click', '.btn-expand', function () {
-	$(this).text(expandContainer('.' + this.dataset.nodeid));
-});
-
+/**
+ * click on save project
+ */
 $(".card-starter").on('click','.saveproject', function (e) {
 	updateData();
 	$('.card-starter').addClass('container-disabled');
@@ -22,19 +21,33 @@ $(".card-starter").on('click','.saveproject', function (e) {
 	saveProject();
 });
 
+/**
+ * click on new project
+ */
 $(".card-starter").on('click','.newproject', function (e) {
 	loadProject('settings/blank_project.json');
 });
 
-$(".card-strater").on('click','.save-app-data', function (e) {
+/**
+ * click on update project
+ */
+$(".card-strater").on('click','.updateproject', function (e) {
 	updateData();
 });
 
+/**
+ * click on menu link item
+ */
 $(".nav-sidebar").on('click','.nav-link', function (e) {
 	e.preventDefault();
 	load_page($(this));
 });
 
+/**
+ * 
+ * @param {object} object data menu link item
+ * @returns {boolean} class active object
+ */
 async function load_page(object) {
 	var url = object.attr('href');
 	var active = object.hasClass('active') ;

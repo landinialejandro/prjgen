@@ -1,24 +1,4 @@
 /**
- * expand or collapse container
- * @param {Element} selector container
- * @returns {String} Returns '+' character for collapsed or '-' for expanded
- */
-function expandContainer(selector){
-  var container = $(selector);
-
-	if (container.hasClass('active')) {
-		container.slideUp("slow");
-		container.removeClass('active');
-		return '+';
-
-	} else {
-		container.slideDown("slow");
-		container.addClass('active');
-		return '-';
-	}
-}
-
-/**
  * simple get file with a promise. use $.get jquery
  * @param {Element} url file name to gete data 
  * @returns {String} promise data
