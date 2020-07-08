@@ -24,7 +24,11 @@ function get_file(url) {
  * @param {Element} data object data { operation: "test", id: "#", text: "test ajax works" }
  * @returns {String} promise data
  */
-function get_data(url="starter.php", data = { operation: "test", id: "#", text: "test ajax works" }) {
+function get_data(url = "starter.php", data = {
+	operation: "test",
+	id: "#",
+	text: "test ajax works"
+}) {
 	const promise = new Promise(function (resolve, reject) {
 		if (data && url) {
 			$.get(url, data)
@@ -61,7 +65,7 @@ function save_file(url, data, folder = 'projects') {
 			if (res == undefined) {
 				alert("Error: unexpected response");
 			} else {
-				console.log("%c saved file: "+ "%c"+res.id, "background: white; color: green");
+				console.log("%c saved file: " + "%c" + res.id, "background: white; color: green");
 			}
 		},
 		error: function (res) {
@@ -80,9 +84,21 @@ function save_file(url, data, folder = 'projects') {
 }
 
 function LoadModule(script) {
-    $.ajax({
-        url: script,
-        dataType: "script",
-        async: false
-    });
+	$.ajax({
+		url: script,
+		dataType: "script",
+		async: false
+	});
+}
+
+function preloader() {
+	var preloaderFadeOutTime = 500;
+
+	function hidePreloader() {
+		var preloader = $('.spinner-wrapper');
+		setTimeout(() => {
+			preloader.fadeOut(preloaderFadeOutTime);
+		}, 500);
+	}
+	hidePreloader();
 }

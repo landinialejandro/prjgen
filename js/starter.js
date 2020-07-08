@@ -2,13 +2,21 @@ LoadModule('js/alert.js');
 LoadModule('js/starter.project.js');
 LoadModule('js/starter.ws.js');
 
+(function($){
+	$(window).on('load', function(){
+		preloader();
+	});
+})
+(jQuery);
+
+
 $(function () { //loaded page function.
 	load_menu();
 	getVersion();
 	setTimeout(() => {
 		load_page($('.nav-sidebar').find('.project-page'));
 		constructWSTree();
-	}, 300);
+	}, 500);
 });
 
 /**

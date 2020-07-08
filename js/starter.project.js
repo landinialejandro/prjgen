@@ -292,27 +292,47 @@ function contextMenu(node, $this) { //create adtional context menu
 	return tmp;
 }
 
-function fieldList() {
+function fieldList() { //by table
 	var flatnode = get_json_node("#", true);
 	$.each(flatnode, function (i, data) {
 		if (data.type === 'table-settings') {
-			var parent = prjTree.get_parent(data.id);
-			var jsonParent = get_json_node(parent);
-			var tbl_list = ["None"];
-			$.each(jsonParent.children, function (i, obj) {
-				if (obj.type === 'field') {
-					tbl_list.push(obj.text);
+			var jsonSettings = get_json_node(data.id); 
+			var jsonParent = get_json_node(data.parent); //get data from table
+			var tbl_list = [];
+			$.each(jsonParent.children, function (i, e) {
+				if (e.type === 'field') {
+					tbl_list.push(e.text);
 				}
 			});
-			var table_settings = get_json_node(data.id);
-			$.each(table_settings.children, function (i, obj) {
-				if (obj.text === 'Default sortby') {
-					var list = prjTree.get_node(obj.id);
-					list.data.options = tbl_list;
-					return false;
-				}
-			});
-			updateTree();
+			updateSelect(data.id,tbl_list); //in table-settings
+			setupTable = sql_setupTable(jsonParent.text, tbl_list);
+			jsonSettings.data["sql"] = setupTable;
+			console.log ( jsonSettings);
+		}
+	});
+	updateTree();
+}
+
+function sql_setupTable(tname,tbl_list = []){
+	var fn_list = [];
+	$.each(tbl_list, function (i, e) { 
+		fn_list.push(`'${e}'`);
+	});
+	fn_list = fn_list.join(",");
+	sql = `create table if not exists '${tname}' ( ${fn_list}); `;
+	console.log(sql); // TODO: esto debería ir al table-settings
+	return sql;
+}
+
+function updateSelect(id, tbl_list = []) {
+	var table_settings = get_json_node(id);
+	var list = ["None"];
+	list.push(tbl_list);
+	$.each(table_settings.children, function (i, e) {
+		if (e.text === 'Default sortby') {
+			var element = prjTree.get_node(e.id);
+			element.data.options = list;
+			return false;
 		}
 	});
 }
@@ -320,7 +340,7 @@ function fieldList() {
 function tableList() {
 	var flatnode = get_json_node("#", true);
 	$.each(flatnode, function (i, data) {
-		if (data.type === 'table'){
+		if (data.type === 'table') {
 			console.log(data.text);
 		}
 	});
