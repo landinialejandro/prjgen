@@ -91,14 +91,10 @@ function LoadModule(script) {
 	});
 }
 
-function preloader() {
+function hidePreloader() {
 	var preloaderFadeOutTime = 500;
-
-	function hidePreloader() {
-		var preloader = $('.spinner-wrapper');
-		setTimeout(() => {
-			preloader.fadeOut(preloaderFadeOutTime);
-		}, 500);
-	}
-	hidePreloader();
+	var preloader = $('.spinner-wrapper');
+	setTimeout(() => {
+		preloader.fadeOut(preloaderFadeOutTime);
+	}, 500);
 }

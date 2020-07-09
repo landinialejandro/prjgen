@@ -4,7 +4,7 @@ LoadModule('js/starter.ws.js');
 
 (function($){
 	$(window).on('load', function(){
-		preloader();
+		hidePreloader();
 	});
 })
 (jQuery);

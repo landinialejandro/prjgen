@@ -4,81 +4,71 @@ if (isset($_REQUEST['operation'])) {
 	$folder = isset($_REQUEST['folder']) ? $_REQUEST['folder'] : 'projects';
 	$fs = new fs($folder);
 	try {
+		$id = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
 		$rslt = null;
 		switch ($_REQUEST['operation']) {
 			case 'get_node':
-				$node = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
-				$rslt = $fs->lst($node, (isset($_REQUEST['id']) && $_REQUEST['id'] === '#'));
+				$rslt = $fs->lst($id, (isset($_REQUEST['id']) && $_REQUEST['id'] === '#'));
 				break;
 			case "get_content":
-				$node = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
-				$rslt = $fs->data($node);
+				$rslt = $fs->data($id);
 				break;
 			case 'create_node':
-				$node = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
-				$rslt = $fs->create($node, isset($_REQUEST['text']) ? $_REQUEST['text'] : '', (!isset($_REQUEST['type']) || $_REQUEST['type'] !== 'file'));
+				$rslt = $fs->create($id, isset($_REQUEST['text']) ? $_REQUEST['text'] : '', (!isset($_REQUEST['type']) || $_REQUEST['type'] !== 'file'));
 				break;
 			case 'rename_node':
-				$node = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
-				$rslt = $fs->rename($node, isset($_REQUEST['text']) ? $_REQUEST['text'] : '');
+				$rslt = $fs->rename($id, isset($_REQUEST['text']) ? $_REQUEST['text'] : '');
 				break;
 			case 'delete_node':
-				$node = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
-				$rslt = $fs->remove($node);
+				$rslt = $fs->remove($id);
 				break;
 			case 'move_node':
-				$node = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
 				$parn = isset($_REQUEST['parent']) && $_REQUEST['parent'] !== '#' ? $_REQUEST['parent'] : '/';
-				$rslt = $fs->move($node, $parn);
+				$rslt = $fs->move($id, $parn);
 				break;
 			case 'copy_node':
-				$node = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
 				$parn = isset($_REQUEST['parent']) && $_REQUEST['parent'] !== '#' ? $_REQUEST['parent'] : '/';
-				$rslt = $fs->copy($node, $parn);
+				$rslt = $fs->copy($id, $parn);
 				break;
 			case 'save_file':
-				$node = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
 				$parn = isset($_REQUEST['text']) ? $_REQUEST['text'] : '';
-
-				$rslt = $fs->create("", $node, false, $parn);
-
+				$rslt = $fs->create("", $id, false, $parn);
 				break;
 			case 'get_json':
-				$id = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
 				$parn = isset($_REQUEST['text']) ? $_REQUEST['text'] : '';
-
 				switch ($parn) {
 					case 'field-settings':
 						$dir = dirname(__FILE__) . "/settings/fields";
+						$res = get_children($dir);
 						break;
 					case 'project-settings':
 						$dir = dirname(__FILE__) . "/settings/project";
+						$res = get_children($dir);
 						break;
-					case 'group-settings':
-						$dir = dirname(__FILE__) . "/settings/groups";
-						break;
-					case 'table-settings':
+					case 'table':
 						$dir = dirname(__FILE__) . "/settings/tables";
-						break;
+						$res[] = [
+							"text"=>"Table Settings",
+							"type"=>"table-settings",
+							"children"=>get_children($dir)
+						];
+					break;
+					case 'group':
+						$dir = dirname(__FILE__) . "/settings/groups";
+						$res[] = [
+							"text"=>"Group Settings",
+							"type"=>"group-settings",
+							"children"=>get_children($dir)
+						];
+					break;
 					default:
 						throw new Exception('Unsupported operation json: ' . $parn);
 						break;
 				}
-				$files = array_diff(scandir($dir), array('.', '..'));
-				$res = [];
-				foreach ($files as $file) {
-					$ext = pathinfo($file, PATHINFO_EXTENSION);
-					if ($ext === 'json') {
-						$res[] = json_decode($fs->getContent("$dir/$file"), true);
-					}
-				}
-				$order = array_column($res, 'order');
-				array_multisort($order, SORT_ASC, $res);
 				$rslt = array('id' => $parn, 'content' => $res);
 				break;
 			case 'version':
 				//TODO: end version function
-				$id = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
 				exec('git rev-parse --verify HEAD 2> /dev/null', $output);
 				$hash = $output[0];
 				exec("git show $hash", $output);
@@ -86,7 +76,6 @@ if (isset($_REQUEST['operation'])) {
 				$rslt = array('id' => $id, 'content' => $parn);
 				break;
 			case 'test':
-				$id = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
 				$parn = isset($_REQUEST['text']) ? $_REQUEST['text'] : '';
 				$rslt = array('id' => $id, 'content' => $parn);
 				break;
@@ -102,4 +91,21 @@ if (isset($_REQUEST['operation'])) {
 		echo $e->getMessage();
 	}
 	die();
+}
+
+function get_children($dir, $sort = true){ //from dir get the children elements
+	$fs = new fs($dir);
+	$files = array_diff(scandir($dir), array('.', '..'));
+	$res = [];
+	foreach ($files as $file) {
+		$ext = pathinfo($file, PATHINFO_EXTENSION);
+		if ($ext === 'json') {
+			$res[] = json_decode($fs->getContent("$dir/$file"), true);
+		}
+	}
+	if ($sort){
+		$order = array_column($res, 'order');
+		array_multisort($order, SORT_ASC, $res);
+	}
+	return $res;
 }

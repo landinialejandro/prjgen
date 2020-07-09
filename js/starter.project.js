@@ -139,7 +139,10 @@ async function constructTree(file) {
 				"plugins": ["dnd", "search", "state", "types", "contextmenu", "unique"]
 			})
 			.on('create_node.jstree', function (e, data, pos, callback, loaded) {
+				
 				data.instance.set_id(data.node, data.node.id);
+				var json_selected = get_json_node(data.node.id);
+				fieldList(json_selected);
 				updateTree();
 			})
 			.on('changed.jstree', function (e, data) {
@@ -149,7 +152,9 @@ async function constructTree(file) {
 					whenHelper();
 					getChildrenHelper(form_group);
 					$('.container-form').html(template(json_selected));
-					fieldList(json_selected);
+					if (data.node.type==='table-settings' || data.node.type==='table'){
+						fieldList(data.node.id);
+					}
 				}
 			})
 			.on('rename_node.jstree', function (e, data) {
@@ -183,23 +188,19 @@ async function createNode(data, type) {
 		children: []
 	};
 	var position = "last";
-	if (type === 'field') {
-		options.text = "field-settings";
-	}
 	if (type === 'project-settings') {
 		options.text = type;
 		newNode.text = "Project Settings";
 		position = "first";
 	}
-	if (type === 'group-settings') {
-		options.text = type;
-		newNode.text = "Group Settings";
-		position = "first";
+	if (type === 'field') {
+		options.text = "field-settings";
 	}
-	if (type === 'table-settings') {
+	if (type === 'table'){
 		options.text = type;
-		newNode.text = "Table Settings";
-		position = "first";
+	}
+	if (type === 'group'){
+		options.text = type;
 	}
 
 	if (options.text != "") {
@@ -246,16 +247,6 @@ function contextMenu(node, $this) { //create adtional context menu
 				return compare_type('#', data);
 			}
 		},
-		"create_grp_setings": {
-			"separator_after": true,
-			"label": "Group Settings",
-			"action": function (data) {
-				createNode(data, "group-settings");
-			},
-			"_disabled": function (data) {
-				return compare_type('group', data);
-			}
-		},
 		"create_table": {
 			"separator_after": false,
 			"label": "Table",
@@ -264,16 +255,6 @@ function contextMenu(node, $this) { //create adtional context menu
 			},
 			"_disabled": function (data) {
 				return compare_type('group', data);
-			}
-		},
-		"create_tbl_settings": {
-			"separator_after": true,
-			"label": "Table Settings",
-			"action": function (data) {
-				createNode(data, "table-settings");
-			},
-			"_disabled": function (data) {
-				return compare_type('table', data);
 			}
 		},
 		"create_field": {
@@ -292,8 +273,8 @@ function contextMenu(node, $this) { //create adtional context menu
 	return tmp;
 }
 
-function fieldList() { //by table
-	var flatnode = get_json_node("#", true);
+function fieldList(id) { //by table
+	var flatnode = get_json_node(id, true);
 	$.each(flatnode, function (i, data) {
 		if (data.type === 'table-settings') {
 			var jsonSettings = get_json_node(data.id); 
@@ -307,7 +288,7 @@ function fieldList() { //by table
 			updateSelect(data.id,tbl_list); //in table-settings
 			setupTable = sql_setupTable(jsonParent.text, tbl_list);
 			jsonSettings.data["sql"] = setupTable;
-			console.log ( jsonSettings);
+			//console.log ( jsonSettings);
 		}
 	});
 	updateTree();
