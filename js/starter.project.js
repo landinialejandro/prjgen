@@ -284,7 +284,7 @@ function fieldList(id) { //by table
 				if (e.type === 'field') {
 					tbl_list.push(e.text);
 					var jsonField = get_json_node(e.id);
-					console.log(jsonField); //TODO aanlizar la configuración de cada campo
+					console.log(jsonField.children); //TODO analizar la configuración de cada campo
 				}
 			});
 			updateSelect(data.id,tbl_list); //in table-settings

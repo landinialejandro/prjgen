@@ -12,7 +12,8 @@
                 "id": "es",
                 "text": ""
             }
-        ]
+        ],
+        "type":"html-control"
     },
     "type":"field-setting",
     "icon": "fa fa-cog",

@@ -1,5 +1,5 @@
 {
-    "text": "Default value",
+    "text": "System default value",
     "data": {
         "user_value":"",
         "option": true,
@@ -12,7 +12,9 @@
             "Edition Date",
             "Edition Time",
             "Edition TimeStamp"
-        ]
+        ],
+        "type":"html-control"
+
     },
     "type": "field-setting",
     "icon": "fas fa-stream",

@@ -1,0 +1,18 @@
+{
+    "text": "Database options value",
+    "data": {
+        "check": true,
+        "options": [
+            {"text":"Primary key", "checked":false},
+            {"text":"Zero fill", "checked":false},
+            {"text":"Auto increment", "checked":false},
+            {"text":"Unique", "checked":false},
+            {"text":"Unsigned", "checked":false},
+            {"text":"Binary", "checked":false}
+        ],
+        "type":"sql-control"
+    },
+    "type": "field-setting",
+    "icon": "fas fa-stream",
+    "order": 8
+}

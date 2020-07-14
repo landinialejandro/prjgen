@@ -1,5 +1,6 @@
 <div class="form-group">
     {{#if li_attr.lang}}
+    <!-- multilingual form group -->
     <div class="card card-outline card-yellow">
         <div class="card-header">
             <h3 class="card-title">{{text}}</h3>
@@ -19,8 +20,8 @@
                             value="{{text}}" title="{{usershelper}}">
                 </div>
             </div>
-            {{/each}}
-        </div>
+        {{/each}}
+    </div>
     {{else}}
         <label for="{{id}}" class="">{{text}}: </label>    
         {{#if data.placeholder}}
@@ -43,10 +44,10 @@
                             <div class="col col-6 col-md-4">
                                 <div class="custom-control custom-switch custom-switch-off-default custom-switch-on-success">
                                     <input  type="checkbox" class="custom-control-input form-node" 
-                                            data-index="{{@index}}" id="check{{@index}}" 
-                                            name="check{{@index}}" data-nodeid="{{../id}}" 
+                                            data-index="{{@index}}" id="check-{{../id}}-{{@index}}" 
+                                            name="check-{{../id}}-{{@index}}" data-nodeid="{{../id}}" 
                                             {{#if checked}}checked{{/if}} >
-                                    <label class="custom-control-label" for="check{{@index}}">{{this.text}}</label>
+                                    <label class="custom-control-label" for="check-{{../id}}-{{@index}}">{{this.text}}</label>
                                 </div>
                             </div>
                     {{/each}}

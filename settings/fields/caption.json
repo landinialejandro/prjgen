@@ -15,7 +15,8 @@
                 "usershelper":"Identifica el título en español",
                 "text": ""
             }
-        ]
+        ],
+        "type":"html-control"
     },
     "type": "field-setting",
     "icon": "fas fa-font",

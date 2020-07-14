@@ -27,7 +27,8 @@
             "Medium Text",
             "Long BLOB",
             "Long Text"
-        ]
+        ],
+        "type":"sql-control"
     },
     "type": "field-setting",
     "icon": "fas fa-stream",

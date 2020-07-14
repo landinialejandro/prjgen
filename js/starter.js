@@ -2,6 +2,10 @@ LoadModule('js/alert.js');
 LoadModule('js/starter.project.js');
 LoadModule('js/starter.ws.js');
 
+/**
+ * TODO: se peude verificar cuando se compile si el usuario ha modificado el archi y avisarle
+ */
+
 (function($){
 	$(window).on('load', function(){
 		hidePreloader();

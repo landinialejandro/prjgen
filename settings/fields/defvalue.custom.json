@@ -1,15 +1,14 @@
 {
-    "text": "Precision",
+    "text": "Custom default value",
     "data": {
-        "placeholder": "Presicion value",
-        "usershelper": "Set the presicion value",
+        "placeholder": "Your custom string o value",
         "user_value": "",
         "type":"html-control"
     },
     "type":"field-setting",
     "icon": "fa fa-cog",
     "li_attr": {
-        "type": "integer"
+        "type": "text"
     },
-    "order":6
+    "order":7
 }
