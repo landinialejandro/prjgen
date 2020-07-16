@@ -26,7 +26,7 @@ $(function () { //loaded page function.
 /**
  * click on save project
  */
-$(".card-starter").on('click','.saveproject', function (e) {
+$(".navbar-nav").on('click','.saveproject', function (e) {
 	updateData();
 	Container(false);
 	updateTree();
@@ -36,8 +36,30 @@ $(".card-starter").on('click','.saveproject', function (e) {
 /**
  * click on new project
  */
-$(".card-starter").on('click','.newproject', function (e) {
+$(".navbar-nav").on('click','.newproject', function (e) {
 	loadProject('settings/blank_project.json');
+});
+
+/**
+ * click on make project
+ */
+$(".navbar-nav").on('click','.makeproject', function (e) {
+	tableList();
+});
+
+/**
+ * click on search on tree options buttons
+ */
+$(".start-search").on('click',function(e){
+	goto_search();
+});
+$(".clear-search").on('click',function(e){
+	search_intree(false);
+});
+$(".search-value").keydown(function(e){
+	if (e.which === 13){
+		goto_search();
+	}
 });
 
 /**
@@ -45,13 +67,6 @@ $(".card-starter").on('click','.newproject', function (e) {
  */
 $(".card-starter").on('click','.updateproject', function (e) {
 	updateData();
-});
-
-/**
- * click on make project
- */
-$(".card-starter").on('click','.makeproject', function (e) {
-	tableList();
 });
 
 /**
@@ -118,4 +133,8 @@ async function getVersion(){
 	};
 	var version = await get_data("starter.php", options);
 	$(options.text).html(version[3]);
+}
+function goto_search(){
+	var search_value = $('.search-value').val();
+	search_intree(search_value);
 }

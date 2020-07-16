@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="css/starter.css">
   <!-- <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet"> -->
 </head>
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini layout-navbar-fixed">
   <div class=" spinner-wrapper">
     <div class=" spinner">
       <div class=" bounce1"></div>
@@ -31,6 +31,24 @@
         <li class="nav-item d-none d-sm-inline-block">
           <a href="starter.html" class="nav-link">Home</a>
         </li>
+      </ul>
+      <form class="form-inline ml-3">
+        <div class="input-group input-group-sm">
+          <input class="form-control form-control-navbar search-value" type="search" placeholder="Search" aria-label="Search">
+          <div class="input-group-append">
+            <button class="btn btn-navbar start-search" type="button">
+              <i class="fas fa-search"></i>
+            </button>
+            <button class="btn btn-navbar clear-search" type="button">
+              <i class="far fa-times-circle"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+      <ul class="navbar-nav ml-auto">
+        <button type="button" class="btn btn-danger btn-xs makeproject"><i class="fa fa-magic"></i> make-it!</button>
+    <button type="button" class="btn btn-warning btn-xs newproject"> new project</button>
+    <button type="button" class="btn btn-success btn-xs saveproject">save project</button>
       </ul>
     </nav>
     <aside class="main-sidebar sidebar-dark-primary elevation-4">

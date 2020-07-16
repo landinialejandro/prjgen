@@ -136,7 +136,11 @@ async function constructTree(file) {
 						return contextMenu(node, this);
 					}
 				},
-				"plugins": ["dnd", "search", "state", "types", "contextmenu", "unique"]
+				"plugins": ["dnd", "search", "state", "types", "contextmenu", "unique"],
+				"search":{
+					"case_sensitive":false,
+					"show_only_matches":true
+				}
 			})
 			.on('create_node.jstree', function (e, data, pos, callback, loaded) {
 				
@@ -327,4 +331,11 @@ function tableList() {
 			console.log(data.text);
 		}
 	});
+}
+function search_intree(search_value = false, long = 3){
+	if (search_value && search_value.length >= long ){
+		$('.card-starter #project_tree').jstree("search",search_value);
+	}else {
+		$('.card-starter #project_tree').jstree("clear_search");
+	}
 }
