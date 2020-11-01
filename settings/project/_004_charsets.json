@@ -1,16 +1,20 @@
 {
-    "text": "Check you charset value.",
-    "description":"You can add your own charset in _xxx_charsets.json file",
-    "data": {
-        "check": true,
-        "options": [
-            {"text":"utf8", "checked":true},
-            {"text":"utf16", "checked":false},
-            {"text":"utf32", "checked":false},
-            {"text":"ascii", "checked":false}
-        ]
-    },
-    "type": "prj-setting",
-    "icon": "fas fa-stream",
-    "order": 3
+  "text": "Select you charset value",
+  "data": {
+    "description":{
+        "text": "You can add your own charset in _xxx_charsets.json file",
+        "class": "text-warning"
+        },
+    "user_value":"utf8",
+    "option": true,
+    "options": [
+        "utf8",
+        "utf16",
+        "ascii"
+    ],
+    "usershelper":"Select your charset"
+  },
+  "type": "prj-setting",
+  "icon": "fas fa-stream",
+  "order": 3
 }

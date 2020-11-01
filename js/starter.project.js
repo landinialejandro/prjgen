@@ -153,6 +153,7 @@ async function constructTree(file) {
                     var template = Handlebars.compile(form);
                     whenHelper();
                     getChildrenHelper(form_group);
+                    console.log(json_selected);
                     $('.container-form').html(template(json_selected));
                     if (data.node.type === 'table-settings' || data.node.type === 'table') {
                         fieldList(data.node.id);

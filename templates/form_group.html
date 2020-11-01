@@ -8,6 +8,17 @@
                     <a href="#" class="btn btn-warning btn-xs add-new-lang"> Add new</a>
                     <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
                 </div>
+                {{#if data.description}}
+                <br>
+                    <p class="
+                        {{#if data.description.class}}
+                            {{data.description.class}}
+                        {{else}}
+                            text-primary
+                        {{/if}}">
+                        {{data.description.text}}
+                    </p>
+                {{/if}}
             </div>
             {{#each data.user_value}}
                 <div class=" card-body">
@@ -24,9 +35,16 @@
         </div>
     {{else}}
         <label for="{{id}}" class="">{{text}}: </label>
-        {{description}}
-            <small id="{{id}}HelpBlock" class="form-text text-muted">
-            </small>
+        {{#if data.description}}
+        <p class="
+            {{#if data.description.class}}
+                {{data.description.class}}
+            {{else}}
+                text-primary
+            {{/if}}">
+            {{data.description.text}}
+        </p>
+        {{/if}}
         {{#if data.placeholder}}
             <input  type="text" class="form-control form-node" 
                     data-index="{{@index}}" data-nodeid="{{id}}" 
@@ -35,9 +53,9 @@
                     title="{{data.usershelper}}">
         {{else}}
             {{#if data.option}}
-                <select class="custom-select form-node" data-nodeid="{{id}}" name="{{id}}">
+                <select class="custom-select form-node" data-nodeid="{{id}}" name="{{id}}" title="{{data.usershelper}}">
                     {{#each data.options}}
-                    <option value="{{this}}" {{#when this "eq" ../data.user_value}}selected{{/when}} >{{this}}</option>
+                    <option value="{{this}}" {{#when this "eq" ../data.user_value}}selected{{/when}}>{{this}}</option>
                     {{/each}}
                 </select>
             {{else}}
@@ -49,8 +67,9 @@
                                     <input  type="checkbox" class="custom-control-input form-node" 
                                             data-index="{{@index}}" id="check-{{../id}}-{{@index}}" 
                                             name="check-{{../id}}-{{@index}}" data-nodeid="{{../id}}" 
-                                            {{#if checked}}checked{{/if}} >
-                                    <label class="custom-control-label" for="check-{{../id}}-{{@index}}">{{this.text}}</label>
+                                            {{#if checked}}checked{{/if}}>
+                                    <label class="custom-control-label" for="check-{{../id}}-{{@index}}" 
+                                    title="{{this.usershelper}}">{{this.text}}</label>
                                 </div>
                             </div>
                     {{/each}}

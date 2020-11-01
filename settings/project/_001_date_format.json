@@ -1,6 +1,10 @@
 {
     "text": "Date order format",
     "data": {
+        "description":{
+            "text": "You can add your own options in _xxx_date_format.json file",
+            "class": "text-primary"
+            },
         "user_value":"",
         "option": true,
         "options": [
