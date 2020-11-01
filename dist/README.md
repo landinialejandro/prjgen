@@ -1,10 +1,7 @@
 # folder contents
 
-- adminlte3 -->AdminLte3.0 dist
-- dist_L -->landini dist
-    - css   --> landini own css
-    - data  --> ??
-    - js    --> landini opwn js scripts
-    - logo  --> landini logos
-    - plugins   --> some others js librarys
+- adminlte3 -->AdminLte3.0 
+- css   --> landini own css
+- logo  --> landini logos
 - php -->php libraries and plugin php codes.
+- plugins   --> some others js librarys

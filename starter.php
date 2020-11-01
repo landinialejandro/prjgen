@@ -84,6 +84,7 @@ if (isset($_REQUEST['operation'])) {
 				break;
 		}
 		header('Content-Type: application/json; charset=utf-8');
+		//change memory_limit = 512MB; in php.ini
 		echo json_encode($rslt);
 	} catch (Exception $e) {
 		header($_SERVER["SERVER_PROTOCOL"] . ' 500 Server Error');

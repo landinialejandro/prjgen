@@ -27,10 +27,11 @@ $(function() { //loaded page function.
  * click on save project
  */
 $(".navbar-nav").on('click', '.saveproject', function(e) {
-    updateData();
     Container(false);
+    updateData();
     updateTree();
     saveProject();
+    Container();
 });
 
 /**
