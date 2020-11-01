@@ -1,10 +1,10 @@
 {
-    "text":"Technical report",
+    "text": "Technical report",
     "data": {
         "placeholder": "Tech report",
         "user_value": ""
     },
-    "type":"tbl-setting",
+    "type": "tbl-setting",
     "icon": "fa fa-cog",
-    "order":12
+    "order": 12
 }
