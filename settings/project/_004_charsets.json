@@ -1,0 +1,16 @@
+{
+    "text": "Check you charset value.",
+    "description":"You can add your own charset in _xxx_charsets.json file",
+    "data": {
+        "check": true,
+        "options": [
+            {"text":"utf8", "checked":true},
+            {"text":"utf16", "checked":false},
+            {"text":"utf32", "checked":false},
+            {"text":"ascii", "checked":false}
+        ]
+    },
+    "type": "prj-setting",
+    "icon": "fas fa-stream",
+    "order": 3
+}

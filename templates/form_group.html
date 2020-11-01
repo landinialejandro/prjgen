@@ -1,29 +1,32 @@
 <div class="form-group">
     {{#if li_attr.lang}}
-    <!-- multilingual form group -->
-    <div class="card card-outline card-yellow">
-        <div class="card-header">
-            <h3 class="card-title">{{text}}</h3>
-            <div class="card-tools">
-                <a href="#" class="btn btn-warning btn-xs add-new-lang"> Add new</a>
-                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
-              </div>
-        </div>
-        {{#each data.user_value}}
-            <div class=" card-body">
-                <div class="input-group">
-                    <div class="input-group-prepend ">
-                        <span class="input-group-text">{{id}}</span>
-                    </div>
-                    <input  type="text" class="form-control form-node" data-index="{{@index}}" 
-                            data-nodeid="{{../id}}" name="{{id}}" placeholder="{{placeholder}}" 
-                            value="{{text}}" title="{{usershelper}}">
+        <!-- multilingual form group -->
+        <div class="card card-outline card-yellow">
+            <div class="card-header">
+                <h3 class="card-title">{{text}}</h3>
+                <div class="card-tools">
+                    <a href="#" class="btn btn-warning btn-xs add-new-lang"> Add new</a>
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
                 </div>
             </div>
-        {{/each}}
-    </div>
+            {{#each data.user_value}}
+                <div class=" card-body">
+                    <div class="input-group">
+                        <div class="input-group-prepend ">
+                            <span class="input-group-text">{{id}}</span>
+                        </div>
+                        <input  type="text" class="form-control form-node" data-index="{{@index}}" 
+                                data-nodeid="{{../id}}" name="{{id}}" placeholder="{{placeholder}}" 
+                                value="{{text}}" title="{{usershelper}}">
+                    </div>
+                </div>
+            {{/each}}
+        </div>
     {{else}}
-        <label for="{{id}}" class="">{{text}}: </label>    
+        <label for="{{id}}" class="">{{text}}: </label>
+        {{description}}
+            <small id="{{id}}HelpBlock" class="form-text text-muted">
+            </small>
         {{#if data.placeholder}}
             <input  type="text" class="form-control form-node" 
                     data-index="{{@index}}" data-nodeid="{{id}}" 
