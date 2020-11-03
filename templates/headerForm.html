@@ -33,8 +33,10 @@
     {{else}} 
         {{#getchildren id}}{{/getchildren}} 
     {{/if}}
-    <div class="form-group">
-        <label for="{{id}}" class="">Set {{text}} {{type}} icon:</label>
-        <input type="text" class="form-control form-node node-setting" data-index="{{@index}}" data-nodeid="{{id}}" name="icon" placeholder="set new icon" value="{{icon}}" title="Change icon to selected node" />
-    </div>
+    <div class="callout callout-secondary">
+        <div class="form-group">
+            <label for="{{id}}" class="">Set {{text}} {{type}} icon:</label>
+            <input type="text" class="form-control form-node node-setting node-icon" data-index="{{@index}}" data-nodeid="{{id}}" name="icon" placeholder="set new icon" value="{{icon}}" title="Change icon to selected node" />
+        </div>
+      </div>
 </form>

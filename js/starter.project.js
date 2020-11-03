@@ -1,3 +1,4 @@
+console.log('starter.project');
 var prjTree = false;
 
 
@@ -29,9 +30,12 @@ function destroyProject() {
  * udpdate user data in project tree 
  */
 function updateData() {
-    $('.form-node').each(function() {
+    console.log('UpdateData');
+    $('.form-node').each(function () {
         var $this = $(this);
         var obj_node = prjTree.get_node($this.data("nodeid"));
+        console.log(obj_node);
+
         if (!$.isEmptyObject(obj_node)) {
             var data = obj_node.data;
             if (data != null) {
@@ -41,7 +45,11 @@ function updateData() {
                 } else if ($this.hasClass('custom-control-input')) {
                     data.options[i].checked = this.checked;
                 } else {
-                    data.user_value = $this.val();
+                    if ($this.hasClass('node-icon')) {
+                        obj_node.icon = $this.val();
+                    } else {
+                        data.user_value = $this.val();
+                    }
                 }
             }
             if ($this.hasClass('node-setting')) {
@@ -95,14 +103,13 @@ async function constructTree(file) {
     try {
         const data = await get_file(file);
         const types = await get_file('settings/prj_types.json');
-        const form = await get_file('templates/headerForm.html');
-        const form_group = await get_file('templates/form_group.html');
+
 
         $('.card-starter #project_tree')
             .jstree({
                 "core": {
                     "data": data,
-                    'check_callback': function(o, n, p, i, m) {
+                    'check_callback': function (o, n, p, i, m) {
                         if (m && m.dnd && m.pos !== 'i') {
                             return false;
                         }
@@ -130,7 +137,7 @@ async function constructTree(file) {
                 },
                 "types": types,
                 'contextmenu': {
-                    'items': function(node) {
+                    'items': function (node) {
                         return contextMenu(node, this);
                     }
                 },
@@ -140,41 +147,47 @@ async function constructTree(file) {
                     "show_only_matches": true
                 }
             })
-            .on('create_node.jstree', function(e, data, pos, callback, loaded) {
+            .on('create_node.jstree', function (e, data, pos, callback, loaded) {
 
                 data.instance.set_id(data.node, data.node.id);
                 var json_selected = get_json_node(data.node.id);
                 fieldList(json_selected);
                 updateTree();
             })
-            .on('changed.jstree', function(e, data) {
+            .on('changed.jstree', function (e, data) {
                 if (data.action === "select_node") {
-                    var json_selected = get_json_node(data.node.id);
-                    var template = Handlebars.compile(form);
-                    whenHelper();
-                    getChildrenHelper(form_group);
-                    console.log(json_selected);
-                    $('.container-form').html(template(json_selected));
+                    fillForm(data.node.id)
                     if (data.node.type === 'table-settings' || data.node.type === 'table') {
                         fieldList(data.node.id);
                     }
                 }
             })
-            .on('rename_node.jstree', function(e, data) {
+            .on('rename_node.jstree', function (e, data) {
                 if (data.node.type === "#") {
                     alert('rename project file?');
                 }
             })
-            .on('loaded.jstree', function() {
+            .on('loaded.jstree', function () {
                 prjTree = $('.card-starter #project_tree').jstree(true);
             })
-            .on('delete_node.jstree', function() {
+            .on('delete_node.jstree', function () {
                 //before delete
             });
 
     } catch (err) {
         return console.log(err.message);
     }
+}
+
+async function fillForm(nodeid) {
+    const form = await get_file('templates/headerForm.html');
+    const form_group = await get_file('templates/form_group.html');
+    var json_selected = get_json_node(nodeid);
+    var template = Handlebars.compile(form);
+    whenHelper();
+    getChildrenHelper(form_group);
+    console.log(json_selected);
+    $('.container-form').html(template(json_selected));
 }
 
 async function createNode(data, type) {
@@ -213,8 +226,8 @@ async function createNode(data, type) {
             return console.log(err.message);
         }
     }
-    inst.create_node(obj, newNode, position, function(new_node) {
-        setTimeout(function() {
+    inst.create_node(obj, newNode, position, function (new_node) {
+        setTimeout(function () {
             inst.edit(new_node);
         }, 0);
     });
@@ -233,39 +246,39 @@ function contextMenu(node, $this) { //create adtional context menu
         "create_prj_setings": {
             "separator_after": true,
             "label": "Project Settings",
-            "action": function(data) {
+            "action": function (data) {
                 createNode(data, "project-settings");
             },
-            "_disabled": function(data) {
+            "_disabled": function (data) {
                 return compare_type('#', data);
             }
         },
         "create_group": {
             "separator_after": false,
             "label": "Group",
-            "action": function(data) {
+            "action": function (data) {
                 createNode(data, "group");
             },
-            "_disabled": function(data) {
+            "_disabled": function (data) {
                 return compare_type('#', data);
             }
         },
         "create_table": {
             "separator_after": false,
             "label": "Table",
-            "action": function(data) {
+            "action": function (data) {
                 createNode(data, "table");
             },
-            "_disabled": function(data) {
+            "_disabled": function (data) {
                 return compare_type('group', data);
             }
         },
         "create_field": {
             "label": "Field",
-            "action": function(data) {
+            "action": function (data) {
                 createNode(data, "field");
             },
-            "_disabled": function(data) {
+            "_disabled": function (data) {
                 return compare_type('table', data);
             }
         }
@@ -278,12 +291,12 @@ function contextMenu(node, $this) { //create adtional context menu
 
 function fieldList(id) { //by table
     var flatnode = get_json_node(id, true);
-    $.each(flatnode, function(i, data) {
+    $.each(flatnode, function (i, data) {
         if (data.type === 'table-settings') {
             var jsonSettings = get_json_node(data.id);
             var jsonParent = get_json_node(data.parent); //get data from table
             var tbl_list = [];
-            $.each(jsonParent.children, function(i, e) {
+            $.each(jsonParent.children, function (i, e) {
                 if (e.type === 'field') {
                     tbl_list.push(e.text);
                     var jsonField = get_json_node(e.id);
@@ -301,7 +314,7 @@ function fieldList(id) { //by table
 
 function sql_setupTable(tname, tbl_list = []) {
     var fn_list = [];
-    $.each(tbl_list, function(i, e) {
+    $.each(tbl_list, function (i, e) {
         fn_list.push(`'${e}'`);
     });
     fn_list = fn_list.join(",");
@@ -314,7 +327,7 @@ function updateSelect(id, tbl_list = []) {
     var table_settings = get_json_node(id);
     var list = ["None"];
     list.push(tbl_list);
-    $.each(table_settings.children, function(i, e) {
+    $.each(table_settings.children, function (i, e) {
         if (e.text === 'Default sortby') {
             var element = prjTree.get_node(e.id);
             element.data.options = list;
@@ -325,7 +338,7 @@ function updateSelect(id, tbl_list = []) {
 
 function tableList() {
     var flatnode = get_json_node("#", true);
-    $.each(flatnode, function(i, data) {
+    $.each(flatnode, function (i, data) {
         if (data.type === 'table') {
             console.log(data.text);
         }

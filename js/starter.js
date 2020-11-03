@@ -1,6 +1,7 @@
 LoadModule('js/alert.js');
 LoadModule('js/starter.project.js');
 LoadModule('js/starter.ws.js');
+LoadModule('js/edit.text.button.js');
 
 /**
  * TODO: se puede verificar cuando se compile si el usuario ha modificado el archivo y avisarle
@@ -121,19 +122,6 @@ async function load_menu() {
     var html = await get_file('templates/nav_sidebar.html');
     var template = Handlebars.compile(html);
     $('.nav-sidebar').html(template(data));
-}
-
-/**
- * get date for last starter commit
- */
-async function getVersion() {
-    options = {
-        operation: "version",
-        id: "#",
-        text: ".starter-version"
-    };
-    var version = await get_data("starter.php", options);
-    $(options.text).html(version[3]);
 }
 
 function goto_search() {

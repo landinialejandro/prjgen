@@ -98,3 +98,16 @@ function hidePreloader() {
         preloader.fadeOut(preloaderFadeOutTime);
     }, 500);
 }
+
+/**
+ * get date for last starter commit
+ */
+async function getVersion() {
+    options = {
+        operation: "version",
+        id: "#",
+        text: ".starter-version"
+    };
+    var version = await get_data("starter.php", options);
+    $(options.text).html(version[3]);
+}

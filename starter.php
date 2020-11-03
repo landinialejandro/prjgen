@@ -101,7 +101,10 @@ function get_children($dir, $sort = true){ //from dir get the children elements
 	foreach ($files as $file) {
 		$ext = pathinfo($file, PATHINFO_EXTENSION);
 		if ($ext === 'json') {
-			$res[] = json_decode($fs->getContent("$dir/$file"), true);
+			$data = json_decode($fs->getContent("$dir/$file"), true);
+			// add setting file name to array
+			$data['data']['filesetting']="$dir/$file";
+			$res[] = $data;
 		}
 	}
 	if ($sort){
