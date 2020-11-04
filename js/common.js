@@ -19,7 +19,7 @@ function get_file(url) {
 }
 
 /**
- * simple get file with a promise. use $.get jquery whit command selector 
+ * simple primise get file with a promise. use $.get jquery like ajax whit command selector 
  * @param {String} url to file, starter.php default
  * @param {Element} data object data { operation: "test", id: "#", text: "test ajax works" }
  * @returns {String} promise data
@@ -109,5 +109,6 @@ async function getVersion() {
         text: ".starter-version"
     };
     var version = await get_data("starter.php", options);
+    console.log("%c version: " + "%c" + version[3]+", "+version[5], "background: white; color: green");
     $(options.text).html(version[3]);
 }

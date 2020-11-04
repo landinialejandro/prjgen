@@ -15,7 +15,8 @@ class fs
 		}
 			
 		if($this->base && strlen($this->base)) {
-			if(strpos($temp, $this->base) !== 0) { throw new Exception('Path is not inside base ('.$this->base.'): ' . $temp); }
+			if(strpos($temp, $this->base) !== 0) { 
+				throw new Exception('Path is not inside base ('.$this->base.'): ' . $temp); }
 		}
 		return $temp;
 	}
@@ -114,7 +115,11 @@ class fs
 			mkdir($dir . DIRECTORY_SEPARATOR . $name);
 		}
 		else {
-			file_put_contents($dir . DIRECTORY_SEPARATOR . $name, $par);
+			$put_content = file_put_contents($dir . DIRECTORY_SEPARATOR . $name, $par);
+			if ($put_content === FALSE){
+				$last_e= json_encode(error_get_last());
+				throw new Exception('Error Put_content'.$last_e);
+			}
 		}
 		return array('id' => $this->id($dir . DIRECTORY_SEPARATOR . $name));
 	}

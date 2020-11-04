@@ -14,13 +14,32 @@ async function edit_text_modal(data) {
     $("#edit-text-modal-" + data.nodeid).modal("show");
 }
 
-function saveSetting(nodeid) {
-    alert("save node setting: " + nodeid);
+async function saveSetting(nodeid) {
     var obj_node = prjTree.get_node(nodeid);
+    var file = obj_node.data.filesetting;
+    var dir = obj_node.data.filesettingdir;
+    console.log("%c save in setting file: " + "%c" + file, "background: white; color: green");
+    if (file) {
+        alert('Las modificaciones se guardarán el archivo settings');
+        var options = {
+            operation: "get_json",
+            id: dir + "/" + file,
+            text: "file"
+        }
+        var data_setting = await get_data("starter.php", options)
+
+        $('.form-node-description').each(function () {
+            var $this = $(this);
+            var data_desc = $(this).data();
+            console.log("%c "+data_desc.key+": " + "%c" + $this.val(), "background: grey; color: black");
+            data_setting.data.description[data_desc.key] = $this.val();
+        })
+        save_file(file, data_setting,dir);
+    }
 }
 
 function saveValues(nodeid) {
-    console.log('Save in proyect');
+    console.log("%c save in project: " + "%c" + nodeid, "background: white; color: green");
     var obj_node = prjTree.get_node(nodeid);
     $('.form-node-description').each(function () {
         var $this = $(this);

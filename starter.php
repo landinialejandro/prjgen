@@ -61,6 +61,9 @@ if (isset($_REQUEST['operation'])) {
 							"children"=>get_children($dir)
 						];
 					break;
+					case 'file':
+						$res = json_decode($fs->getContent($id), true);
+					break;
 					default:
 						throw new Exception('Unsupported operation json: ' . $parn);
 						break;
@@ -103,7 +106,8 @@ function get_children($dir, $sort = true){ //from dir get the children elements
 		if ($ext === 'json') {
 			$data = json_decode($fs->getContent("$dir/$file"), true);
 			// add setting file name to array
-			$data['data']['filesetting']="$dir/$file";
+			$data['data']['filesetting']="$file";
+			$data['data']['filesettingdir']="$dir";
 			$res[] = $data;
 		}
 	}

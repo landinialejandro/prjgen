@@ -109,7 +109,10 @@ class fs
 			mkdir($dir . DIRECTORY_SEPARATOR . $name);
 		}
 		else {
-			file_put_contents($dir . DIRECTORY_SEPARATOR . $name, '');
+			$put_content = file_put_contents($dir . DIRECTORY_SEPARATOR . $name, '');
+			if ($put_content === FALSE){
+				throw new Exception('Error Put_content');
+			}
 		}
 		return array('id' => $this->id($dir . DIRECTORY_SEPARATOR . $name));
 	}
