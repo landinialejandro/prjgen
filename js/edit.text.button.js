@@ -1,7 +1,6 @@
 console.log("edibutton");
 $("body").on("click", "button.data-desc", function (e) {
     var data = $(this).data();
-    //alert("hola editor: "+data.nodeid);
     edit_text_modal(data);
 });
 
@@ -30,11 +29,11 @@ async function saveSetting(nodeid) {
 
         $('.form-node-description').each(function () {
             var $this = $(this);
-            var data_desc = $(this).data();
-            console.log("%c "+data_desc.key+": " + "%c" + $this.val(), "background: grey; color: black");
+            var data_desc = $this.data();
+            console.log("%c " + data_desc.key + ": " + "%c" + $this.val(), "background: grey; color: black");
             data_setting.data.description[data_desc.key] = $this.val();
         })
-        save_file(file, data_setting,dir);
+        save_file(file, data_setting, dir);
     }
 }
 
@@ -43,7 +42,7 @@ function saveValues(nodeid) {
     var obj_node = prjTree.get_node(nodeid);
     $('.form-node-description').each(function () {
         var $this = $(this);
-        var data_desc = $(this).data();
+        var data_desc = $this.data();
         obj_node.data.description[data_desc.key] = $this.val();
     })
     $("#edit-text-modal-" + nodeid).modal("hide");

@@ -209,6 +209,11 @@ async function createNode(data, type) {
         newNode.text = "Project Settings";
         position = "first";
     }
+    if (type === 'group-settings') {
+        options.text = type;
+        newNode.text = "Group Settings";
+        position = "first";
+    }
     if (type === 'field') {
         options.text = "field-settings";
     }
@@ -244,13 +249,23 @@ function contextMenu(node, $this) { //create adtional context menu
     tmp.create.label = "New object";
     tmp.create.submenu = {
         "create_prj_setings": {
-            "separator_after": true,
+            "separator_after": false,
             "label": "Project Settings",
             "action": function (data) {
                 createNode(data, "project-settings");
             },
             "_disabled": function (data) {
                 return compare_type('#', data);
+            }
+        },
+        "create_grp_setings": {
+            "separator_after": true,
+            "label": "Group Settings",
+            "action": function (data) {
+                createNode(data, "group-settings");
+            },
+            "_disabled": function (data) {
+                return compare_type('group', data);
             }
         },
         "create_group": {

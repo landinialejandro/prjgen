@@ -45,6 +45,10 @@ if (isset($_REQUEST['operation'])) {
 						$dir = dirname(__FILE__) . "/settings/project";
 						$res = get_children($dir);
 						break;
+					case 'group-settings':
+						$dir = dirname(__FILE__) . "/settings/groups";
+						$res = get_children($dir);
+						break;
 					case 'table':
 						$dir = dirname(__FILE__) . "/settings/tables";
 						$res[] = [
