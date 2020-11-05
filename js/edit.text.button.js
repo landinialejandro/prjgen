@@ -1,5 +1,5 @@
-console.log("edibutton");
-$("body").on("click", "button.data-desc", function (e) {
+console.log("edit.text.button");
+$("body").on("click", "button.edit-text", function (e) {
     var data = $(this).data();
     edit_text_modal(data);
 });

@@ -2,6 +2,7 @@ LoadModule('js/alert.js');
 LoadModule('js/starter.project.js');
 LoadModule('js/starter.ws.js');
 LoadModule('js/edit.text.button.js');
+LoadModule('js/add.new.properties.js');
 
 /**
  * TODO: se puede verificar cuando se compile si el usuario ha modificado el archivo y avisarle

@@ -5,7 +5,7 @@
             <div class="card-header">
                 <h3 class="card-title">{{text}}</h3>
                 <div class="card-tools">
-                    <a href="#" class="btn btn-warning btn-xs add-new-lang"> Add new</a>
+                    <button type = "button" class="btn btn-warning btn-xs add-new-properties" data-nodeid="{{id}}"> Add new</button>
                     <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
                 </div>
                 {{#if data.description}}
@@ -17,7 +17,7 @@
                             text-primary
                         {{/if}}">
                         {{data.description.text}}
-                        <button type="button" class="btn btn-tool data-desc" data-nodeid="{{id}}">
+                        <button type="button" class="btn btn-tool edit-text" data-nodeid="{{id}}">
                             <i class="nav-icon fas fa-edit"></i>
                         </button>
                     </p>
