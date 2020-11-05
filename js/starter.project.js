@@ -39,8 +39,8 @@ function updateData() {
         if (!$.isEmptyObject(obj_node)) {
             var data = obj_node.data;
             if (data != null) {
-                var i = $this.data("index");
-                if (Array.isArray(data.user_value) && i != "") {
+                var i = parseInt( $this.data("index"));
+                if (Array.isArray(data.user_value) && i >= 0) {
                     data.user_value[i].text = $this.val();
                 } else if ($this.hasClass('custom-control-input')) {
                     data.options[i].checked = this.checked;
