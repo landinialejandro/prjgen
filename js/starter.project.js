@@ -356,6 +356,7 @@ function updateSelect(id, tbl_list = []) {
 
 function tableList() {
     var flatnode = get_json_node("#", true);
+    debugger;
     $.each(flatnode, function (i, data) {
         if (data.type === 'table') {
             console.log(data.text);
