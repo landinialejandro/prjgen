@@ -1,3 +1,6 @@
 [submodule "dist/adminlte3"]
 	path = dist/adminlte3
 	url = https://github.com/ColorlibHQ/AdminLTE.git
+[submodule "dist/plugins/jstree"]
+	path = dist/plugins/jstree
+	url = https://github.com/vakata/jstree.git
