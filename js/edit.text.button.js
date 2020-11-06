@@ -1,4 +1,4 @@
-console.log("edit.text.button");
+secondary_log("edit.text.button");
 $("body").on("click", "button.data-desc", function (e) {
     var data = $(this).data();
     edit_text_modal(data);
@@ -17,7 +17,7 @@ async function saveSetting(nodeid) {
     var obj_node = prjTree.get_node(nodeid);
     var file = obj_node.data.filesetting;
     var dir = obj_node.data.filesettingdir;
-    console.log("%c save in setting file: " + "%c" + file, "background: white; color: green");
+    info_log("Save in setting file: " + file);
     if (file) {
         alert('Las modificaciones se guardarán el archivo settings');
         var options = {
@@ -30,7 +30,7 @@ async function saveSetting(nodeid) {
         $('.form-node-description').each(function () {
             var $this = $(this);
             var data_desc = $this.data();
-            console.log("%c " + data_desc.key + ": " + "%c" + $this.val(), "background: grey; color: black");
+            secondary_log( data_desc.key + ": " + $this.val());
             data_setting.data.description[data_desc.key] = $this.val();
         })
         save_file(file, data_setting, dir);
@@ -38,7 +38,7 @@ async function saveSetting(nodeid) {
 }
 
 function saveValues(nodeid) {
-    console.log("%c save in project node: %c" + nodeid, "background: white; color: green");
+    info_log("Save in project node: " + nodeid);
     var obj_node = prjTree.get_node(nodeid);
     $('.form-node-description').each(function () {
         var $this = $(this);

@@ -1,4 +1,4 @@
-console.log('starter.ws');
+secondary_log('starter.ws.js');
 var loadedWS = false;
 
 async function constructWSTree() {

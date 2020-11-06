@@ -1,4 +1,4 @@
-console.log('starter.project');
+secondary_log('starter.project');
 var prjTree = false;
 
 
@@ -128,7 +128,7 @@ async function constructTree(file) {
                         if (o === "rename_node") {
                             var no_rename = ['field-setting', 'prj-setting', 'grp-setting', 'group-settings', 'project-settings'];
                             if ($.inArray(n.type, no_rename) >= 0) {
-                                console.log("%c ERROR! yo can't rename: " + n.type, "background: white; color: red");
+                                danger_log("ERROR! yo can't rename: " + n.type);
                                 return false;
                             }
                         }
@@ -175,7 +175,7 @@ async function constructTree(file) {
             });
 
     } catch (err) {
-        return console.log(err.message);
+        return danger_log(err.message);
     }
 }
 
@@ -187,7 +187,7 @@ async function fillForm(nodeid) {
     var template = Handlebars.compile(form);
     whenHelper();
     getChildrenHelper(form_group);
-    console.log("%c Object used to fill form: %c", "background: yellow; color: blue");
+    warning_log("Object used to fill form: ");
     console.log(json_selected);
     $('.container-form').html(template(json_selected));
     info_log("Fill form END");
@@ -283,7 +283,7 @@ function contextMenu(node, $this) { //create adtional context menu
         },
         "create_table": {
             "separator_after": false,
-            "label": "Table",
+            "label": "Table (ctrl+l)",
             "action": function (data) {
                 createNode(data, "table");
             },
@@ -292,7 +292,7 @@ function contextMenu(node, $this) { //create adtional context menu
             }
         },
         "create_field": {
-            "label": "Field",
+            "label": "Field (ctrl+f)",
             "action": function (data) {
                 createNode(data, "field");
             },

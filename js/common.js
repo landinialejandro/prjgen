@@ -65,7 +65,7 @@ function save_file(url, data, folder = 'projects') {
             if (res == undefined) {
                 alert("Error: unexpected response");
             } else {
-                console.log("%c saved file: " + "%c" + res.id, "background: white; color: green");
+                info_log("saved file: "+ res.id);
             }
         },
         error: function(res) {
@@ -109,7 +109,7 @@ async function getVersion() {
         text: ".starter-version"
     };
     var version = await get_data("starter.php", options);
-    console.log("%c version: " + "%c" + version[3]+", "+version[5], "background: white; color: green");
+    info_log("version: " + version[3]+", "+version[5]);
     $(options.text).html(version[3]);
 }
 function info_log(msg=false){

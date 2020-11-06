@@ -1,4 +1,4 @@
-console.log("add.new.properties");
+secondary_log("add.new.properties");
 $("body").on("click", "button.add-new-properties", function (e) {
     var data = $(this).data();
     add_properties_modal(data);
@@ -34,7 +34,7 @@ function addValues(nodeid){
         new_prop[$this.data('key')] = $this.val();
     })
     obj_node.data.user_value.push(new_prop);
-    console.log("%c Add property to project: %c" + nodeid, "background: white; color: green");
+    info_log("Add property to project:" + nodeid);
     console.log(obj_node);
     $("#add-properties-modal-" + nodeid).modal("hide");
     setTimeout(() => {
