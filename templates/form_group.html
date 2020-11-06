@@ -32,6 +32,9 @@
                         <input  type="text" class="form-control form-node" data-index="{{@index}}" 
                                 data-nodeid="{{../id}}" name="{{id}}" placeholder="{{placeholder}}" 
                                 value="{{text}}" title="{{usershelper}}">
+                                <button type="button" class="btn btn-tool remove-property" data-index="{{@index}}" data-nodeid="{{../id}}">
+                                    <i class="nav-icon fa fa-times"></i>
+                                </button>
                     </div>
                 </div>
             {{/each}}

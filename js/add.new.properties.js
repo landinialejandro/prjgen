@@ -3,6 +3,10 @@ $("body").on("click", "button.add-new-properties", function (e) {
     var data = $(this).data();
     add_properties_modal(data);
 });
+$("body").on("click", "button.remove-property", function (e) {
+    var data = $(this).data();
+    remove_property(data);
+});
 
 async function add_properties_modal(data) {
     var json_selected = get_json_node(data.nodeid);
@@ -14,8 +18,6 @@ async function add_properties_modal(data) {
     },
     "id": data.nodeid}
     console.log(json_selected);
-    //object = $.extend(true, json_selected,add_object)
-    console.log(add_object);
     const form = await get_file("templates/add_properties_modal.html");
     var template = Handlebars.compile(form);
     $(".container-form").append(template(add_object));
@@ -28,13 +30,46 @@ function addValues(nodeid){
     var new_prop = {};
     $('.form-new-prop').each(function(){
         var $this = $(this)
-        var data = $this.data();
-        new_prop[data.key] = $this.val();
-        console.log(new_prop);
+        //TODO: check key values
+        new_prop[$this.data('key')] = $this.val();
     })
     obj_node.data.user_value.push(new_prop);
+    console.log("%c Add property to project: %c" + nodeid, "background: white; color: green");
     console.log(obj_node);
+    $("#add-properties-modal-" + nodeid).modal("hide");
+    setTimeout(() => {
+        fillForm(nodeid);
+        saveProject();
+    }, 300);
 }
 function addSetting(nodeid){
     alert("add to setting")
+    //TODO: add values to settings
+}
+
+function remove_property(data){
+    info_log('Remove property START')
+    if (confirm("Remove??")){
+        var obj_node = prjTree.get_node(data.nodeid);
+        secondary_log("start object: ")
+        console.log(obj_node);
+        var elements = Object.keys(obj_node.data.user_value).length
+        secondary_log("Elements: "+elements);
+        if (elements > 1){
+            //remove object
+            danger_log("Remove property from project: node:" + data.nodeid + "  index: "+ data.index);
+            obj_node.data.user_value.splice(data.index,1);
+            warning_log ("Result object: ");
+            console.log(obj_node);
+            setTimeout(() => {
+                fillForm(data.nodeid);
+                //saveProject();
+            }, 300);
+        }else{
+            alert("You can't remove all elements");
+        }
+    }else{
+        info_log('Remove property CANCELED')
+    }
+    info_log('Remove property END')
 }
