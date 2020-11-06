@@ -180,14 +180,17 @@ async function constructTree(file) {
 }
 
 async function fillForm(nodeid) {
+    info_log("Fill form START");
     const form = await get_file('templates/headerForm.html');
     const form_group = await get_file('templates/form_group.html');
     var json_selected = get_json_node(nodeid);
     var template = Handlebars.compile(form);
     whenHelper();
     getChildrenHelper(form_group);
+    console.log("%c Object used to fill form: %c", "background: yellow; color: blue");
     console.log(json_selected);
     $('.container-form').html(template(json_selected));
+    info_log("Fill form END");
 }
 
 async function createNode(data, type) {

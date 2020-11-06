@@ -1,5 +1,5 @@
 console.log("edit.text.button");
-$("body").on("click", "button.edit-text", function (e) {
+$("body").on("click", "button.data-desc", function (e) {
     var data = $(this).data();
     edit_text_modal(data);
 });
@@ -38,7 +38,7 @@ async function saveSetting(nodeid) {
 }
 
 function saveValues(nodeid) {
-    console.log("%c save in project: " + "%c" + nodeid, "background: white; color: green");
+    console.log("%c save in project node: %c" + nodeid, "background: white; color: green");
     var obj_node = prjTree.get_node(nodeid);
     $('.form-node-description').each(function () {
         var $this = $(this);
