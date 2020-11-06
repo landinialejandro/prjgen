@@ -112,3 +112,23 @@ async function getVersion() {
     console.log("%c version: " + "%c" + version[3]+", "+version[5], "background: white; color: green");
     $(options.text).html(version[3]);
 }
+function info_log(msg=false){
+    if (msg){
+        console.log("%c "+msg+" %c", "background: white; color: green");
+    }
+}
+function warning_log (msg=false){
+    if (msg){
+        console.log("%c "+msg+" %c", "background: yellow; color: blue");
+    }
+}
+function danger_log (msg=false){
+    if (msg){
+        console.log("%c "+msg+" %c", "background: red; color: white");
+    }
+}
+function secondary_log (msg=false){
+    if (msg){
+        console.log("%c "+msg+" %c", "background: grey; color: black");
+    }
+}
