@@ -44,12 +44,12 @@
             }
         ]
     },
-    "type": "field-setting",
+    "type": "prj-setting",
     "icon": "fas fa-font",
     "li_attr": {
         "type": "text",
         "lang": "en"
     },
-    "order":10
+    "order":30
     
 }
