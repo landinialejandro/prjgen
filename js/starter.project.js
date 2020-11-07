@@ -40,7 +40,7 @@ function updateData() {
         if (!$.isEmptyObject(obj_node)) {
             var data = obj_node.data;
             if (data != null) {
-                var i = parseInt( $this.data("index"));
+                var i = parseInt($this.data("index"));
                 if (Array.isArray(data.user_value) && i >= 0) {
                     data.user_value[i].text = $this.val();
                 } else if ($this.hasClass('custom-control-input')) {
@@ -66,6 +66,7 @@ function updateData() {
  * save project data to file, get de file name from  name of root tree
  */
 function saveProject() {
+    info_log("saving project");
     var node = get_json_node('#');
     var file = node[0].text;
     //TODO: se puede controlar si el nombre es valido antes de pasarlo a la función
@@ -148,7 +149,6 @@ async function constructTree(file) {
                 }
             })
             .on('create_node.jstree', function (e, data, pos, callback, loaded) {
-
                 data.instance.set_id(data.node, data.node.id);
                 var json_selected = get_json_node(data.node.id);
                 fieldList(json_selected);
@@ -195,39 +195,32 @@ async function fillForm(nodeid) {
     info_log("Fill form END");
 }
 
-async function createNode(data, type) {
+async function createNode(data, type, position = "last") {
     var inst = $.jstree.reference(data.reference);
     var obj = inst.get_node(data.reference);
     var options = {
         operation: "get_json",
         id: "#",
-        text: ""
+        text: type
     };
     var newNode = {
         type: type,
         text: "new_" + type + "_" + (obj.children.length + 1),
         children: []
     };
-    var position = "last";
     if (type === 'project-settings') {
-        options.text = type;
         newNode.text = "Project Settings";
         position = "first";
     }
     if (type === 'group-settings') {
-        options.text = type;
         newNode.text = "Group Settings";
         position = "first";
     }
     if (type === 'field') {
         options.text = "field-settings";
     }
-    if (type === 'table') {
-        options.text = type;
-    }
-    if (type === 'group') {
-        options.text = type;
-    }
+    if (type === 'table') {}
+    if (type === 'group') {}
 
     if (options.text != "") {
         try {
@@ -358,12 +351,16 @@ function updateSelect(id, tbl_list = []) {
 
 function tableList() {
     var flatnode = get_json_node("#", true);
-    debugger;
     $.each(flatnode, function (i, data) {
-        if (data.type === 'table') {
-            console.log(data.text);
+        if (typeof (data) === undefined) {
+            debugger;
         }
+        if (data.type === 'table') {
+            danger_log(data.text);
+        }
+
     });
+    debugger;
 }
 
 function search_intree(search_value = false, long = 3) {

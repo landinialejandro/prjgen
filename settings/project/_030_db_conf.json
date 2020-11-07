@@ -26,7 +26,7 @@
             },
             {
                 "id": "dbDatabase",
-                "usershelper":"Database name",
+                "usershelper":"Required Database name",
                 "placeholder": "your database name",
                 "text": "",
                 "required":true
