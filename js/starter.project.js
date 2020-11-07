@@ -1,5 +1,6 @@
 secondary_log('starter.project');
 var prjTree = false;
+var project = false;
 
 
 /*
@@ -104,7 +105,6 @@ async function constructTree(file) {
         const data = await get_file(file);
         const types = await get_file('settings/prj_types.json');
 
-
         $('.card-starter #project_tree')
             .jstree({
                 "core": {
@@ -168,7 +168,8 @@ async function constructTree(file) {
                 }
             })
             .on('loaded.jstree', function () {
-                prjTree = $('.card-starter #project_tree').jstree(true);
+                project = $('.card-starter #project_tree');
+                prjTree = project.jstree(true);
             })
             .on('delete_node.jstree', function () {
                 //before delete
@@ -190,6 +191,7 @@ async function fillForm(nodeid) {
     warning_log("Object used to fill form: ");
     console.log(json_selected);
     $('.container-form').html(template(json_selected));
+    validate_control();
     info_log("Fill form END");
 }
 
@@ -366,8 +368,8 @@ function tableList() {
 
 function search_intree(search_value = false, long = 3) {
     if (search_value && search_value.length >= long) {
-        $('.card-starter #project_tree').jstree("search", search_value);
+        project.jstree("search", search_value);
     } else {
-        $('.card-starter #project_tree').jstree("clear_search");
+        project.jstree("clear_search");
     }
 }
