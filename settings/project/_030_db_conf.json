@@ -28,7 +28,8 @@
                 "id": "dbDatabase",
                 "usershelper":"Database name",
                 "placeholder": "your database name",
-                "text": ""
+                "text": "",
+                "required":true
             },
             {
                 "id": "appURI",
