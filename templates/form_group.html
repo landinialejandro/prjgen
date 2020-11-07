@@ -29,9 +29,9 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text">{{id}}</div>
                         </div>
-                        <input  type="text" class="form-control form-node" data-index="{{@index}}" 
+                        <input  type="text" class="form-control form-node {{#if required}}validate-control{{/if}}" data-index="{{@index}}" 
                                 data-nodeid="{{../id}}" name="{{id}}" placeholder="{{placeholder}}" 
-                                value="{{text}}" title="{{usershelper}}">
+                                value="{{text}}" title="{{usershelper}}" {{#if required}}required{{/if}}>
                                 <button type="button" class="btn btn-tool remove-property" data-index="{{@index}}" data-nodeid="{{../id}}">
                                     <i class="nav-icon fa fa-times"></i>
                                 </button>
