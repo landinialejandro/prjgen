@@ -14,7 +14,8 @@ async function add_properties_modal(data) {
         "id": "",
         "usershelper":"",
         "placeholder": "",
-        "text": ""
+        "text": "",
+        "required":"false"
     },
     "id": data.nodeid}
     console.log(json_selected);
@@ -25,22 +26,25 @@ async function add_properties_modal(data) {
 }
 
 function addValues(nodeid){
-    alert("add to project")
-    var obj_node = prjTree.get_node(nodeid);
-    var new_prop = {};
-    $('.form-new-prop').each(function(){
-        var $this = $(this)
-        //TODO: check key values
-        new_prop[$this.data('key')] = $this.val();
-    })
-    obj_node.data.user_value.push(new_prop);
-    info_log("Add property to project:" + nodeid);
-    console.log(obj_node);
-    $("#add-properties-modal-" + nodeid).modal("hide");
-    setTimeout(() => {
-        fillForm(nodeid);
-        saveProject();
-    }, 300);
+    if (confirm("add to project")){
+        var obj_node = prjTree.get_node(nodeid);
+        var new_prop = {};
+        $('.form-new-prop').each(function(){
+            var $this = $(this)
+            //TODO: check key values
+            new_prop[$this.data('key')] = $this.val();
+        })
+        obj_node.data.user_value.push(new_prop);
+        info_log("Add property to project:" + nodeid);
+        console.log(obj_node);
+        $("#add-properties-modal-" + nodeid).modal("hide");
+        setTimeout(() => {
+            fillForm(nodeid);
+            saveProject();
+        }, 300);
+    }else{
+        info_log('Add property to project CANCELED')
+    }
 }
 function addSetting(nodeid){
     alert("add to setting")
