@@ -5,7 +5,7 @@
             value="{{data.user_value}}" 
             title="{{data.usershelper}}">
 {{/inline}}
-
+{{#if data}}
 <div class="form-group">
     {{#if data.properties}}
         <!-- properties form group -->
@@ -57,3 +57,4 @@
         </div>
     {{/if}}
 </div>
+{{/if}}
