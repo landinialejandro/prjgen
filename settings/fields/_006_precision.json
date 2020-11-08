@@ -3,7 +3,7 @@
     "data": {
         "placeholder": "Presicion value",
         "usershelper": "Set the presicion value",
-        "user_value": "",
+        "text": "",
         "type":"html-control"
     },
     "type":"field-setting",

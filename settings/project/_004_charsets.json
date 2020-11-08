@@ -5,7 +5,7 @@
         "text": "You can add your own charset in _xxx_charsets.json file",
         "class": "text-warning"
         },
-    "user_value":"utf8",
+    "text":"utf8",
     "option": true,
     "options": [
         "utf8",

@@ -1,7 +1,7 @@
 {
     "text": "Table view title",
     "data": {
-        "user_value": [
+        "properties": [
             {
                 "id": "en",
                 "placeholder": "Table view title",

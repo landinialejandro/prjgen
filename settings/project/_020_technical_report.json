@@ -2,7 +2,8 @@
     "text": "Technical report",
     "data": {
         "placeholder": "Tech report",
-        "user_value": ""
+        "text": "",
+        "type":"textarea"
     },
     "type": "prj-setting",
     "icon": "fa fa-cog",

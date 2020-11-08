@@ -41,15 +41,15 @@ function updateData() {
             var data = obj_node.data;
             if (data != null) {
                 var i = parseInt($this.data("index"));
-                if (Array.isArray(data.user_value) && i >= 0) {
-                    data.user_value[i].text = $this.val();
+                if (Array.isArray(data.properties) && i >= 0) {
+                    data.properties[i].text = $this.val();
                 } else if ($this.hasClass('custom-control-input')) {
                     data.options[i].checked = this.checked;
                 } else {
                     if ($this.hasClass('node-icon')) {
                         obj_node.icon = $this.val();
                     } else {
-                        data.user_value = $this.val();
+                        data.text = $this.val();
                     }
                 }
             }
@@ -184,13 +184,17 @@ async function fillForm(nodeid) {
     info_log("Fill form START");
     const form = await get_file('templates/headerForm.html');
     const form_group = await get_file('templates/form_group.html');
+    const form_properties = await get_file('templates/form_properties.html');
     var json_selected = get_json_node(nodeid);
     var template = Handlebars.compile(form);
     whenHelper();
     getChildrenHelper(form_group);
+    properties_template(form_properties);
+
     warning_log("Object used to fill form: ");
     console.log(json_selected);
     $('.container-form').html(template(json_selected));
+    
     validate_control();
     info_log("Fill form END");
 }
@@ -360,7 +364,6 @@ function tableList() {
         }
 
     });
-    debugger;
 }
 
 function search_intree(search_value = false, long = 3) {

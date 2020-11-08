@@ -1,7 +1,7 @@
 {
     "text": "Default sortby",
     "data": {
-        "user_value":"",
+        "text":"",
         "option": true,
         "options": [
             "None"

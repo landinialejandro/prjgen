@@ -5,7 +5,7 @@
       "text": "You can add your own options in _xxx_date_format.json file",
       "class": "text-purple"
     },
-    "user_value": "",
+    "text": "",
     "option": true,
     "options": ["Month, Day, Year", "Day, Month, Year", "Year, Day, Month"],
     "usershelper": "Indique el orden en el que aparece la fecha"

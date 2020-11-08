@@ -2,7 +2,7 @@
     "text": "Lenght",
     "data": {
         "placeholder": "Lenght string o value",
-        "user_value": "",
+        "text": "",
         "type":"sql-control"
     },
     "type":"field-setting",

@@ -5,7 +5,7 @@
             "text": "You can define your versioning number",
             "class": "text-primary"
             },
-        "user_value": [
+        "properties": [
             {
                 "id": "Major",
                 "usershelper":"Major changes break compatibility",

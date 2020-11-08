@@ -2,7 +2,7 @@
     "text": "Description",
     "data": {
         "placeholder": "Description user helper",
-        "user_value": [
+        "properties": [
             {
                 "id": "en",
                 "text": "",

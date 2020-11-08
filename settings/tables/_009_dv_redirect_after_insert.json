@@ -2,7 +2,7 @@
     "text": "Redirect after insert",
     "data": {
         "placeholder": "Redirect after insert",
-        "user_value": "?SelectedID=#ID#"
+        "text": "?SelectedID=#ID#"
     },
     "type":"tbl-setting",
     "icon": "fa fa-cog",

@@ -5,7 +5,7 @@
             "text": "You can add more own data base options in _xxx_db_conf.json file",
             "class": "text-primary"
             },
-        "user_value": [
+        "properties": [
             {
                 "id": "dbServer",
                 "usershelper":"Database host",

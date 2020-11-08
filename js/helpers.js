@@ -19,11 +19,11 @@ function whenHelper() {
 				'%': function (l, r) {
 					return (l % r) === 0;
 				},
-				"inString": function (l,r) {
-					return r.indexOf( l ) !== -1;
+				"inString": function (l, r) {
+					return r.indexOf(l) !== -1;
 				},
-				"notInString": function (l,r) {
-					return r.indexOf( l ) === -1;
+				"notInString": function (l, r) {
+					return r.indexOf(l) === -1;
 				}
 			},
 			result = operators[operator](operand_1, operand_2);
@@ -33,15 +33,25 @@ function whenHelper() {
 	});
 }
 
-function getChildrenHelper(form_group) {
+function getChildrenHelper(form) {
 	Handlebars.registerHelper('getchildren', function (id, options) {
-		var nodeID = prjTree.get_json(id);
-		var template = Handlebars.compile(form_group);
-		var type = options.data.root.type;
-		if (type != 'filed' && type != 'field-setting') {
-			nodeID['readonly'] = true;
-		}
-		var res = template(nodeID);
-		return res;
+		return process_template(id,options,form);
 	});
+}
+
+function properties_template(form) {
+	Handlebars.registerHelper('properties_template', function (id, options) {
+		return process_template(id,options,form);
+	})
+}
+
+function process_template(id, options, form) {
+	var nodeid = prjTree.get_json(id);
+	var template = Handlebars.compile(form);
+	var type = options.data.root.type;
+	if (type != 'filed' && type != 'field-setting') {
+		nodeid['readonly'] = true;
+	}
+	var res = template(nodeid);
+	return res;
 }

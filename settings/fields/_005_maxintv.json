@@ -2,7 +2,7 @@
     "text": "Max character in table view",
     "data": {
         "placeholder": "Max character in table view value",
-        "user_value": "",
+        "text": "",
         "type":"html-control"
     },
     "type":"field-setting",

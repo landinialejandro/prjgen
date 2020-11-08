@@ -2,7 +2,7 @@
     "text": "Custom default value",
     "data": {
         "placeholder": "Your custom string o value",
-        "user_value": "",
+        "text": "",
         "type":"html-control"
     },
     "type":"field-setting",

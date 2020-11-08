@@ -2,7 +2,7 @@
     "text": "Detail view title",
     "data": {
         "placeholder": "Detail view title",
-        "user_value": [
+        "properties": [
             {
                 "id": "en",
                 "placeholder": "Detail view title",

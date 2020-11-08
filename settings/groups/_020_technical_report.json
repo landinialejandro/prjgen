@@ -2,7 +2,7 @@
     "text": "Technical report",
     "data": {
         "placeholder": "Tech report",
-        "user_value": ""
+        "text": ""
     },
     "type": "grp-setting",
     "icon": "fa fa-cog",

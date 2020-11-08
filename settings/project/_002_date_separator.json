@@ -6,7 +6,7 @@
             "class": "text-primary"
             },
         "placeholder": "/",
-        "user_value": "/",
+        "text": "/",
         "usershelper":"Write a date saparator"
     },
     "type": "prj-setting",

@@ -34,7 +34,7 @@ function addValues(nodeid){
             //TODO: check key values
             new_prop[$this.data('key')] = $this.val();
         })
-        obj_node.data.user_value.push(new_prop);
+        obj_node.data.properties.push(new_prop);
         info_log("Add property to project:" + nodeid);
         console.log(obj_node);
         $("#add-properties-modal-" + nodeid).modal("hide");
@@ -57,12 +57,12 @@ function remove_property(data){
         var obj_node = prjTree.get_node(data.nodeid);
         secondary_log("start object: ")
         console.log(obj_node);
-        var elements = Object.keys(obj_node.data.user_value).length
+        var elements = Object.keys(obj_node.data.properties).length
         secondary_log("Elements: "+elements);
         if (elements > 1){
             //remove object
             danger_log("Remove property from project: node:" + data.nodeid + "  index: "+ data.index);
-            obj_node.data.user_value.splice(data.index,1);
+            obj_node.data.properties.splice(data.index,1);
             warning_log ("Result object: ");
             console.log(obj_node);
             setTimeout(() => {
