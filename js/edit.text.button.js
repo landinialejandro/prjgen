@@ -1,5 +1,5 @@
 secondary_log("edit.text.button");
-$("body").on("click", "button.data-desc", function (e) {
+$("body").on("click", "button.data-desc", function(e) {
     var data = $(this).data();
     edit_text_modal(data);
 });
@@ -7,7 +7,7 @@ $("body").on("click", "button.data-desc", function (e) {
 async function edit_text_modal(data) {
     var json_selected = get_json_node(data.nodeid);
     console.log(json_selected.data.description);
-    const form = await get_file("templates/edit_text_modal.html");
+    const form = await get_file("templates/edit_text_modal.hbs");
     var template = Handlebars.compile(form);
     $(".container-form").append(template(json_selected));
     $("#edit-text-modal-" + data.nodeid).modal("show");
@@ -27,10 +27,10 @@ async function saveSetting(nodeid) {
         }
         var data_setting = await get_data("starter.php", options)
 
-        $('.form-node-description').each(function () {
+        $('.form-node-description').each(function() {
             var $this = $(this);
             var data_desc = $this.data();
-            secondary_log( data_desc.key + ": " + $this.val());
+            secondary_log(data_desc.key + ": " + $this.val());
             data_setting.data.description[data_desc.key] = $this.val();
         })
         save_file(file, data_setting, dir);
@@ -40,7 +40,7 @@ async function saveSetting(nodeid) {
 function saveValues(nodeid) {
     info_log("Save in project node: " + nodeid);
     var obj_node = prjTree.get_node(nodeid);
-    $('.form-node-description').each(function () {
+    $('.form-node-description').each(function() {
         var $this = $(this);
         var data_desc = $this.data();
         obj_node.data.description[data_desc.key] = $this.val();

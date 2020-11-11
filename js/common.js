@@ -3,11 +3,11 @@
  * @param {Element} url file name to gete data 
  * @returns {String} promise data
  */
-function get_file(url) {
-    const promise = new Promise(function(resolve, reject) {
+let get_file = async(url) => {
+    return new Promise((resolve, reject) => {
         if (url) {
             $.get(url)
-                .done(function(data) {
+                .done((data) => {
                     resolve(data);
                 });
         }
@@ -15,7 +15,6 @@ function get_file(url) {
             reject(new Error('Not exist file'));
         }
     });
-    return promise;
 }
 
 /**
@@ -24,12 +23,12 @@ function get_file(url) {
  * @param {Element} data object data { operation: "test", id: "#", text: "test ajax works" }
  * @returns {String} promise data
  */
-function get_data(url = "starter.php", data = {
+let get_data = (url = "starter.php", data = {
     operation: "test",
     id: "#",
     text: "test ajax works"
-}) {
-    const promise = new Promise(function(resolve, reject) {
+}) => {
+    return new Promise(function(resolve, reject) {
         if (data && url) {
             $.get(url, data)
                 .done(function(res) {
@@ -40,7 +39,6 @@ function get_data(url = "starter.php", data = {
             reject(new Error('url/data needed'));
         }
     });
-    return promise;
 }
 
 /**
@@ -65,7 +63,7 @@ function save_file(url, data, folder = 'projects') {
             if (res == undefined) {
                 alert("Error: unexpected response");
             } else {
-                info_log("saved file: "+ res.id);
+                info_log("saved file: " + res.id);
             }
         },
         error: function(res) {
@@ -102,33 +100,33 @@ function hidePreloader() {
 /**
  * get date for last starter commit
  */
-async function getVersion() {
-    options = {
+let getVersion = async() => {
+    let options = {
         operation: "version",
         id: "#",
         text: ".starter-version"
     };
-    var version = await get_data("starter.php", options);
-    info_log("version: " + version[3]+", "+version[5]);
-    $(options.text).html(version[3]);
-}
-function info_log(msg=false){
-    if (msg){
-        console.log("%c "+msg+" %c", "background: white; color: green");
+    let version = await get_data("starter.php", options);
+
+    if (!version) {
+        throw new error(`error to get version`);
+    } else {
+        return version;
     }
 }
-function warning_log (msg=false){
-    if (msg){
-        console.log("%c "+msg+" %c", "background: yellow; color: blue");
-    }
+
+let info_log = (msg = false) => {
+    if (msg) console.log(`%c ${ msg }%c`, "background: white; color: green");
 }
-function danger_log (msg=false){
-    if (msg){
-        console.log("%c "+msg+" %c", "background: red; color: white");
-    }
+
+let warning_log = (msg = false) => {
+    if (msg) console.log(`%c ${ msg }%c`, "background: yellow; color: blue");
 }
-function secondary_log (msg=false){
-    if (msg){
-        console.log("%c "+msg+" %c", "background: grey; color: black");
-    }
+
+let danger_log = (msg = false) => {
+    if (msg) console.log(`%c ${ msg }%c`, "background: red; color: white");
+}
+
+let secondary_log = (msg = false) => {
+    if (msg) console.log(`%c ${ msg }%c`, "background: grey; color: black");
 }

@@ -1,12 +1,12 @@
 <div class="card-header"> Icon List </div>
 <div class="card-body">
-	<div class="container-icons"></div>
+    <div class="container-icons"></div>
 </div>
 <script>
-	$(async function () {
-		var icons = await get_file('settings/icons/icons.json');
-		var form = await get_file('templates/iconlist.html');
-		var template = Handlebars.compile(form);
-		$('.container-icons').html(template(icons));
-	});
+    $(async function() {
+        var icons = await get_file('settings/icons/icons.json');
+        var form = await get_file('templates/iconlist.hbs');
+        var template = Handlebars.compile(form);
+        $('.container-icons').html(template(icons));
+    });
 </script>

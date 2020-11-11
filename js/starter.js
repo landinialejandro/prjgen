@@ -20,11 +20,16 @@ LoadModule('js/validate.control.js');
 
 $(function() { //loaded page function.
     load_menu();
-    getVersion();
     setTimeout(() => {
         load_page($('.nav-sidebar').find('.project-page'));
         constructWSTree();
     }, 500);
+    getVersion().then(version => {
+        info_log("version: " + version[3] + ", " + version[5]);
+        $(".starter-version").html(version[3]);
+    }).catch(err => {
+        console.log(err)
+    })
 });
 
 /**
@@ -122,7 +127,7 @@ async function load_page(object) {
  */
 async function load_menu() {
     var data = await get_file('settings/nav_sidebar.json');
-    var html = await get_file('templates/nav_sidebar.html');
+    var html = await get_file('templates/nav_sidebar.hbs');
     var template = Handlebars.compile(html);
     $('.nav-sidebar').html(template(data));
 }
