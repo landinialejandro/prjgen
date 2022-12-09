@@ -11,7 +11,7 @@ let get_file = async(url) => {
                     resolve(data);
                 });
         }
-        if (!url) {
+        else {
             reject(new Error('Not exist file'));
         }
     });
@@ -30,15 +30,43 @@ let get_data = (url = "starter.php", data = {
 }) => {
     return new Promise(function(resolve, reject) {
         if (data && url) {
+
             $.get(url, data)
                 .done(function(res) {
                     resolve(res.content);
                 });
         }
-        if (!data || !url) {
+        else {
             reject(new Error('url/data needed'));
         }
     });
+}
+
+const MyFecth = ({
+    url = null,
+    method, //default is GET
+    body = null,
+    callback,
+}, isJson = true) => {
+    fetch(url, {
+        method,
+        body,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+        }
+    })
+        .then((response) => isJson ? response.json() : response.text())
+        .then((response) => {
+            if ((typeof response.OK !== 'undefined' && response.OK == true) || !isJson) {
+                isJson && console.log("RESPONSE: ", response)
+                if (typeof callback == "function") callback(response);
+            } else {
+                console.log(response)
+                errors = JSON.stringify(response.err, null, '\t')
+                //swErrors('Error en la actualizción del registro: ' + errors)
+            }
+        })
+        .catch((err) => console.log(err))
 }
 
 /**
@@ -107,6 +135,7 @@ let getVersion = async() => {
         text: ".starter-version"
     };
     let version = await get_data("starter.php", options);
+    console.log(version);
 
     if (!version) {
         throw new error(`error to get version`);
