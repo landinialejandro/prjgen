@@ -80,10 +80,10 @@ function saveProject() {
  * @return {Object} json object 
  */
 function get_json_node(id = '#', flat = false) {
-    var json_node = prjTree.get_json(id, {
+    return prjTree.get_json(id, {
         flat: flat
     }); // set flat:true to get all nodes in 1-level json
-    return json_node;
+    // return json_node;
 }
 
 function get_reference(data) { //return reference node
