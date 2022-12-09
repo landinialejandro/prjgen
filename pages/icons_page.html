@@ -3,7 +3,7 @@
     <div class="container-icons"></div>
 </div>
 <script>
-    $(async function() {
+    $(async() => {
         var icons = await get_file('settings/icons/icons.json');
         var form = await get_file('templates/iconlist.hbs');
         var template = Handlebars.compile(form);
