@@ -3,16 +3,13 @@
  * @param {Element} url file name to gete data 
  * @returns {String} promise data
  */
-let get_file = async(url) => {
+let get_file = (url, isJson = true) => {
     return new Promise((resolve, reject) => {
         if (url) {
-            $.get(url)
-                .done((data) => {
-                    resolve(data);
-                });
+            MyFecth({ url, callback: (data) => resolve(data) }, isJson);
         }
         else {
-            reject(new Error('Not exist file'));
+            reject(new Error('Not exist file!!'));
         }
     });
 }
@@ -27,14 +24,10 @@ let get_data = (url = "starter.php", data = {
     operation: "test",
     id: "#",
     text: "test ajax works"
-}) => {
-    return new Promise(function(resolve, reject) {
+}, isJson = true) => {
+    return new Promise(function (resolve, reject) {
         if (data && url) {
-
-            $.get(url, data)
-                .done(function(res) {
-                    resolve(res.content);
-                });
+            MyFecth({ url, body: JSON.stringify( data ), callback: (data) => resolve(data.content) }, isJson);
         }
         else {
             reject(new Error('url/data needed'));
@@ -44,7 +37,7 @@ let get_data = (url = "starter.php", data = {
 
 const MyFecth = ({
     url = null,
-    method, //default is GET
+    method = "POST", //default is GET
     body = null,
     callback,
 }, isJson = true) => {
@@ -57,12 +50,12 @@ const MyFecth = ({
     })
         .then((response) => isJson ? response.json() : response.text())
         .then((response) => {
-            if ((typeof response.OK !== 'undefined' && response.OK == true) || !isJson) {
+            if ((typeof response !== 'undefined') || !isJson) {
                 isJson && console.log("RESPONSE: ", response)
                 if (typeof callback == "function") callback(response);
             } else {
                 console.log(response)
-                errors = JSON.stringify(response.err, null, '\t')
+                errors = JSON.stringify(response, null, '\t')
                 //swErrors('Error en la actualizción del registro: ' + errors)
             }
         })
@@ -87,29 +80,32 @@ function save_file(url, data, folder = 'projects') {
             folder: folder
         },
         dataType: "json",
-        success: function(res) {
+        success: function (res) {
             if (res == undefined) {
                 alert("Error: unexpected response");
             } else {
                 info_log("saved file: " + res.id);
             }
         },
-        error: function(res) {
+        error: function (res) {
             if (res == undefined) {
                 alert("Error: undefined");
             } else {
                 alert("Error: " + res.responseText);
             }
         },
-        complete: function() {
+        complete: function () {
             Container();
         }
-    }).always(function() {
+    }).always(function () {
         $('#ws_tree').jstree(true).refresh();
     });
 }
 
 function LoadModule(script) {
+    // scr = await eval(get_file(script,false));
+    // eval(scr);
+    //await MyFecth({ url: script, callback: (data) => eval(data) }, false)
     $.ajax({
         url: script,
         dataType: "script",
@@ -128,7 +124,7 @@ function hidePreloader() {
 /**
  * get date for last starter commit
  */
-let getVersion = async() => {
+let getVersion = async () => {
     let options = {
         operation: "version",
         id: "#",
@@ -145,17 +141,17 @@ let getVersion = async() => {
 }
 
 let info_log = (msg = false) => {
-    if (msg) console.log(`%c ${ msg }%c`, "background: white; color: green");
+    if (msg) console.log(`%c ${msg}%c`, "background: white; color: green");
 }
 
 let warning_log = (msg = false) => {
-    if (msg) console.log(`%c ${ msg }%c`, "background: yellow; color: blue");
+    if (msg) console.log(`%c ${msg}%c`, "background: yellow; color: blue");
 }
 
 let danger_log = (msg = false) => {
-    if (msg) console.log(`%c ${ msg }%c`, "background: red; color: white");
+    if (msg) console.log(`%c ${msg}%c`, "background: red; color: white");
 }
 
 let secondary_log = (msg = false) => {
-    if (msg) console.log(`%c ${ msg }%c`, "background: grey; color: black");
+    if (msg) console.log(`%c ${msg}%c`, "background: grey; color: black");
 }

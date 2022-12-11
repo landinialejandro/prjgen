@@ -111,7 +111,7 @@ async function load_page(object) {
     var url = object.attr('href');
     var active = object.hasClass('active');
     if (url !== "#") {
-        var page = await get_file(url);
+        var page = await get_file(url,false);
         $('.nav-sidebar .active').removeClass('active');
         object.addClass('active');
         $('.breadcrumb-item.active').text(object.children('p').text());
@@ -127,8 +127,9 @@ async function load_page(object) {
  */
 async function load_menu() {
     var data = await get_file('settings/nav_sidebar.json');
-    var html = await get_file('templates/nav_sidebar.hbs');
+    var html = await get_file('templates/nav_sidebar.hbs',false);
     var template = Handlebars.compile(html);
+
     $('.nav-sidebar').html(template(data));
 }
 

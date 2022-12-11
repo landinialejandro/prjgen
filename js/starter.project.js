@@ -182,9 +182,9 @@ async function constructTree(file) {
 
 async function fillForm(nodeid) {
     info_log("Fill form START");
-    const form = await get_file('templates/headerForm.hbs');
-    const form_group = await get_file('templates/form_group.hbs');
-    const form_properties = await get_file('templates/form_properties.hbs');
+    const form = await get_file('templates/headerForm.hbs',false);
+    const form_group = await get_file('templates/form_group.hbs',false);
+    const form_properties = await get_file('templates/form_properties.hbs',false);
     var json_selected = get_json_node(nodeid);
     var template = Handlebars.compile(form);
     whenHelper();

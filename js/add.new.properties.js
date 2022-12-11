@@ -21,7 +21,7 @@ async function add_properties_modal(data) {
         "id": data.nodeid
     }
     console.log(json_selected);
-    const form = await get_file("templates/add_properties_modal.hbs");
+    const form = await get_file("templates/add_properties_modal.hbs",false);
     var template = Handlebars.compile(form);
     $(".container-form").append(template(add_object));
     $("#add-properties-modal-" + data.nodeid).modal("show");

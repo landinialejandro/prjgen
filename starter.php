@@ -1,5 +1,10 @@
 <?php
-include('class_fs.php');
+require_once('class_fs.php');
+//modificación para obtener el dato del body
+$content = trim(file_get_contents("php://input"));
+if (is_null($decoded = json_decode($content, true)))  $decoded=[] ;
+$_REQUEST = array_merge($_REQUEST,$decoded);
+//-------------------------------------------
 if (isset($_REQUEST['operation'])) {
 	$folder = isset($_REQUEST['folder']) ? $_REQUEST['folder'] : 'projects';
 	$fs = new fs($folder);
