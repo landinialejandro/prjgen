@@ -3,8 +3,8 @@ var loadedWS = false;
 
 async function constructWSTree() {
 	try {
-		const types = await get_file('settings/ws_types.json');
-		const ws = await get_file('settings/workspace.json');
+		const types = await get_file({url:'settings/ws_types.json'});
+		const ws = await get_file({url:'settings/workspace.json'});
 
 		$('#ws_tree')
 			.jstree({

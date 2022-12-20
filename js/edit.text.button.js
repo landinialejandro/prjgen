@@ -7,7 +7,7 @@ $("body").on("click", "button.data-desc", function(e) {
 async function edit_text_modal(data) {
     var json_selected = get_json_node(data.nodeid);
     console.log(json_selected.data.description);
-    const form = await get_file("templates/edit_text_modal.hbs",false);
+    const form = await get_file({url:"templates/edit_text_modal.hbs",isJson:false});
     var template = Handlebars.compile(form);
     $(".container-form").append(template(json_selected));
     $("#edit-text-modal-" + data.nodeid).modal("show");
