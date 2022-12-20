@@ -3,7 +3,7 @@
  * @param {Element} url file name to gete data 
  * @returns {String} promise data
  */
-let get_file = (url, isJson = true) => {
+let get_file = ({url, isJson = true}) => {
     return new Promise((resolve, reject) => {
         if (url) {
             MyFecth({ url, callback: (data) => resolve(data) }, isJson);
@@ -20,11 +20,7 @@ let get_file = (url, isJson = true) => {
  * @param {Element} data object data { operation: "test", id: "#", text: "test ajax works" }
  * @returns {String} promise data
  */
-let get_data = (url = "starter.php", data = {
-    operation: "test",
-    id: "#",
-    text: "test ajax works"
-}, isJson = true) => {
+let get_data = ({url = "starter.php", data = {}, isJson = true}) => {
     return new Promise(function (resolve, reject) {
         if (data && url) {
             MyFecth({ url, body: JSON.stringify( data ), callback: (data) => resolve(data.content) }, isJson);

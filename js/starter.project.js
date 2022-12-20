@@ -103,8 +103,8 @@ function updateTree() {
 async function constructTree(file) {
 
     try {
-        const data = await get_file(file);
-        const types = await get_file('settings/prj_types.json');
+        const data = await get_file({url:file});
+        const types = await get_file({url:'settings/prj_types.json'});
 
         $('.card-starter #project_tree')
             .jstree({
@@ -182,9 +182,9 @@ async function constructTree(file) {
 
 async function fillForm(nodeid) {
     info_log("Fill form START");
-    const form = await get_file('templates/headerForm.hbs',false);
-    const form_group = await get_file('templates/form_group.hbs',false);
-    const form_properties = await get_file('templates/form_properties.hbs',false);
+    const form = await get_file({url:'templates/headerForm.hbs',isJson:false});
+    const form_group = await get_file({url:'templates/form_group.hbs',isJson:false});
+    const form_properties = await get_file({url:'templates/form_properties.hbs',isJson:false});
     var json_selected = get_json_node(nodeid);
     var template = Handlebars.compile(form);
     whenHelper();
