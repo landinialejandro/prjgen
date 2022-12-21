@@ -24,6 +24,7 @@ $(function() { //loaded page function.
         load_page($('.nav-sidebar').find('.project-page'));
         constructWSTree();
     }, 500);
+    info_log("version: " );
     getVersion().then(version => {
         info_log("version: " + version[3] + ", " + version[5]);
         $(".starter-version").html(version[3]);

@@ -80,12 +80,8 @@ if (isset($_REQUEST['operation'])) {
 				$rslt = array('id' => $parn, 'content' => $res);
 				break;
 			case 'version':
-				//TODO: end version function
-				exec('git rev-parse --verify HEAD 2> /dev/null', $output);
-				$hash = $output[0];
-				exec("git show $hash", $output);
-				$parn = $output;
-				$rslt = array('id' => $id, 'content' => $parn);
+				$data = json_decode($fs->getContent("settings/settings.json"), true);
+				$rslt = array('id' => $id, 'content' => $data);
 				break;
 			case 'test':
 				$parn = isset($_REQUEST['text']) ? $_REQUEST['text'] : '';
