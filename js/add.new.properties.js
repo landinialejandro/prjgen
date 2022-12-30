@@ -1,4 +1,3 @@
-secondary_log("add.new.properties");
 $("body").on("click", "button.add-new-properties", function(e) {
     var data = $(this).data();
     add_properties_modal(data);
@@ -37,7 +36,7 @@ function addValues(nodeid) {
             new_prop[$this.data('key')] = $this.val();
         })
         obj_node.data.properties.push(new_prop);
-        info_log("Add property to project:" + nodeid);
+        msg.info("Add property to project:" + nodeid);
         console.log(obj_node);
         $("#add-properties-modal-" + nodeid).modal("hide");
         setTimeout(() => {
@@ -45,7 +44,7 @@ function addValues(nodeid) {
             saveProject();
         }, 300);
     } else {
-        info_log('Add property to project CANCELED')
+        msg.info('Add property to project CANCELED')
     }
 }
 
@@ -55,19 +54,19 @@ function addSetting(nodeid) {
 }
 
 function remove_property(data) {
-    info_log('Remove property START')
+    msg.info('Remove property START')
     if (confirm("Remove??")) {
         var obj_node = prjTree.get_node(data.nodeid);
-        secondary_log("start object: ")
-        console.log(obj_node);
+        msg.secondary("start object: ")
+        msg.info(obj_node);
         var elements = Object.keys(obj_node.data.properties).length
-        secondary_log("Elements: " + elements);
+        msg.secondary("Elements: " + elements);
         if (elements > 1) {
             //remove object
-            danger_log("Remove property from project: node:" + data.nodeid + "  index: " + data.index);
+            msg.danger("Remove property from project: node:" + data.nodeid + "  index: " + data.index);
             obj_node.data.properties.splice(data.index, 1);
-            warning_log("Result object: ");
-            console.log(obj_node);
+            msg.warning("Result object: ");
+            msg.info(obj_node);
             setTimeout(() => {
                 fillForm(data.nodeid);
                 //saveProject();
@@ -76,7 +75,7 @@ function remove_property(data) {
             alert("You can't remove all elements");
         }
     } else {
-        info_log('Remove property CANCELED')
+        msg.info('Remove property CANCELED')
     }
-    info_log('Remove property END')
+    msg.info('Remove property END')
 }

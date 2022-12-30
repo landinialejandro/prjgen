@@ -1,91 +1,92 @@
-LoadModule('js/alert.js');
-LoadModule('js/starter.project.js');
-LoadModule('js/starter.ws.js');
-LoadModule('js/edit.text.button.js');
-LoadModule('js/add.new.properties.js');
-LoadModule('js/keyboard.input.js');
-LoadModule('js/validate.control.js');
+const msg = new Msglog();
+LoadModule("js/alert.js");
+LoadModule("js/starter.project.js");
+LoadModule("js/starter.ws.js");
+LoadModule("js/edit.text.button.js");
+LoadModule("js/add.new.properties.js");
+LoadModule("js/keyboard.input.js");
+LoadModule("js/validate.control.js");
 
 /**
  * TODO: se puede verificar cuando se compile si el usuario ha modificado el archivo y avisarle
  */
 
-(function($) {
-    $(window).on('load', function() {
-        hidePreloader();
-    });
-})
-(jQuery);
+(function ($) {
+  $(window).on("load", function () {
+    hidePreloader();
+  });
+})(jQuery);
 
-
-$(function() { //loaded page function.
-    load_menu();
-    setTimeout(() => {
-        load_page($('.nav-sidebar').find('.project-page'));
-        constructWSTree();
-    }, 500);
-    info_log("version: " );
-    getVersion().then(version => {
-        info_log("version: " + version[3] + ", " + version[5]);
-        $(".starter-version").html(version[3]);
-    }).catch(err => {
-        console.log(err)
+$(function () {
+  //loaded page function.
+  load_menu();
+  setTimeout(() => {
+    load_page($(".nav-sidebar").find(".project-page"));
+    constructWSTree();
+  }, 500);
+  getVersion()
+    .then(({ version }) => {
+      msg.info("version: " + version);
+      $(".starter-version").html(version);
     })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 /**
  * click on save project
  */
-$(".navbar-nav").on('click', '.saveproject', function(e) {
-    Container(false);
-    updateData();
-    updateTree();
-    saveProject();
-    Container();
+$(".navbar-nav").on("click", ".saveproject", function (e) {
+  Container(false);
+  updateData();
+  updateTree();
+  saveProject();
+  Container();
 });
 
 /**
  * click on new project
  */
-$(".navbar-nav").on('click', '.newproject', function(e) {
-    loadProject('settings/blank_project.json');
+$(".navbar-nav").on("click", ".newproject", function (e) {
+  loadProject("settings/blank_project.json");
 });
 
 /**
  * click on make project
  */
-$(".navbar-nav").on('click', '.makeproject', function(e) {
-    tableList();
+$(".navbar-nav").on("click", ".makeproject", function (e) {
+  tableList();
 });
 
 /**
  * click on search on tree options buttons
  */
-$(".start-search").on('click', function(e) {
+$(".start-search").on("click", function (e) {
+  goto_search();
+});
+$(".clear-search").on("click", function (e) {
+  search_intree(false);
+});
+$(".search-value").on("keypress", function (e) {
+  if (e.key === "Enter") {
     goto_search();
-});
-$(".clear-search").on('click', function(e) {
-    search_intree(false);
-});
-$(".search-value").on('keypress', function(e) {
-    if (e.key === 'Enter') {
-        goto_search();
-    }
+  }
 });
 
 /**
  * click on update project
  */
-$(".card-starter").on('click', '.updateproject', function(e) {
-    updateData();
+$(".card-starter").on("click", ".updateproject", function (e) {
+  updateData();
 });
 
 /**
  * click on menu link item
  */
-$(".nav-sidebar").on('click', '.nav-link', function(e) {
-    e.preventDefault();
-    load_page($(this));
+$(".nav-sidebar").on("click", ".nav-link", function (e) {
+  e.preventDefault();
+  load_page($(this));
 });
 
 /**
@@ -93,14 +94,14 @@ $(".nav-sidebar").on('click', '.nav-link', function(e) {
  * @param {boolean} enable or disable a container
  */
 function Container(enable = true) {
-    if (enable) {
-        setTimeout(() => {
-            $('.container-disabled').removeClass('container-disabled');
-        }, 200);
-    } else {
-        $('.card-starter').addClass('container-disabled');
-        $('#ws_tree').addClass('container-disabled');
-    }
+  if (enable) {
+    setTimeout(() => {
+      $(".container-disabled").removeClass("container-disabled");
+    }, 200);
+  } else {
+    $(".card-starter").addClass("container-disabled");
+    $("#ws_tree").addClass("container-disabled");
+  }
 }
 
 /**
@@ -109,32 +110,35 @@ function Container(enable = true) {
  * @returns {boolean} class active object
  */
 async function load_page(object) {
-    var url = object.attr('href');
-    var active = object.hasClass('active');
-    if (url !== "#") {
-        var page = await get_file({url,isJson:false});
-        $('.nav-sidebar .active').removeClass('active');
-        object.addClass('active');
-        $('.breadcrumb-item.active').text(object.children('p').text());
-        $('.card-starter').html(page);
-    } else {
-        location.reload();
-    }
-    return active;
+  var url = object.attr("href");
+  var active = object.hasClass("active");
+  if (url !== "#") {
+    var page = await get_file({ url, isJson: false });
+    $(".nav-sidebar .active").removeClass("active");
+    object.addClass("active");
+    $(".breadcrumb-item.active").text(object.children("p").text());
+    $(".card-starter").html(page);
+  } else {
+    location.reload();
+  }
+  return active;
 }
 
 /**
  * Load starter left menu
  */
 async function load_menu() {
-    var data = await get_file({url:'settings/nav_sidebar.json'});
-    var html = await get_file({url:'templates/nav_sidebar.hbs',isJson:false});
-    var template = Handlebars.compile(html);
+  var data = await get_file({ url: "settings/nav_sidebar.json" });
+  var html = await get_file({
+    url: "templates/nav_sidebar.hbs",
+    isJson: false,
+  });
+  var template = Handlebars.compile(html);
 
-    $('.nav-sidebar').html(template(data));
+  $(".nav-sidebar").html(template(data));
 }
 
 function goto_search() {
-    var search_value = $('.search-value').val();
-    search_intree(search_value);
+  var search_value = $(".search-value").val();
+  search_intree(search_value);
 }

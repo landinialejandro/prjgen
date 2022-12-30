@@ -75,6 +75,8 @@ class fs
 				case 'text':
 				case 'md':
 				case 'js':
+					$dat['content'] = file_get_contents($dir);
+					break;
 				case 'json':
 				case 'css':
 				case 'html':

@@ -2,8 +2,8 @@
 require_once('class_fs.php');
 //modificación para obtener el dato del body
 $content = trim(file_get_contents("php://input"));
-if (is_null($decoded = json_decode($content, true)))  $decoded=[] ;
-$_REQUEST = array_merge($_REQUEST,$decoded);
+if (is_null($decoded = json_decode($content, true)))  $decoded = [];
+$_REQUEST = array_merge($_REQUEST, $decoded);
 //-------------------------------------------
 if (isset($_REQUEST['operation'])) {
 	$folder = isset($_REQUEST['folder']) ? $_REQUEST['folder'] : 'projects';
@@ -57,22 +57,22 @@ if (isset($_REQUEST['operation'])) {
 					case 'table':
 						$dir = dirname(__FILE__) . "/settings/tables";
 						$res[] = [
-							"text"=>"Table Settings",
-							"type"=>"table-settings",
-							"children"=>get_children($dir)
+							"text" => "Table Settings",
+							"type" => "table-settings",
+							"children" => get_children($dir)
 						];
-					break;
+						break;
 					case 'group':
 						$dir = dirname(__FILE__) . "/settings/groups";
 						$res[] = [
-							"text"=>"Group Settings",
-							"type"=>"group-settings",
-							"children"=>get_children($dir)
+							"text" => "Group Settings",
+							"type" => "group-settings",
+							"children" => get_children($dir)
 						];
-					break;
+						break;
 					case 'file':
 						$res = json_decode($fs->getContent($id), true);
-					break;
+						break;
 					default:
 						throw new Exception('Unsupported operation json: ' . $parn);
 						break;
@@ -102,7 +102,7 @@ if (isset($_REQUEST['operation'])) {
 	die();
 }
 
-function get_children($dir, $sort = true){ //from dir get the children elements
+function get_children($dir, $sort = true) { //from dir get the children elements
 	$fs = new fs($dir);
 	$files = array_diff(scandir($dir), array('.', '..'));
 	$res = [];
@@ -111,12 +111,12 @@ function get_children($dir, $sort = true){ //from dir get the children elements
 		if ($ext === 'json') {
 			$data = json_decode($fs->getContent("$dir/$file"), true);
 			// add setting file name to array
-			$data['data']['filesetting']="$file";
-			$data['data']['filesettingdir']="$dir";
+			$data['data']['filesetting'] = "$file";
+			$data['data']['filesettingdir'] = "$dir";
 			$res[] = $data;
 		}
 	}
-	if ($sort){
+	if ($sort) {
 		$order = array_column($res, 'order');
 		array_multisort($order, SORT_ASC, $res);
 	}

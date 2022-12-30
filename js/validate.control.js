@@ -1,4 +1,3 @@
-secondary_log('validate.control.js');
 jQuery.validator.setDefaults({
     success: "valid",
     errorElement: 'span',
@@ -10,7 +9,7 @@ jQuery.validator.setDefaults({
         var data = $(element).data();
         $(element).addClass('is-invalid');
         $('#' + data.nodeid).addClass('bg-gradient-danger');
-        danger_log(data.nodeid);
+        msg.danger(data.nodeid);
         project.jstree("select_node",data.nodeid);
         alert('has an error!!!')
     },
@@ -22,7 +21,7 @@ jQuery.validator.setDefaults({
 });
 
 function validate_control() {
-    info_log("validating");
+    msg.info("validating");
     
     $(".validate-control").each(function () { 
         $(this).valid();

@@ -1,4 +1,3 @@
-secondary_log("edit.text.button");
 $("body").on("click", "button.data-desc", function(e) {
     var data = $(this).data();
     edit_text_modal(data);
@@ -17,28 +16,28 @@ async function saveSetting(nodeid) {
     var obj_node = prjTree.get_node(nodeid);
     var file = obj_node.data.filesetting;
     var dir = obj_node.data.filesettingdir;
-    info_log("Save in setting file: " + file);
+    msg.info("Save in setting file: " + file);
     if (file) {
         alert('Las modificaciones se guardarán el archivo settings');
-        var options = {
+        var data = {
             operation: "get_json",
             id: dir + "/" + file,
             text: "file"
         }
-        var data_setting = await get_data("starter.php", options)
+        var data_setting = await get_data({url:"starter.php", data})
 
         $('.form-node-description').each(function() {
             var $this = $(this);
             var data_desc = $this.data();
-            secondary_log(data_desc.key + ": " + $this.val());
-            data_setting.data.description[data_desc.key] = $this.val();
+            msg.secondary(data_desc.key + ": " + $this.val());
+            data_setting.content.data.description[data_desc.key] = $this.val();
         })
-        save_file(file, data_setting, dir);
+        save_file(file, data_setting.content, dir);
     }
 }
 
 function saveValues(nodeid) {
-    info_log("Save in project node: " + nodeid);
+    msg.info("Save in project node: " + nodeid);
     var obj_node = prjTree.get_node(nodeid);
     $('.form-node-description').each(function() {
         var $this = $(this);
