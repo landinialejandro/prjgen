@@ -10,7 +10,7 @@
     "options": ["Month, Day, Year", "Day, Month, Year", "Year, Day, Month"],
     "usershelper": "Indique el orden en el que aparece la fecha"
   },
-  "type": "prj-setting",
+  "type": "prj-settings",
   "icon": "fas fa-stream",
   "order": 1
 }

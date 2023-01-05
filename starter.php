@@ -19,7 +19,8 @@ if (isset($_REQUEST['operation'])) {
 				$rslt = $fs->data($id);
 				break;
 			case 'create_node':
-				$rslt = $fs->create($id, isset($_REQUEST['text']) ? $_REQUEST['text'] : '', (!isset($_REQUEST['type']) || $_REQUEST['type'] !== 'file'));
+				$parn = isset($_REQUEST['content']) ? $_REQUEST['content'] : '';
+				$rslt = $fs->create($id, isset($_REQUEST['text']) ? $_REQUEST['text'] : '', (!isset($_REQUEST['type']) || $_REQUEST['type'] !== 'file'), $parn);
 				break;
 			case 'rename_node':
 				$rslt = $fs->rename($id, isset($_REQUEST['text']) ? $_REQUEST['text'] : '');

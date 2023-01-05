@@ -16,7 +16,7 @@
         "type":"html-control"
 
     },
-    "type": "field-setting",
+    "type": "field-settings",
     "icon": "fas fa-stream",
     "order": 7
 }

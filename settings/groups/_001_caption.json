@@ -17,7 +17,7 @@
             }
         ]
     },
-    "type": "grp-setting",
+    "type": "grp-settings",
     "icon": "fas fa-font",
     "li_attr": {
         "type": "text",

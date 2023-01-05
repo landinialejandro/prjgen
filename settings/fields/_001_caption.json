@@ -17,7 +17,7 @@
         ],
         "type": "html-control"
     },
-    "type": "field-setting",
+    "type": "field-settings",
     "icon": "fas fa-font",
     "li_attr": {
         "type": "text",

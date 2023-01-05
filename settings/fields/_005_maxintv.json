@@ -5,7 +5,7 @@
         "text": "",
         "type":"html-control"
     },
-    "type":"field-setting",
+    "type":"field-settings",
     "icon": "fa fa-cog",
     "li_attr": {
         "type": "integer"

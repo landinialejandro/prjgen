@@ -30,7 +30,7 @@
         ],
         "type":"sql-control"
     },
-    "type": "field-setting",
+    "type": "field-settings",
     "icon": "fas fa-stream",
     "order": 3
 }

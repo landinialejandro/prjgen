@@ -4,7 +4,7 @@
         "placeholder": "Tech report",
         "text": ""
     },
-    "type": "grp-setting",
+    "type": "grp-settings",
     "icon": "fa fa-cog",
     "order": 20
 }

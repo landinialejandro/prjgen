@@ -6,7 +6,7 @@
             {"text":"Show Only in admin group?", "checked":false}
         ]
     },
-    "type": "grp-setting",
+    "type": "grp-settings",
     "icon": "fas fa-stream",
     "order": 3
 }

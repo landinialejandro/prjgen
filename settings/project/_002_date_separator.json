@@ -9,7 +9,7 @@
         "text": "/",
         "usershelper":"Write a date saparator"
     },
-    "type": "prj-setting",
+    "type": "prj-settings",
     "icon": "fas fa-font",
     "order":2
 }

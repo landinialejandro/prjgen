@@ -130,9 +130,10 @@ class fs
 		if($dir === $this->base) {
 			throw new Exception('Cannot rename root');
 		}
-		if(preg_match('/[a-zA-Z-_0-9.]*$/', $name) || !strlen($name)) {
-			throw new Exception('Invalid name: ' . $name);
-		}
+		//todo: verificar el nombre del archivo siguiente funciono no funciona como se espera.
+		// if(preg_match('/[a-zA-Z-_0-9.]*$/', $name) || !strlen($name)) {
+		// 	throw new Exception('Invalid name: ' . $name);
+		// }
 		$new = explode(DIRECTORY_SEPARATOR, $dir);
 		array_pop($new);
 		array_push($new, $name);

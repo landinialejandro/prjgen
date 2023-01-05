@@ -115,13 +115,7 @@ const LoadModule = (module) => {
     })
 }
 
-function hidePreloader() {
-    var preloaderFadeOutTime = 500;
-    var preloader = $(".spinner-wrapper");
-    setTimeout(() => {
-        preloader.fadeOut(preloaderFadeOutTime);
-    }, 500);
-}
+const hidePreloader = () => setTimeout(() => $(".spinner-wrapper").fadeOut(600), 500)
 
 /**
  * get date for last starter commit
@@ -132,11 +126,11 @@ let getVersion = async () => {
         id: "#",
         text: ".starter-version",
     };
-    let version = await get_data({ url: "starter.php", data });
-    if (!version) {
+    const { content } = await get_data({ url: "starter.php", data })
+    if (!content) {
         throw new error(`error to get version`);
     } else {
-        return version.content;
+        return content;
     }
 };
 class Msglog {

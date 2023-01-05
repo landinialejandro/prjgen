@@ -5,7 +5,7 @@
         "text": "",
         "type":"textarea"
     },
-    "type": "prj-setting",
+    "type": "prj-settings",
     "icon": "fa fa-cog",
     "order": 20
 }

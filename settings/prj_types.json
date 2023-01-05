@@ -20,21 +20,21 @@
         "max_children": 20,
         "max_depth": 20,
         "icon": "fas fa-stream",
-        "valid_children":["field-setting"]
+        "valid_children":["field-settings"]
     },
-    "field-setting": {
+    "field-settings": {
         "max_children": 20,
         "max_depth": 20,
         "icon": "fa fa-cog",
         "valid_children":["none"]
     },
-    "prj-setting": {
+    "prj-settings": {
         "max_children": 20,
         "max_depth": 20,
         "icon": "fa fa-cog",
         "valid_children":["none"]
     },
-    "grp-setting": {
+    "grp-settings": {
         "max_children": 20,
         "max_depth": 20,
         "icon": "fa fa-cog",
@@ -50,7 +50,7 @@
         "max_children": 20,
         "max_depth": 20,
         "icon": "fa fa-cog",
-        "valid_children":["prj-setting"],
+        "valid_children":["prj-settings"],
         "a_attr" : {
 			"style": "background-color: #fff59d"
 		}
@@ -68,7 +68,7 @@
         "max_children": 20,
         "max_depth": 20,
         "icon": "fa fa-cog",
-        "valid_children":["grp-setting"],
+        "valid_children":["grp-settings"],
         "a_attr" : {
 			"style": "background-color:#fff59d"
 		}

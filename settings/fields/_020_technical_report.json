@@ -4,7 +4,7 @@
         "placeholder": "Tech report",
         "text": ""
     },
-    "type": "field-setting",
+    "type": "field-settings",
     "icon": "fa fa-cog",
     "order": 20
 }

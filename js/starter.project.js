@@ -16,15 +16,10 @@ function loadProject(file) {
 }
 
 /**
- * detroy the current loaded project
- */
-const destroyProject = () => prjTree && prjTree.destroy();
-
-/**
  * udpdate user data in project tree
  */
 function updateData() {
-    console.log("UpdateData");
+    msg.info("UpdateData");
     $(".form-node").each(function () {
         var $this = $(this);
         var obj_node = prjTree.get_node($this.data("nodeid"));
@@ -60,56 +55,23 @@ function updateData() {
  */
 function saveProject() {
     msg.info("saving project");
-    var node = get_json_node();
-    var file = node[0].text;
     //TODO: se puede controlar si el nombre es valido antes de pasarlo a la función
-    save_file(file + ".json", node);
-}
-
-/**
- * get json data node
- * @param {String} id node, by default get root id
- * @param {boolean} flat false get structured tree json data, true: get plain data
- * @return {Object} json object
- */
-const get_json_node = (id = "#", flat = false) =>
-    prjTree.get_json(id, { flat });
-
-function get_reference(data) {
-    //return reference node
-    var inst = $.jstree.reference(data.reference);
-    return inst.get_node(data.reference);
-}
-
-function compare_type(type, data) {
-    var obj = get_reference(data);
-    return obj.type != type;
-}
-
-function updateTree() {
-    prjTree.settings.core.data = get_json_node();
+    save_file(get_ws_selectedNode(), get_json_node());
 }
 
 async function constructTree(url) {
     try {
-        const data = await get_file({ url });
-        const types = await get_file({ url: "settings/prj_types.json" });
-
         $(".card-starter #project_tree")
             .jstree({
                 core: {
-                    data,
+                    data: await get_file({ url }),
                     check_callback: function (o, n, p, i, m) {
-                        if (m && m.dnd && m.pos !== "i") {
-                            return false;
-                        }
+                        if (m && m.dnd && m.pos !== "i") return false;
                         if (o === "move_node" || o === "copy_node") {
-                            if (this.get_node(n).parent === this.get_node(p).id) {
-                                return false;
-                            }
+                            if (this.get_node(n).parent === this.get_node(p).id) return false;
                         }
                         if (o === "delete_node") {
-                            if (n.type === "field-setting") {
+                            if (n.type === "field-settings") {
                                 return false;
                             } else {
                                 return confirm("Are you sure you want to delete?");
@@ -117,9 +79,9 @@ async function constructTree(url) {
                         }
                         if (o === "rename_node") {
                             var no_rename = [
-                                "field-setting",
-                                "prj-setting",
-                                "grp-setting",
+                                "field-settings",
+                                "prj-settings",
+                                "grp-settings",
                                 "group-settings",
                                 "project-settings",
                             ];
@@ -131,11 +93,9 @@ async function constructTree(url) {
                         return true;
                     },
                 },
-                types: types,
+                types: await get_prj_types(),
                 contextmenu: {
-                    items: function (node) {
-                        return contextMenu(node, this);
-                    },
+                    items: (node) => contextMenu(node),
                 },
                 plugins: ["dnd", "search", "state", "types", "contextmenu", "unique"],
                 search: {
@@ -143,7 +103,7 @@ async function constructTree(url) {
                     show_only_matches: true,
                 },
             })
-            .on("create_node.jstree", function (e, {instance, node }, pos, callback, loaded) {
+            .on("create_node.jstree", function (e, { instance, node }, pos, callback, loaded) {
                 instance.set_id(node, node.id);
                 var json_selected = get_json_node(node.id);
                 fieldList(json_selected);
@@ -191,113 +151,129 @@ async function fillForm(nodeid) {
     msg.info("Fill form END");
 }
 
-async function createNode(data, type, position = "last") {
-    var inst = $.jstree.reference(data.reference);
-    var obj = inst.get_node(data.reference);
+async function createNode({ reference }, new_node_type = "", position = "last") {
+    var inst = get_reference(reference);
+    var obj = get_inst_node(reference);
+
     var options = {
         operation: "get_json",
         id: "#",
-        text: type,
+        text: new_node_type,
     };
+
     var newNode = {
-        type: type,
-        text: "new_" + type + "_" + (obj.children.length + 1),
+        type: new_node_type,
+        text: "new_" + new_node_type + "_" + (obj.children.length + 1),
         children: [],
     };
-    if (type === "project-settings") {
-        newNode.text = "Project Settings";
-        position = "first";
-    }
-    if (type === "group-settings") {
-        newNode.text = "Group Settings";
-        position = "first";
-    }
-    if (type === "field") {
-        options.text = "field-settings";
-    }
-    if (type === "table") {
-    }
-    if (type === "group") {
+    
+    switch (new_node_type) {
+        case "project-settings":
+            newNode.text = "Project Settings";
+            position = "first";
+            break;
+        case "group-settings":
+            newNode.text = "Group Settings";
+            position = "first";
+            break
+        case "field":
+            options.text = "field-settings"
+            break;
+        case "group":
+            break
+        case "file":
+
+            options.id = obj.id
+            options.content = await get_file({ url: "settings/blank_project.json", isJson: false, })
+            options.text = "new_file_" + (obj.children.length + 1) + ".json"
+            newNode.text = options.text
+            options.operation = "create_node"
+            options.type = "file"
+            break;
+        case "folder":
+        case "default":
+            options.id = obj.id
+            options.text = "new_folder_" + (obj.children.length + 1)
+            options.operation = "create_node"
+            options.type = "folder"
+            break;
+        default:
+            break;
     }
 
     if (options.text != "") {
-        try {
-            tmp = await get_data({ url: "starter.php", data: options });
-            newNode.children = tmp.content;
-        } catch (err) {
-            return console.log(err.message);
-        }
+        get_data({ url: "starter.php", data: options })
+            .then(({ content }) => {
+                newNode.children = content
+                inst.create_node(obj, newNode, position, function (new_node) {
+                    setTimeout(() => inst.edit(new_node), 0);
+                });
+            })
+            .catch(error => { console.log(error) })
     }
-    inst.create_node(obj, newNode, position, function (new_node) {
-        setTimeout(function () {
-            inst.edit(new_node);
-        }, 0);
-    });
+
 }
 
 /**
- * create context menu in project tree
+ * create aditional context menu in project/ws tree
  * @param {string} node
  * @param {object} $this
  */
-function contextMenu(node, $this) {
-    //create adtional context menu
+function contextMenu({ type }) {
     var tmp = $.jstree.defaults.contextmenu.items();
-    delete tmp.create.action;
-    tmp.create.label = "New object";
-    tmp.create.submenu = {
-        create_prj_setings: {
-            separator_after: false,
-            label: "Project Settings",
-            action: function (data) {
-                createNode(data, "project-settings");
-            },
-            _disabled: function (data) {
-                return compare_type("#", data);
-            },
-        },
-        create_grp_setings: {
-            separator_after: true,
-            label: "Group Settings",
-            action: function (data) {
-                createNode(data, "group-settings");
-            },
-            _disabled: function (data) {
-                return compare_type("group", data);
-            },
-        },
-        create_group: {
-            separator_after: false,
-            label: "Group",
-            action: function (data) {
-                createNode(data, "group");
-            },
-            _disabled: function (data) {
-                return compare_type("#", data);
-            },
-        },
-        create_table: {
-            separator_after: false,
-            label: "Table (ctrl+l)",
-            action: function (data) {
-                createNode(data, "table");
-            },
-            _disabled: function (data) {
-                return compare_type("group", data);
-            },
-        },
-        create_field: {
-            label: "Field (ctrl+f)",
-            action: function (data) {
-                createNode(data, "field");
-            },
-            _disabled: function (data) {
-                return compare_type("table", data);
-            },
-        },
-    };
-    if ($this.get_type(node) === "field_") {
-        delete tmp.create;
+    tmp.create = false
+    if (type !== "field_") {
+        tmp.create = {
+            label: "New object",
+            action: false,
+            submenu: {
+                create_prj_setings: {
+                    separator_after: false,
+                    label: "Project Settings",
+                    action: (data) => createNode(data, "project-settings"),
+                    _disabled: () => compare_type("#", type),
+                },
+                create_grp_setings: {
+                    separator_after: true,
+                    label: "Group Settings",
+                    action: (data) => createNode(data, "group-settings"),
+                    _disabled: () => compare_type("group", type),
+                },
+                create_group: {
+                    separator_after: false,
+                    label: "Group",
+                    action: (data) => createNode(data, "group"),
+                    _disabled: () => compare_type("#", type),
+                },
+                create_table: {
+                    separator_after: false,
+                    label: "Table (ctrl+l)",
+                    action: (data) => createNode(data, "table"),
+                    _disabled: () => compare_type("group", type),
+                },
+                create_field: {
+                    label: "Field (ctrl+f)",
+                    action: (data) => createNode(data, "field"),
+                    _disabled: () => compare_type("table", type),
+                },
+            }
+        }
+    }
+    if (type === "default") {
+        tmp.create = {
+            label: "New",
+            action: false,
+            submenu: {
+                create_folder: {
+                    label: "Folder",
+                    action: (node) => createNode(node, 'default')
+                },
+                create_file: {
+                    label: "File",
+                    action: (node) => createNode(node, 'file')
+                },
+            }
+        }
     }
     return tmp;
 }
@@ -353,19 +329,14 @@ function updateSelect(id, tbl_list = []) {
 function tableList() {
     var flatnode = get_json_node("#", true);
     $.each(flatnode, function (i, data) {
-        if (typeof data === undefined) {
-            debugger;
-        }
-        if (data.type === "table") {
-            msg.danger(data.text);
-        }
+        if (typeof data === undefined) debugger
+        if (data.type === "table") msg.danger(data.text)
     });
 }
 
 function search_intree(search_value = false, long = 3) {
-    if (search_value && search_value.length >= long) {
-        project.jstree("search", search_value);
-    } else {
-        project.jstree("clear_search");
-    }
+    search_value && search_value.length >= long ?
+        project.jstree("search", search_value)
+        :
+        project.jstree("clear_search")
 }

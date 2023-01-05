@@ -45,7 +45,7 @@
             }
         ]
     },
-    "type": "prj-setting",
+    "type": "prj-settings",
     "icon": "fas fa-font",
     "li_attr": {
         "type": "text",
