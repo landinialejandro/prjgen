@@ -1,74 +1,82 @@
 <?php
 require_once('class_fs.php');
 //modificación para obtener el dato del body
-$content = trim(file_get_contents("php://input"));
-if (is_null($decoded = json_decode($content, true)))  $decoded = [];
+$body = trim(file_get_contents("php://input"));
+if (is_null($decoded = json_decode($body, true)))  $decoded = [];
 $_REQUEST = array_merge($_REQUEST, $decoded);
+
+[
+	'operation' => $operation,
+	'id' => $id,
+	'folder' => $folder,
+	'text' => $text,
+	'content' => $content,
+	'type' => $type,
+	'parent'=>$parent,
+
+] = $_REQUEST;
+
 //-------------------------------------------
-if (isset($_REQUEST['operation'])) {
-	$folder = isset($_REQUEST['folder']) ? $_REQUEST['folder'] : 'projects';
+if ($operation) {
+	$folder = $folder ? $folder : 'projects';
 	$fs = new fs($folder);
 	try {
-		$id = isset($_REQUEST['id']) && $_REQUEST['id'] !== '#' ? $_REQUEST['id'] : '/';
+		$id = $id && $id !== '#' ? $id : '/';
 		$rslt = null;
-		switch ($_REQUEST['operation']) {
+		$dir = dirname(__FILE__) . "/settings/";
+		switch ($operation) {
 			case 'get_node':
-				$rslt = $fs->lst($id, (isset($_REQUEST['id']) && $_REQUEST['id'] === '#'));
+				$rslt = $fs->lst($id, ($id && $id === '#'));
 				break;
 			case "get_content":
 				$rslt = $fs->data($id);
 				break;
 			case 'create_node':
-				$parn = isset($_REQUEST['content']) ? $_REQUEST['content'] : '';
-				$rslt = $fs->create($id, isset($_REQUEST['text']) ? $_REQUEST['text'] : '', (!isset($_REQUEST['type']) || $_REQUEST['type'] !== 'file'), $parn);
+				$parn = $content ? $content : '';
+				$rslt = $fs->create($id, $text ? $text : '', (!($type) || $type !== 'file'), $parn);
 				break;
 			case 'rename_node':
-				$rslt = $fs->rename($id, isset($_REQUEST['text']) ? $_REQUEST['text'] : '');
+				$rslt = $fs->rename($id, $text ? $text : '');
 				break;
 			case 'delete_node':
 				$rslt = $fs->remove($id);
 				break;
 			case 'move_node':
-				$parn = isset($_REQUEST['parent']) && $_REQUEST['parent'] !== '#' ? $_REQUEST['parent'] : '/';
+				$parn = $parent && $parent !== '#' ? $parent : '/';
 				$rslt = $fs->move($id, $parn);
 				break;
 			case 'copy_node':
-				$parn = isset($_REQUEST['parent']) && $_REQUEST['parent'] !== '#' ? $_REQUEST['parent'] : '/';
+				$parn = $parent && $parent !== '#' ? $parent : '/';
 				$rslt = $fs->copy($id, $parn);
 				break;
 			case 'save_file':
-				$parn = isset($_REQUEST['text']) ? $_REQUEST['text'] : '';
+				$parn = $text ? $text : '';
 				$rslt = $fs->create("", $id, false, $parn);
 				break;
 			case 'get_json':
-				$parn = isset($_REQUEST['text']) ? $_REQUEST['text'] : '';
+				$parn = $text ? $text : '';
 				switch ($parn) {
 					case 'field-settings':
-						$dir = dirname(__FILE__) . "/settings/fields";
-						$res = get_children($dir);
+						$res = get_children($dir."fields");
 						break;
 					case 'project-settings':
-						$dir = dirname(__FILE__) . "/settings/project";
-						$res = get_children($dir);
+						$res = get_children($dir."project");
 						break;
 					case 'group-settings':
-						$dir = dirname(__FILE__) . "/settings/groups";
-						$res = get_children($dir);
+						$res = get_children($dir."groups");
 						break;
 					case 'table':
-						$dir = dirname(__FILE__) . "/settings/tables";
 						$res[] = [
 							"text" => "Table Settings",
 							"type" => "table-settings",
-							"children" => get_children($dir)
+							"children" => get_children($dir."tables")
 						];
 						break;
 					case 'group':
-						$dir = dirname(__FILE__) . "/settings/groups";
 						$res[] = [
 							"text" => "Group Settings",
 							"type" => "group-settings",
-							"children" => get_children($dir)
+							"children" => get_children($dir."groups")
 						];
 						break;
 					case 'file':
@@ -85,11 +93,10 @@ if (isset($_REQUEST['operation'])) {
 				$rslt = array('id' => $id, 'content' => $data);
 				break;
 			case 'test':
-				$parn = isset($_REQUEST['text']) ? $_REQUEST['text'] : '';
-				$rslt = array('id' => $id, 'content' => $parn);
+				$rslt = array('id' => $id, 'content' => $text ? $text : 'TEST');
 				break;
 			default:
-				throw new Exception('Unsupported operation: ' . $_REQUEST['operation']);
+				throw new Exception('Unsupported operation: ' . $operation);
 				break;
 		}
 		header('Content-Type: application/json; charset=utf-8');

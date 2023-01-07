@@ -14,14 +14,14 @@ LoadModule("js/validate.control.js");
 const get_json_node = (id = "#", flat = false) => prjTree.get_json(id, { flat })
 const get_reference = (reference) => $.jstree.reference(reference)
 const get_inst_node = (reference) => get_reference(reference).get_node(reference)
-const compare_type = (type, node_type) => node_type != type;
-const updateTree = () => prjTree.settings.core.data = get_json_node();
-const get_prj_types = () => get_file({ url: "settings/prj_types.json" });
-const get_ws_types = () => get_file({ url: "settings/ws_types.json" });
-const get_ws_selectedNode  = () => $("#ws_tree").jstree().get_selected(true)[0].text;
-const get_workspace = () => get_file({ url: "settings/workspace.json" });
-const destroyProject = () => prjTree && prjTree.destroy();
-const goto_search = () => search_intree($(".search-value").val());
+const compare_type = (type, node_type) => node_type != type
+const updateTree = () => prjTree.settings.core.data = get_json_node()
+const get_prj_types = () => get_file({ url: "settings/prj_types.json" })
+const get_ws_types = () => get_file({ url: "settings/ws_types.json" })
+const get_ws_selectedNode  = () => $("#ws_tree").jstree().get_selected(true)[0].text 
+const get_workspace = () => get_file({ url: "settings/workspace.json" })
+const destroyProject = () => prjTree && prjTree.destroy()
+const goto_search = () => search_intree($(".search-value").val())
 
 document.addEventListener("DOMContentLoaded", () => hidePreloader())
 
