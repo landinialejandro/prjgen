@@ -1,6 +1,3 @@
-var prjTree = false;
-var project = false;
-
 /*
 TODO:	lista de campos de una tabla en proceso
 
@@ -22,7 +19,7 @@ function updateData() {
     msg.info("UpdateData");
     $(".form-node").each(function () {
         var $this = $(this);
-        var obj_node = prjTree.get_node($this.data("nodeid"));
+        var obj_node = prjTree().get_node($this.data("nodeid"));
         console.log(obj_node);
 
         if (!$.isEmptyObject(obj_node)) {
@@ -61,48 +58,47 @@ function saveProject() {
 
 async function constructTree(url) {
     try {
-        $(".card-starter #project_tree")
-            .jstree({
-                core: {
-                    data: await get_file({ url }),
-                    check_callback: function (o, n, p, i, m) {
-                        if (m && m.dnd && m.pos !== "i") return false;
-                        if (o === "move_node" || o === "copy_node") {
-                            if (this.get_node(n).parent === this.get_node(p).id) return false;
+        project().jstree({
+            core: {
+                data: await get_file({ url }),
+                check_callback: function (o, n, p, i, m) {
+                    if (m && m.dnd && m.pos !== "i") return false;
+                    if (o === "move_node" || o === "copy_node") {
+                        if (this.get_node(n).parent === this.get_node(p).id) return false;
+                    }
+                    if (o === "delete_node") {
+                        if (n.type === "field-settings") {
+                            return false;
+                        } else {
+                            return confirm("Are you sure you want to delete?");
                         }
-                        if (o === "delete_node") {
-                            if (n.type === "field-settings") {
-                                return false;
-                            } else {
-                                return confirm("Are you sure you want to delete?");
-                            }
+                    }
+                    if (o === "rename_node") {
+                        var no_rename = [
+                            "field-settings",
+                            "prj-settings",
+                            "grp-settings",
+                            "group-settings",
+                            "project-settings",
+                        ];
+                        if ($.inArray(n.type, no_rename) >= 0) {
+                            msg.danger("ERROR! yo can't rename: " + n.type);
+                            return false;
                         }
-                        if (o === "rename_node") {
-                            var no_rename = [
-                                "field-settings",
-                                "prj-settings",
-                                "grp-settings",
-                                "group-settings",
-                                "project-settings",
-                            ];
-                            if ($.inArray(n.type, no_rename) >= 0) {
-                                msg.danger("ERROR! yo can't rename: " + n.type);
-                                return false;
-                            }
-                        }
-                        return true;
-                    },
+                    }
+                    return true;
                 },
-                types: await get_prj_types(),
-                contextmenu: {
-                    items: (node) => contextMenu(node),
-                },
-                plugins: ["dnd", "search", "state", "types", "contextmenu", "unique"],
-                search: {
-                    case_sensitive: false,
-                    show_only_matches: true,
-                },
-            })
+            },
+            types: await get_prj_types(),
+            contextmenu: {
+                items: (node) => contextMenu(node),
+            },
+            plugins: ["dnd", "search", "state", "types", "contextmenu", "unique"],
+            search: {
+                case_sensitive: false,
+                show_only_matches: true,
+            },
+        })
             .on("create_node.jstree", function (e, { instance, node }, pos, callback, loaded) {
                 instance.set_id(node, node.id);
                 var json_selected = get_json_node(node.id);
@@ -116,17 +112,10 @@ async function constructTree(url) {
                 }
             })
             .on("rename_node.jstree", function (e, { node }) {
-                if (node.type === "#") {
-                    alert("rename project file?");
-                }
+                node.type === "#" && alert("rename project file?");
             })
-            .on("loaded.jstree", function () {
-                project = $(".card-starter #project_tree");
-                prjTree = project.jstree(true);
-            })
-            .on("delete_node.jstree", function () {
-                //before delete
-            });
+            .on("loaded.jstree", function () {/*before load*/ })
+            .on("delete_node.jstree", function () {  /*before delete*/ });
     } catch (err) {
         return msg.danger(err.message);
     }
@@ -166,7 +155,7 @@ async function createNode({ reference }, new_node_type = "", position = "last") 
         text: "new_" + new_node_type + "_" + (obj.children.length + 1),
         children: [],
     };
-    
+
     switch (new_node_type) {
         case "project-settings":
             newNode.text = "Project Settings";
@@ -319,7 +308,7 @@ function updateSelect(id, tbl_list = []) {
     list.push(tbl_list);
     $.each(table_settings.children, function (i, e) {
         if (e.text === "Default sortby") {
-            var element = prjTree.get_node(e.id);
+            var element = prjTree().get_node(e.id);
             element.data.options = list;
             return false;
         }
@@ -336,7 +325,7 @@ function tableList() {
 
 function search_intree(search_value = false, long = 3) {
     search_value && search_value.length >= long ?
-        project.jstree("search", search_value)
+        project().jstree("search", search_value)
         :
-        project.jstree("clear_search")
+        project().jstree("clear_search")
 }

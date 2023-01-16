@@ -11,17 +11,22 @@ LoadModule("js/validate.control.js");
  * TODO: se puede verificar cuando se compile si el usuario ha modificado el archivo y avisarle
  */
 
-const get_json_node = (id = "#", flat = false) => prjTree.get_json(id, { flat })
+const project = () => $(".card-starter #project_tree")
+const prjTree = () => project().jstree(true)
+const get_json_node = (id = "#", flat = false) => prjTree().get_json(id, { flat })
 const get_reference = (reference) => $.jstree.reference(reference)
 const get_inst_node = (reference) => get_reference(reference).get_node(reference)
-const compare_type = (type, node_type) => node_type != type;
-const updateTree = () => prjTree.settings.core.data = get_json_node();
-const get_prj_types = () => get_file({ url: "settings/prj_types.json" });
-const get_ws_types = () => get_file({ url: "settings/ws_types.json" });
-const get_ws_selectedNode  = () => $("#ws_tree").jstree().get_selected(true)[0].text;
-const get_workspace = () => get_file({ url: "settings/workspace.json" });
-const destroyProject = () => prjTree && prjTree.destroy();
-const goto_search = () => search_intree($(".search-value").val());
+const compare_type = (type, node_type) => node_type != type
+const updateTree = () => prjTree().settings.core.data = get_json_node()
+const destroyProject = () => prjTree() && prjTree().destroy()
+const goto_search = () => search_intree($(".search-value").val())
+const get_prj_types = () => get_file({ url: "settings/prj_types.json" })
+
+const ws = () => $("#ws_tree")
+const get_workspace = () => get_file({ url: "settings/workspace.json" })
+const get_ws_types = () => get_file({ url: "settings/ws_types.json" })
+const get_ws_selectedNode = () => ws().jstree().get_selected(true)[0].text
+const get_ws_lastProject = async () => await get_workspace().then(({ text }) => text)
 
 document.addEventListener("DOMContentLoaded", () => hidePreloader())
 
@@ -43,9 +48,7 @@ getVersion()
         console.log(err);
     });
 
-/**
- * click on save project
- */
+//click on save project
 $(".navbar-nav").on("click", ".saveproject", function (e) {
     Container(false);
     updateData();
@@ -54,19 +57,13 @@ $(".navbar-nav").on("click", ".saveproject", function (e) {
     Container();
 });
 
-/**
- * click on new project
- */
+//click on new project
 $(".navbar-nav").on("click", ".newproject", (e) => loadProject("settings/blank_project.json"))
 
-/**
- * click on make project
- */
+//click on make project
 $(".navbar-nav").on("click", ".makeproject", (e) => tableList())
 
-/**
- * click on search on tree options buttons
- */
+//click on search on tree options buttons
 $(".start-search").on("click", (e) => goto_search())
 $(".clear-search").on("click", (e) => search_intree(false))
 $(".search-value").on("keypress", (e) => {
@@ -76,37 +73,26 @@ $(".search-value").on("keypress", (e) => {
     }
 })
 
-/**
- * click on update project
- */
+//click on update project
 $(".card-starter").on("click", ".updateproject", (e) => updateData())
 
-/**
- * click on menu link item
- */
+//click on menu link item
 $(".nav-sidebar").on("click", ".nav-link", function (e) {
     e.preventDefault()
     load_page($(this).attr("href")).then(() => $(this).addClass("active"))
 });
 
-/**
- * enable or disable containers
- * @param {boolean} enable or disable a container
- */
+//enable or disable containers
 function Container(enable = true) {
     if (enable) {
         setTimeout(() => $(".container-disabled").removeClass("container-disabled"), 200)
     } else {
         $(".card-starter").addClass("container-disabled");
-        $("#ws_tree").addClass("container-disabled");
+        ws().addClass("container-disabled");
     }
 }
 
-/**
- * load page from links left menu
- * @param {object} object data menu link item
- * @returns {boolean} class active object
- */
+//load page from links left menu
 async function load_page(url) {
     if (url !== "#") {
         var page = await get_file({ url, isJson: false }) //carga las distintas paginas html, project_page.html es la pagina de proyectos

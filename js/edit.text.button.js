@@ -13,7 +13,7 @@ async function edit_text_modal(data) {
 }
 
 async function saveSetting(nodeid) {
-    var obj_node = prjTree.get_node(nodeid);
+    var obj_node = prjTree().get_node(nodeid);
     var file = obj_node.data.filesetting;
     var dir = obj_node.data.filesettingdir;
     msg.info("Save in setting file: " + file);
@@ -38,7 +38,7 @@ async function saveSetting(nodeid) {
 
 function saveValues(nodeid) {
     msg.info("Save in project node: " + nodeid);
-    var obj_node = prjTree.get_node(nodeid);
+    var obj_node = prjTree().get_node(nodeid);
     $('.form-node-description').each(function() {
         var $this = $(this);
         var data_desc = $this.data();

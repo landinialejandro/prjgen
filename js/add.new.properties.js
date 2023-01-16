@@ -28,7 +28,7 @@ async function add_properties_modal(data) {
 
 function addValues(nodeid) {
     if (confirm("add to project")) {
-        var obj_node = prjTree.get_node(nodeid);
+        var obj_node = prjTree().get_node(nodeid);
         var new_prop = {};
         $('.form-new-prop').each(function() {
             var $this = $(this)
@@ -56,7 +56,7 @@ function addSetting(nodeid) {
 function remove_property(data) {
     msg.info('Remove property START')
     if (confirm("Remove??")) {
-        var obj_node = prjTree.get_node(data.nodeid);
+        var obj_node = prjTree().get_node(data.nodeid);
         msg.secondary("start object: ")
         msg.info(obj_node);
         var elements = Object.keys(obj_node.data.properties).length

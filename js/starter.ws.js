@@ -2,7 +2,7 @@ var loadedWS = false;
 
 async function constructWSTree() {
     try {
-        $("#ws_tree").jstree({
+        ws().jstree({
             core: {
                 data: await get_data({ url: "starter.php", data: { operation: "get_node", id: "#" } }),
                 check_callback: function (o, n, p, i, m) {
@@ -21,15 +21,15 @@ async function constructWSTree() {
             unique: { duplicate: (name, counter) => name + " " + counter },
             plugins: ["state", "sort", "types", "contextmenu", "unique"],
         })
-            .on("loaded.jstree", async (e, data) => {
-                get_workspace().then(({ text }) => {
-                    if (text && text !== "" && text !== "undefined") loadProject("projects/" + text)
+            .on("loaded.jstree", (e, data) => {
+                get_ws_lastProject().then(text => {
+                    if (text && text !== "" && text !== "undefined") {
+                        ws().jstree("select_node", text, true);
+                        loadProject("projects/" + text)
+                    }
                 })
             })
             .on("rename_node.jstree", function (e, data) {
-                if (data.node.type === "#") {
-                    alert("rename project file?");
-                }
                 renamimg(data)
             })
             .on("select_node.jstree", (n, { node: { text, type }, event }, e) => {
@@ -65,6 +65,8 @@ const renamimg = (data) => {
             .then(({ content }) => {
                 //newNode.children = content
                 msg.info("file renamed")
+                ws().jstree(true).refresh();
+
             })
             .catch(error => { console.log(error) })
     }

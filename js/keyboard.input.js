@@ -11,7 +11,7 @@ hotkeys("ctrl+f,ctrl+l", function (event, handler) {
     default:
       alert(event);
   }
-  var data = { reference: prjTree.get_selected() };
+  var data = { reference: prjTree().get_selected() };
   console.log(data);
   msg.info("adding new " + type);
   createNode(data, type);

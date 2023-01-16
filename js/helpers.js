@@ -46,7 +46,7 @@ function properties_template(form) {
 }
 
 function process_template(id, options, form) {
-	var nodeid = prjTree.get_json(id);
+	var nodeid = prjTree().get_json(id);
 	var template = Handlebars.compile(form);
 	var type = options.data.root.type;
 	if (type != 'filed' && type != 'field-settings') {

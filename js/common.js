@@ -100,7 +100,7 @@ function save_file(url, data, folder = "projects") {
         },
     });
 
-    $("#ws_tree").jstree(true).refresh();
+    ws().jstree(true).refresh();
 }
 
 const LoadModule = (module) => {
