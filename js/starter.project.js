@@ -80,6 +80,7 @@ async function constructTree(url) {
                             "grp-settings",
                             "group-settings",
                             "project-settings",
+                            "table-settings",
                         ];
                         if ($.inArray(n.type, no_rename) >= 0) {
                             msg.danger("ERROR! yo can't rename: " + n.type);
@@ -112,7 +113,7 @@ async function constructTree(url) {
                 }
             })
             .on("rename_node.jstree", function (e, { node }) {
-                node.type === "#" && alert("rename project file?");
+                node.type === "#" && alert("rename project name?");
             })
             .on("loaded.jstree", function () {/*before load*/ })
             .on("delete_node.jstree", function () {  /*before delete*/ });
