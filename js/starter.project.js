@@ -63,29 +63,27 @@ async function constructTree(url) {
             core: {
                 data: await get_file({ url }),
                 check_callback: (o, n, p, i, m) => {
+                    const t = filteredObject(types, [n.type])
+                    msg.secondary("check if can " + o + " by type");
                     if (m && m.dnd && m.pos !== "i") return false;
                     if (o === "move_node" || o === "copy_node") {
                         if (this.get_node(n).parent === this.get_node(p).id) return false;
                     }
                     if (o === "delete_node") {
-                        if (n.type === "field-settings") {
+                        if (!t[n.type].delete) {
+                            msg.danger("ERROR! yo can't delete: " + n.type)
                             return false;
                         } else {
                             return confirm("Are you sure you want to delete?");
                         }
                     }
                     if (o === "rename_node") {
-                        console.log("rename node", o);
-                        // debugger
-                        return false
-                        // const t = filteredObject(types, [n.type])
-                        // const rename = t[n.type].rename
-
-                        // if (!rename) {
-                        //     msg.danger("ERROR! yo can't rename: " + n.type)
-                        //     return false;
-                        // }
+                        if (!t[n.type].rename) {
+                            msg.danger("ERROR! yo can't rename: " + n.type)
+                            return false;
+                        }
                     }
+                    msg.info("you can " + o + " ");
                     return true;
                 },
             },
@@ -174,7 +172,6 @@ async function createNode({ reference }, new_node_type = "", position = "last") 
         case "group":
             break
         case "file":
-
             options.id = obj.id
             options.content = await get_file({ url: "settings/blank_project.json", isJson: false, })
             options.text = "new_file_" + (obj.children.length + 1) + ".json"
