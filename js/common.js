@@ -133,6 +133,12 @@ let getVersion = async () => {
         return content;
     }
 };
+
+const filteredObject = (obj, keys = []) => Object.keys(obj)
+                                                .filter(key => keys.includes(key))
+                                                .reduce((o, k) => {o[k] = obj[k]
+                                                return o}, {})
+
 class Msglog {
     info_text = "background: white; color: green";
     warning_text = "background: yellow; color: blue";

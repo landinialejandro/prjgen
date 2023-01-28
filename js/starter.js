@@ -20,7 +20,7 @@ const compare_type = (type, node_type) => node_type != type
 const updateTree = () => prjTree().settings.core.data = get_json_node()
 const destroyProject = () => prjTree() && prjTree().destroy()
 const goto_search = () => search_intree($(".search-value").val())
-const get_prj_types = () => get_file({ url: "settings/prj_types.json" })
+const get_prj_types = async () => await get_file({ url: "settings/prj_types.json" })
 
 const ws = () => $("#ws_tree")
 const get_workspace = () => get_file({ url: "settings/workspace.json" })
@@ -34,8 +34,10 @@ document.addEventListener("DOMContentLoaded", () => hidePreloader())
 get_file({ url: "templates/nav_sidebar.hbs", isJson: false, }).then((hbs) => {
     const template = Handlebars.compile(hbs)
     get_file({ url: "settings/nav_sidebar.json" }).then((json) => {
+        msg.info("Sidebar loaded...")
         $(".nav-sidebar").html(template(json))
         load_page($(".nav-sidebar").find(".project-page").attr("href"))
+        msg.info("Project page loaded...")
         constructWSTree()
     })
 })

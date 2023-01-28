@@ -57,11 +57,12 @@ function saveProject() {
 }
 
 async function constructTree(url) {
+    const types = await get_prj_types()
     try {
         project().jstree({
             core: {
                 data: await get_file({ url }),
-                check_callback: function (o, n, p, i, m) {
+                check_callback: (o, n, p, i, m) => {
                     if (m && m.dnd && m.pos !== "i") return false;
                     if (o === "move_node" || o === "copy_node") {
                         if (this.get_node(n).parent === this.get_node(p).id) return false;
@@ -74,23 +75,21 @@ async function constructTree(url) {
                         }
                     }
                     if (o === "rename_node") {
-                        var no_rename = [
-                            "field-settings",
-                            "prj-settings",
-                            "grp-settings",
-                            "group-settings",
-                            "project-settings",
-                            "table-settings",
-                        ];
-                        if ($.inArray(n.type, no_rename) >= 0) {
-                            msg.danger("ERROR! yo can't rename: " + n.type);
-                            return false;
-                        }
+                        console.log("rename node", o);
+                        // debugger
+                        return false
+                        // const t = filteredObject(types, [n.type])
+                        // const rename = t[n.type].rename
+
+                        // if (!rename) {
+                        //     msg.danger("ERROR! yo can't rename: " + n.type)
+                        //     return false;
+                        // }
                     }
                     return true;
                 },
             },
-            types: await get_prj_types(),
+            types: types,
             contextmenu: {
                 items: (node) => contextMenu(node),
             },
@@ -98,6 +97,9 @@ async function constructTree(url) {
             search: {
                 case_sensitive: false,
                 show_only_matches: true,
+            },
+            error: function (err) {
+                this.edit(JSON.parse(err.data).obj)
             },
         })
             .on("create_node.jstree", function (e, { instance, node }, pos, callback, loaded) {

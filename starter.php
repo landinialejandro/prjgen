@@ -3,7 +3,17 @@ require_once('class_fs.php');
 //modificación para obtener el dato del body
 $body = trim(file_get_contents("php://input"));
 if (is_null($decoded = json_decode($body, true)))  $decoded = [];
-$_REQUEST = array_merge($_REQUEST, $decoded);
+$defaults = [
+	'operation' => "test",
+	'id' => "",
+	'folder' => "",
+	'text' => "",
+	'content' => "",
+	'type' => "",
+	'parent' => "",
+
+];
+$_REQUEST = array_merge($defaults, $_REQUEST, $decoded);
 
 [
 	'operation' => $operation,
@@ -12,7 +22,7 @@ $_REQUEST = array_merge($_REQUEST, $decoded);
 	'text' => $text,
 	'content' => $content,
 	'type' => $type,
-	'parent'=>$parent,
+	'parent' => $parent,
 
 ] = $_REQUEST;
 
@@ -57,26 +67,26 @@ if ($operation) {
 				$parn = $text ? $text : '';
 				switch ($parn) {
 					case 'field-settings':
-						$res = get_children($dir."fields");
+						$res = get_children($dir . "fields");
 						break;
 					case 'project-settings':
-						$res = get_children($dir."project");
+						$res = get_children($dir . "project");
 						break;
 					case 'group-settings':
-						$res = get_children($dir."groups");
+						$res = get_children($dir . "groups");
 						break;
 					case 'table':
 						$res[] = [
 							"text" => "Table Settings",
 							"type" => "table-settings",
-							"children" => get_children($dir."tables")
+							"children" => get_children($dir . "tables")
 						];
 						break;
 					case 'group':
 						$res[] = [
 							"text" => "Group Settings",
 							"type" => "group-settings",
-							"children" => get_children($dir."groups")
+							"children" => get_children($dir . "groups")
 						];
 						break;
 					case 'file':

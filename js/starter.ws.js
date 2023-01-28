@@ -23,6 +23,7 @@ async function constructWSTree() {
         })
             .on("loaded.jstree", (e, data) => {
                 get_ws_lastProject().then(text => {
+                    msg.info("load last project..." + text)
                     if (text && text !== "" && text !== "undefined") {
                         ws().jstree("select_node", text, true);
                         loadProject("projects/" + text)
@@ -53,7 +54,7 @@ async function constructWSTree() {
 
 const renamimg = (data) => {
     console.log(data);
-    let options={}
+    let options = {}
     if (data.node.type = "file") {
         msg.danger("renaming    ")
         options.id = data.old

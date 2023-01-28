@@ -51,7 +51,7 @@
         "max_depth": 20,
         "icon": "fa fa-cog",
         "valid_children":["prj-settings"],
-        "raname": false,
+        "rename": false,
         "a_attr" : {
 			"style": "background-color: #fff59d"
 		}
@@ -61,7 +61,7 @@
         "max_depth": 20,
         "icon": "fa fa-cog",
         "valid_children":["tbl-setting"],
-        "raname": false,
+        "rename": false,
         "a_attr" : {
 			"style": "background-color: #fff59d"
 		}
@@ -71,7 +71,7 @@
         "max_depth": 20,
         "icon": "fa fa-cog",
         "valid_children":["grp-settings"],
-        "raname": false,
+        "rename": false,
         "a_attr" : {
 			"style": "background-color:#fff59d"
 		}
