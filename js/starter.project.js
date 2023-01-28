@@ -87,7 +87,7 @@ async function constructTree(url) {
                     return true;
                 },
             },
-            types: types,
+            types,
             contextmenu: {
                 items: (node) => contextMenu(node),
             },
