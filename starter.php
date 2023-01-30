@@ -67,26 +67,21 @@ if ($operation) {
 				$parn = $text ? $text : '';
 				switch ($parn) {
 					case 'field-settings':
-						$res = get_children($dir . "fields");
+						$res = get_children($dir . "field");
 						break;
 					case 'project-settings':
 						$res = get_children($dir . "project");
 						break;
 					case 'group-settings':
-						$res = get_children($dir . "groups");
+						$res = get_children($dir . "group");
 						break;
 					case 'table':
-						$res[] = [
-							"text" => "Table Settings",
-							"type" => "table-settings",
-							"children" => get_children($dir . "tables")
-						];
-						break;
 					case 'group':
+						$type = ucfirst($parn);
 						$res[] = [
-							"text" => "Group Settings",
-							"type" => "group-settings",
-							"children" => get_children($dir . "groups")
+							"text" => "$type Settings",
+							"type" => "$parn-settings",
+							"children" => get_children($dir . $parn)
 						];
 						break;
 					case 'file':
