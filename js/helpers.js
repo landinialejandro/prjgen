@@ -18,7 +18,7 @@ function RegisterHelpers() {
 	});
 }
 
-RegisterPartials = () => {
+const RegisterPartials = () => {
 	msg.info("registering partials...")
 	const partials = ["modalHeader", "modalFooter"];
 	partials.forEach(async (e) => {
