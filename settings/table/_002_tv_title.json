@@ -1,6 +1,10 @@
 {
     "text": "Table view title",
     "data": {
+        "description": {
+            "text": "Es posible indicar el título de la vista de tabla en varios idiomas",
+            "class": "text-purple"
+          },
         "properties": [
             {
                 "id": "en",

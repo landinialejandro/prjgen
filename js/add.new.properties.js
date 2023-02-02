@@ -22,8 +22,9 @@ async function add_properties_modal(data) {
     console.log(json_selected);
     const form = await get_file({url:"templates/add_properties_modal.hbs",isJson:false});
     var template = Handlebars.compile(form);
-    $(".container-form").append(template(add_object));
-    $("#add-properties-modal-" + data.nodeid).modal("show");
+    var bb = template(add_object);
+    $(".container-form").append(bb);
+    $("#modal-" + data.nodeid).modal("show");
 }
 
 function addValues(nodeid) {
@@ -38,7 +39,7 @@ function addValues(nodeid) {
         obj_node.data.properties.push(new_prop);
         msg.info("Add property to project:" + nodeid);
         console.log(obj_node);
-        $("#add-properties-modal-" + nodeid).modal("hide");
+        $("#modal-" + nodeid).modal("hide");
         setTimeout(() => {
             fillForm(nodeid);
             saveProject();

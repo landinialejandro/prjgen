@@ -1,47 +1,42 @@
-function whenHelper() {
+function RegisterHelpers() {
+	msg.info("registering helpers...")
 	Handlebars.registerHelper("when", function (operand_1, operator, operand_2, options) {
 		var operators = {
-				'eq': function (l, r) {
-					return l == r;
-				},
-				'noteq': function (l, r) {
-					return l != r;
-				},
-				'gt': function (l, r) {
-					return Number(l) > Number(r);
-				},
-				'or': function (l, r) {
-					return l || r;
-				},
-				'and': function (l, r) {
-					return l && r;
-				},
-				'%': function (l, r) {
-					return (l % r) === 0;
-				},
-				"inString": function (l, r) {
-					return r.indexOf(l) !== -1;
-				},
-				"notInString": function (l, r) {
-					return r.indexOf(l) === -1;
-				}
-			},
-			result = operators[operator](operand_1, operand_2);
+			'eq': (l, r) => l == r,
+			'noteq': (l, r) => l != r,
+			'gt': (l, r) => Number(l) > Number(r),
+			'or': (l, r) => l || r,
+			'and': (l, r) => l && r,
+			'%': (l, r) => (l % r) === 0,
+			"inString": (l, r) => r.indexOf(l) !== -1,
+			"notInString": (l, r) => r.indexOf(l) === -1,
+		}
+		result = operators[operator](operand_1, operand_2);
 
 		if (result) return options.fn(this);
 		else return options.inverse(this);
 	});
 }
 
+RegisterPartials = () => {
+	msg.info("registering partials...")
+	const partials = ["modalHeader", "modalFooter"];
+	partials.forEach(async (e) => {
+		url = `templates/partials/${e}.hbs`
+		t = await get_file({ url, isJson: false })
+		Handlebars.registerPartial(e, t)
+	})
+}
+
 function getChildrenHelper(form) {
 	Handlebars.registerHelper('getchildren', function (id, options) {
-		return process_template(id,options,form);
+		return process_template(id, options, form);
 	});
 }
 
 function properties_template(form) {
 	Handlebars.registerHelper('properties_template', function (id, options) {
-		return process_template(id,options,form);
+		return process_template(id, options, form);
 	})
 }
 

@@ -9,7 +9,7 @@ async function edit_text_modal(data) {
     const form = await get_file({url:"templates/edit_text_modal.hbs",isJson:false});
     var template = Handlebars.compile(form);
     $(".container-form").append(template(json_selected));
-    $("#edit-text-modal-" + data.nodeid).modal("show");
+    $("#modal-" + data.nodeid).modal("show");
 }
 
 async function saveSetting(nodeid) {
@@ -44,7 +44,7 @@ function saveValues(nodeid) {
         var data_desc = $this.data();
         obj_node.data.description[data_desc.key] = $this.val();
     })
-    $("#edit-text-modal-" + nodeid).modal("hide");
+    $("#modal-" + nodeid).modal("hide");
     setTimeout(() => {
         fillForm(nodeid);
         saveProject();

@@ -71,7 +71,7 @@ async function constructTree(url) {
                     }
                     if (o === "delete_node") {
                         if (!t[n.type].delete) {
-                            msg.danger("ERROR! yo can't delete: " + n.type)
+                            msg.danger("ERROR! you can't delete: " + n.type)
                             return false;
                         } else {
                             return confirm("Are you sure you want to delete?");
@@ -129,7 +129,6 @@ async function fillForm(nodeid) {
     const form_properties = await get_file({ url: "templates/form_properties.hbs", isJson: false, });
     var json_selected = get_json_node(nodeid);
     var template = Handlebars.compile(form);
-    whenHelper();
     getChildrenHelper(form_group);
     properties_template(form_properties);
 

@@ -28,6 +28,9 @@ const get_ws_types = () => get_file({ url: "settings/ws_types.json" })
 const get_ws_selectedNode = () => ws().jstree().get_selected(true)[0].text
 const get_ws_lastProject = async () => await get_workspace().then(({ text }) => text)
 
+RegisterHelpers()
+RegisterPartials()
+
 document.addEventListener("DOMContentLoaded", () => hidePreloader())
 
 //Procesos principales
