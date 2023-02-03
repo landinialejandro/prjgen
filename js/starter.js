@@ -1,11 +1,12 @@
-const msg = new Msglog();
-LoadModule("js/alert.js");
-LoadModule("js/starter.project.js");
-LoadModule("js/starter.ws.js");
-LoadModule("js/edit.text.button.js");
-LoadModule("js/add.new.properties.js");
-LoadModule("js/keyboard.input.js");
-LoadModule("js/validate.control.js");
+const msg = new Msglog()
+LoadModule("js/alert.js")
+LoadModule("js/starter.project.js")
+LoadModule("js/starter.ws.js")
+LoadModule("js/edit.text.button.js")
+LoadModule("js/add.new.properties.js")
+LoadModule("js/keyboard.input.js")
+LoadModule("js/validate.control.js")
+LoadModule("js/hbs.js")
 
 /**
  * TODO: se puede verificar cuando se compile si el usuario ha modificado el archivo y avisarle
@@ -27,9 +28,6 @@ const get_workspace = () => get_file({ url: "settings/workspace.json" })
 const get_ws_types = () => get_file({ url: "settings/ws_types.json" })
 const get_ws_selectedNode = () => ws().jstree().get_selected(true)[0].text
 const get_ws_lastProject = async () => await get_workspace().then(({ text }) => text)
-
-RegisterHelpers()
-RegisterPartials()
 
 document.addEventListener("DOMContentLoaded", () => hidePreloader())
 

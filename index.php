@@ -113,7 +113,6 @@
     <script src="dist/plugins/jstree/dist/jstree.js"></script>
     <script src="dist/plugins/hotkeys/hotkeys.js"></script>
     <script src="js/common.js"></script>
-    <script src="js/helpers.js"></script>
     <script src="js/starter.js"></script>
 </body>
 

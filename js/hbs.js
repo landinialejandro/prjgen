@@ -50,3 +50,6 @@ function process_template(id, options, form) {
 	var res = template(nodeid);
 	return res;
 }
+
+RegisterHelpers()
+RegisterPartials()
