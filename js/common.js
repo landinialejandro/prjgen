@@ -69,38 +69,56 @@ const MyFecth = (
  * @param {Element} data object json data
  * @param {String} folder to file
  */
-function save_file(url, data, folder = "projects") {
-    $.ajax({
-        type: "POST",
-        url: "starter.php",
-        data: {
-            operation: "save_file",
-            type: "json",
-            id: url,
-            text: JSON.stringify(data),
-            folder: folder,
-        },
-        dataType: "json",
-        success: function (res) {
-            if (res == undefined) {
-                alert("Error: unexpected response");
-            } else {
-                msg.info("saved file: " + res.id);
-            }
-        },
-        error: function (res) {
-            if (res == undefined) {
-                alert("Error: undefined");
-            } else {
-                alert("Error: " + res.responseText);
-            }
-        },
-        complete: function () {
-            Container();
-        },
+function save_file(url = "starter.php", data) {
+
+    return new Promise(function (resolve, reject) {
+        if (data && url) {
+            MyFecth(
+                {
+                    url,
+                    body: JSON.stringify(data),
+                    callback: (data) => {
+                        ws().jstree(true).refresh();
+                        resolve(data)
+                    },
+                }
+            )
+        } else {
+            reject(new Error("url/data needed"));
+        }
     });
 
-    ws().jstree(true).refresh();
+    // $.ajax({
+    //     type: "POST",
+    //     url: "starter.php",
+    //     data: {
+    //         operation: "save_file",
+    //         type: "json",
+    //         id: url,
+    //         text: JSON.stringify(data),
+    //         folder: folder,
+    //     },
+    //     dataType: "json",
+    //     success: function (res) {
+    //         if (res == undefined) {
+    //             alert("Error: unexpected response");
+    //         } else {
+    //             msg.info("saved file: " + res.id);
+    //         }
+    //     },
+    //     error: function (res) {
+    //         if (res == undefined) {
+    //             alert("Error: undefined");
+    //         } else {
+    //             alert("Error: " + res.responseText);
+    //         }
+    //     },
+    //     complete: function () {
+    //         Container();
+    //     },
+    // });
+
+
 }
 
 const LoadModule = (module) => {
@@ -135,9 +153,11 @@ let getVersion = async () => {
 };
 
 const filteredObject = (obj, keys = []) => Object.keys(obj)
-                                                .filter(key => keys.includes(key))
-                                                .reduce((o, k) => {o[k] = obj[k]
-                                                return o}, {})
+    .filter(key => keys.includes(key))
+    .reduce((o, k) => {
+        o[k] = obj[k]
+        return o
+    }, {})
 
 class Msglog {
     info_text = "background: white; color: green";

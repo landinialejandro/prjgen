@@ -42,7 +42,15 @@ async function constructWSTree() {
                         load_page(url).then(() => {
                             loadedWS = text;
                             loadProject("projects/" + text);
-                            save_file("workspace.json", { text, }, "settings");
+                            const datab = {
+                                operation: "save_file",
+                                type: "json",
+                                id: url,
+                                text: JSON.stringify({ text, }),
+                                folder: "settings",
+                            }
+
+                            save_file("settings/workspace.json",datab);
                         });
                     }
                 }

@@ -32,7 +32,16 @@ async function saveSetting(nodeid) {
             msg.secondary(data_desc.key + ": " + $this.val());
             data_setting.content.data.description[data_desc.key] = $this.val();
         })
-        save_file(file, data_setting.content, dir);
+
+        const datab = {
+            operation: "save_file",
+            type: "json",
+            id: url,
+            text: JSON.stringify(data_setting.content),
+            folder: dir,
+        }
+        //save in settings file
+        save_file("projects/"+file, datab);
     }
 }
 
