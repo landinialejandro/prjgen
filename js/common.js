@@ -88,37 +88,6 @@ function save_file(url = "starter.php", data) {
         }
     });
 
-    // $.ajax({
-    //     type: "POST",
-    //     url: "starter.php",
-    //     data: {
-    //         operation: "save_file",
-    //         type: "json",
-    //         id: url,
-    //         text: JSON.stringify(data),
-    //         folder: folder,
-    //     },
-    //     dataType: "json",
-    //     success: function (res) {
-    //         if (res == undefined) {
-    //             alert("Error: unexpected response");
-    //         } else {
-    //             msg.info("saved file: " + res.id);
-    //         }
-    //     },
-    //     error: function (res) {
-    //         if (res == undefined) {
-    //             alert("Error: undefined");
-    //         } else {
-    //             alert("Error: " + res.responseText);
-    //         }
-    //     },
-    //     complete: function () {
-    //         Container();
-    //     },
-    // });
-
-
 }
 
 const LoadModule = (module) => {
