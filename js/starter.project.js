@@ -53,7 +53,7 @@ function updateData() {
 function saveProject() {
     msg.info("saving project");
     //TODO: se puede controlar si el nombre es valido antes de pasarlo a la función
-    const datab = {
+    const data = {
         operation: "save_file",
         type: "json",
         id: get_ws_selectedNode(),
@@ -61,8 +61,7 @@ function saveProject() {
         folder: "projects",
     }
     //save projet
-    ////
-    save_file("starter.php", datab);
+    save_file("starter.php", data);
 }
 
 async function constructTree(url) {

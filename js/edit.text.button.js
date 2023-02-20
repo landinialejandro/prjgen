@@ -36,12 +36,12 @@ async function saveSetting(nodeid) {
         const datab = {
             operation: "save_file",
             type: "json",
-            id: url,
+            id: file,
             text: JSON.stringify(data_setting.content),
             folder: dir,
         }
         //save in settings file
-        save_file("projects/"+file, datab);
+        save_file("starter.php", datab);
     }
 }
 

@@ -2,7 +2,7 @@
     <input  type="text" class="form-control form-node" 
             data-index="{{@index}}" data-nodeid="{{id}}" 
             name="{{id}}" placeholder="{{data.placeholder}}" 
-            value="{{data.user_value}}" 
+            value="{{data.text}}" 
             title="{{data.usershelper}}">
 {{/inline}}
 {{#if data}}
@@ -29,7 +29,7 @@
             {{#if data.option}}
                 <select class="custom-select form-node" data-nodeid="{{id}}" name="{{id}}" title="{{data.usershelper}}">
                     {{#each data.options}}
-                    <option value="{{this}}" {{#when this "eq" ../data.user_value}}selected{{/when}}>{{this}}</option>
+                    <option value="{{this}}" {{#when this "eq" ../data.text}}selected{{/when}}>{{this}}</option>
                     {{/each}}
                 </select>
             {{else}}

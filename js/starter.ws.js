@@ -35,26 +35,30 @@ async function constructWSTree() {
             })
             .on("select_node.jstree", (n, { node: { text, type }, event }, e) => {
                 if (type === "file" && typeof event !== "undefined" && type !== "contextmenu") {
-                    var active = $(".project-page").hasClass("active");
+                    var active = $(".project-page").hasClass("active")
                     if (text !== loadedWS || !active) {
-                        Container(false);
+                        Container(false)
                         url = $(".project-page").attr("href")
                         load_page(url).then(() => {
                             loadedWS = text;
-                            loadProject("projects/" + text);
+                            loadProject("projects/" + text)
+                            msg.info("saving workspace.json")
                             const datab = {
                                 operation: "save_file",
                                 type: "json",
-                                id: url,
+                                id: "workspace.json", //nombre del archivo a modificar
                                 text: JSON.stringify({ text, }),
                                 folder: "settings",
                             }
 
-                            save_file("settings/workspace.json",datab);
-                        });
+                            save_file("starter.php", datab).then((res) => {
+                                msg.info("saved file: " + res.id)
+                                Container()
+                            })
+                        })
                     }
                 }
-            });
+            })
     } catch (err) {
         return msg.danger(err.message);
     }
