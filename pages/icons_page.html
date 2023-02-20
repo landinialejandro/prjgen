@@ -4,8 +4,8 @@
 </div>
 <script>
     $(async() => {
-        var icons = await get_file({url:'settings/icons/icons.json'});
-        var form = await get_file({url:'templates/iconlist.hbs',isJson:false});
+        var icons = await get_data({url:'settings/icons/icons.json'});
+        var form = await get_data({url:'templates/iconlist.hbs',isJson:false});
         var template = Handlebars.compile(form);
         $('.container-icons').html(template(icons));
     });

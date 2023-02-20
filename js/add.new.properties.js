@@ -20,7 +20,7 @@ async function add_properties_modal(data) {
         "id": data.nodeid
     }
     console.log(json_selected);
-    const form = await get_file({url:"templates/add_properties_modal.hbs",isJson:false});
+    const form = await get_data({url:"templates/add_properties_modal.hbs",isJson:false});
     var template = Handlebars.compile(form);
     var bb = template(add_object);
     $(".container-form").append(bb);

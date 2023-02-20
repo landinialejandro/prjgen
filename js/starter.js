@@ -21,20 +21,20 @@ const compare_type = (type, node_type) => node_type != type
 const updateTree = () => prjTree().settings.core.data = get_json_node()
 const destroyProject = () => prjTree() && prjTree().destroy()
 const goto_search = () => search_intree($(".search-value").val())
-const get_prj_types = async () => await get_file({ url: "settings/prj_types.json" })
+const get_prj_types = async () => await get_data({ url: "settings/prj_types.json" })
 
 const ws = () => $("#ws_tree")
-const get_workspace = () => get_file({ url: "settings/workspace.json" })
-const get_ws_types = () => get_file({ url: "settings/ws_types.json" })
+const get_workspace = () => get_data({ url: "settings/workspace.json" })
+const get_ws_types = () => get_data({ url: "settings/ws_types.json" })
 const get_ws_selectedNode = () => ws().jstree().get_selected(true)[0].text
 const get_ws_lastProject = async () => await get_workspace().then(({ text }) => text)
 
 document.addEventListener("DOMContentLoaded", () => hidePreloader())
 
 //Procesos principales
-get_file({ url: "templates/nav_sidebar.hbs", isJson: false, }).then((hbs) => {
+get_data({ url: "templates/nav_sidebar.hbs", isJson: false, }).then((hbs) => {
     const template = Handlebars.compile(hbs)
-    get_file({ url: "settings/nav_sidebar.json" }).then((json) => {
+    get_data({ url: "settings/nav_sidebar.json" }).then((json) => {
         msg.info("Sidebar loaded...")
         $(".nav-sidebar").html(template(json))
         load_page($(".nav-sidebar").find(".project-page").attr("href"))
@@ -98,7 +98,7 @@ function Container(enable = true) {
 //load page from links left menu
 async function load_page(url) {
     if (url !== "#") {
-        var page = await get_file({ url, isJson: false }) //carga las distintas paginas html, project_page.html es la pagina de proyectos
+        var page = await get_data({ url, isJson: false }) //carga las distintas paginas html, project_page.html es la pagina de proyectos
         $(".nav-sidebar .active").removeClass("active") //remueve la clase active del elemento actual, para que no se quede con la clase active el elemento que se esta cargando
         $(".card-starter").html(page) //carga la pagina html en el div card-starter
     } else {

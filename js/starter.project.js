@@ -61,7 +61,9 @@ function saveProject() {
         folder: "projects",
     }
     //save projet
-    save_file("starter.php", data);
+    get_data({
+        url:"starter.php", data, callback: () => ws().jstree(true).refresh(),
+    })
 }
 
 async function constructTree(url) {
@@ -69,7 +71,7 @@ async function constructTree(url) {
     try {
         project().jstree({
             core: {
-                data: await get_file({ url }),
+                data: await get_data({ url }),
                 check_callback: (o, n, p, i, m) => {
                     const t = filteredObject(types, [n.type])
                     msg.secondary("check if can " + o + " by type");
@@ -132,9 +134,9 @@ async function constructTree(url) {
 
 async function fillForm(nodeid) {
     msg.info("Fill form START");
-    const form = await get_file({ url: "templates/headerForm.hbs", isJson: false, });
-    const form_group = await get_file({ url: "templates/form_group.hbs", isJson: false, });
-    const form_properties = await get_file({ url: "templates/form_properties.hbs", isJson: false, });
+    const form = await get_data({ url: "templates/headerForm.hbs", isJson: false, });
+    const form_group = await get_data({ url: "templates/form_group.hbs", isJson: false, });
+    const form_properties = await get_data({ url: "templates/form_properties.hbs", isJson: false, });
     var json_selected = get_json_node(nodeid);
     var template = Handlebars.compile(form);
     getChildrenHelper(form_group);
@@ -180,7 +182,7 @@ async function createNode({ reference }, new_node_type = "", position = "last") 
             break
         case "file":
             options.id = obj.id
-            options.content = await get_file({ url: "settings/blank_project.json", isJson: false, })
+            options.content = await get_data({ url: "settings/blank_project.json", isJson: false, })
             options.text = "new_file_" + (obj.children.length + 1) + ".json"
             newNode.text = options.text
             options.operation = "create_node"

@@ -23,7 +23,7 @@ const RegisterPartials = () => {
 	const partials = ["modalHeader", "modalFooter"];
 	partials.forEach(async (e) => {
 		url = `templates/partials/${e}.hbs`
-		t = await get_file({ url, isJson: false })
+		t = await get_data({ url, isJson: false })
 		Handlebars.registerPartial(e, t)
 	})
 }

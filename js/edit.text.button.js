@@ -6,7 +6,7 @@ $("body").on("click", "button.data-desc", function(e) {
 async function edit_text_modal(data) {
     var json_selected = get_json_node(data.nodeid);
     console.log(json_selected.data.description);
-    const form = await get_file({url:"templates/edit_text_modal.hbs",isJson:false});
+    const form = await get_data({url:"templates/edit_text_modal.hbs",isJson:false});
     var template = Handlebars.compile(form);
     $(".container-form").append(template(json_selected));
     $("#modal-" + data.nodeid).modal("show");
@@ -41,7 +41,9 @@ async function saveSetting(nodeid) {
             folder: dir,
         }
         //save in settings file
-        save_file("starter.php", datab);
+        get_data({
+            url:"starter.php", datab, callback: () => ws().jstree(true).refresh(),
+        })
     }
 }
 

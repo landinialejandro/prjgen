@@ -43,15 +43,16 @@ async function constructWSTree() {
                             loadedWS = text;
                             loadProject("projects/" + text)
                             msg.info("saving workspace.json")
-                            const datab = {
+                            const data = {
                                 operation: "save_file",
                                 type: "json",
                                 id: "workspace.json", //nombre del archivo a modificar
                                 text: JSON.stringify({ text, }),
                                 folder: "settings",
                             }
-
-                            save_file("starter.php", datab).then((res) => {
+                            get_data({
+                                url: "starter.php", data,
+                            }).then((res) => {
                                 msg.info("saved file: " + res.id)
                                 Container()
                             })
@@ -68,20 +69,13 @@ const renamimg = (data) => {
     console.log(data);
     let options = {}
     if (data.node.type = "file") {
-        msg.danger("renaming    ")
+        msg.danger("renaming...")
         options.id = data.old
         options.text = data.text
         options.operation = "rename_node"
     }
     if (options.text != "") {
         get_data({ url: "starter.php", data: options })
-            .then(({ content }) => {
-                //newNode.children = content
-                msg.info("file renamed")
-                ws().jstree(true).refresh();
-
-            })
-            .catch(error => { console.log(error) })
+            .then(({ id }) => msg.info("file renamed to: " + id))
     }
-
 }
