@@ -66,7 +66,6 @@ async function constructWSTree() {
 }
 
 const renamimg = (data) => {
-    console.log(data);
     let options = {}
     if (data.node.type = "file") {
         msg.danger("renaming...")
