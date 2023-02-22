@@ -62,7 +62,7 @@ function saveProject() {
     }
     //save projet
     get_data({
-        url:"starter.php", data, callback: () => ws().jstree(true).refresh(),
+        url: "starter.php", data, callback: () => ws().jstree(true).refresh(),
     })
 }
 
@@ -112,14 +112,15 @@ async function constructTree(url) {
         })
             .on("create_node.jstree", function (e, { instance, node }, pos, callback, loaded) {
                 instance.set_id(node, node.id);
-                var json_selected = get_json_node(node.id);
-                fieldList(json_selected);
+                //var json_selected = get_json_node(node.id);
+                // crear los datos SQL, 
+                //sql_CreateTable(node.id) //tiene que ser el nodo de la tabla
                 updateTree();
             })
             .on("changed.jstree", function (e, { action, node }) {
                 if (action === "select_node") {
                     fillForm(node.id);
-                    if (node.type === "table-settings" || node.type === "table") fieldList(node.id);
+                    //if (node.type === "table-settings" || node.type === "table") fieldList(node.id);
                 }
             })
             .on("rename_node.jstree", function (e, { node }) {
@@ -276,60 +277,21 @@ function contextMenu({ type }) {
     return tmp;
 }
 
-function fieldList(id) {
-    //by table
-    var flatnode = get_json_node(id, true);
-    $.each(flatnode, function (i, data) {
-        if (data.type === "table-settings") {
-            var jsonSettings = get_json_node(data.id);
-            var jsonParent = get_json_node(data.parent); //get data from table
-            var tbl_list = [];
-            $.each(jsonParent.children, function (i, e) {
-                if (e.type === "field") {
-                    tbl_list.push(e.text);
-                    var jsonField = get_json_node(e.id);
-                    console.log(jsonField.children); //TODO analizar la configuración de cada campo
-                }
-            });
-            updateSelect(data.id, tbl_list); //in table-settings
-            setupTable = sql_setupTable(jsonParent.text, tbl_list);
-            jsonSettings.data["sql"] = setupTable;
-            //console.log ( jsonSettings);
-        }
-    });
-    updateTree();
+const sql_CreateTable = (TableId) => {
+    const fields = typeList(TableId, "field")
+    const tableName = prjTree().get_node(TableId).text
+    fn = fields.map((e) => {
+        f = prjTree().get_node(e).text
+        //todo: recuperar la informción de configuración del campo
+        return `\`${f}\`  VARCHAR(40) NULL `
+    }).join(",")
+    sql = `CREATE TABLE IF NOT EXISTS '${tableName}' ( ${fn} ); `
+    return sql
 }
 
-function sql_setupTable(tname, tbl_list = []) {
-    var fn_list = [];
-    $.each(tbl_list, function (i, e) {
-        fn_list.push(`'${e}'`);
-    });
-    fn_list = fn_list.join(",");
-    sql = `create table if not exists '${tname}' ( ${fn_list}); `;
-    console.log(sql); // TODO: esto debería ir al table-settings
-    return sql;
-}
-
-function updateSelect(id, tbl_list = []) {
-    var table_settings = get_json_node(id);
-    var list = ["None"];
-    list.push(tbl_list);
-    $.each(table_settings.children, function (i, e) {
-        if (e.text === "Default sortby") {
-            var element = prjTree().get_node(e.id);
-            element.data.options = list;
-            return false;
-        }
-    });
-}
-
-function tableList() {
-    var flatnode = get_json_node("#", true);
-    $.each(flatnode, function (i, data) {
-        if (typeof data === undefined) debugger
-        if (data.type === "table") msg.danger(data.text)
-    });
+const typeList = (id, tp) => {
+    var nodes = prjTree().get_node(id).children_d
+    return nodes.filter((e) => { if (get_json_node(e).type === tp) return e; })
 }
 
 function search_intree(search_value = false, long = 3) {
