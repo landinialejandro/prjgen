@@ -47,7 +47,7 @@ class fs
 			$tmp = preg_match('([^ a-zа-я-_0-9.]+)ui', $item);
 			if($tmp === false || $tmp === 1) { continue; }
 			if(is_dir($dir . DIRECTORY_SEPARATOR . $item)) {
-				$res[] = array('text' => $item, 'children' => true,  'id' => $this->id($dir . DIRECTORY_SEPARATOR . $item), 'type' => 'folder');
+				$res[] = array('text' => $item, 'children' =>$this->lst($this->id($dir . DIRECTORY_SEPARATOR . $item)),  'id' => $this->id($dir . DIRECTORY_SEPARATOR . $item), 'type' => 'folder');
 			}
 			else {
 				$res[] = array('text' => $item, 'children' => false, 'id' => $this->id($dir . DIRECTORY_SEPARATOR . $item), 'type' => 'file');

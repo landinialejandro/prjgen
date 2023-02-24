@@ -6,7 +6,7 @@ if (is_null($decoded = json_decode($body, true)))  $decoded = [];
 $defaults = [
 	'operation' => "test",
 	'id' => "",
-	'folder' => "",
+	'folder' => "projects",
 	'text' => "",
 	'content' => "",
 	'type' => "",
@@ -28,7 +28,6 @@ $_REQUEST = array_merge($defaults, $_REQUEST, $decoded);
 
 //-------------------------------------------
 if ($operation) {
-	$folder = $folder ? $folder : 'projects';
 	$fs = new fs($folder);
 	try {
 		$id = $id && $id !== '#' ? $id : '/';
@@ -36,7 +35,7 @@ if ($operation) {
 		$dir = dirname(__FILE__) . "/settings/";
 		switch ($operation) {
 			case 'get_node':
-				$rslt = $fs->lst($id, ($id && $id === '#'));
+				$rslt = $fs->lst($id, ($id && $id === '/'));
 				break;
 			case "get_content":
 				$rslt = $fs->data($id);

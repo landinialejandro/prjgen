@@ -33,21 +33,21 @@ async function constructWSTree() {
             .on("rename_node.jstree", function (e, data) {
                 renamimg(data)
             })
-            .on("select_node.jstree", (n, { node: { text, type }, event }, e) => {
+            .on("select_node.jstree", (n, { node: { text, type, id }, event }, e) => {
                 if (type === "file" && typeof event !== "undefined" && type !== "contextmenu") {
                     var active = $(".project-page").hasClass("active")
-                    if (text !== loadedWS || !active) {
+                    if (id !== loadedWS || !active) {
                         Container(false)
                         url = $(".project-page").attr("href")
                         load_page(url).then(() => {
-                            loadedWS = text;
-                            loadProject("projects/" + text)
+                            loadedWS = id;
+                            loadProject("projects/" + id)
                             msg.info("saving workspace.json")
                             const data = {
                                 operation: "save_file",
                                 type: "json",
                                 id: "workspace.json", //nombre del archivo a modificar
-                                text: JSON.stringify({ text, }),
+                                text: JSON.stringify({ id, }),
                                 folder: "settings",
                             }
                             get_data({
