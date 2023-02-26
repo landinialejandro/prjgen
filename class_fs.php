@@ -110,20 +110,24 @@ class fs
 	}
 	public function create($id, $name, $mkdir = false, $par = "") {
 		$dir = $this->path($id);
-		if(!preg_match("/^[a-zA-Z-_0-9.]*$/", $name) || !strlen($name)) {
-			throw new Exception('Invalid name: ' . $name);
+		if (!is_null($name)){
+			if(!preg_match("/^[a-zA-Z-_0-9.]*$/", $name) || !strlen($name)) {
+				throw new Exception('Invalid name: ' . $name);
+			}
+			$dir = $dir . DIRECTORY_SEPARATOR . $name;
 		}
 		if($mkdir) {
-			mkdir($dir . DIRECTORY_SEPARATOR . $name);
+			mkdir($dir);
 		}
 		else {
-			$put_content = file_put_contents($dir . DIRECTORY_SEPARATOR . $name, $par);
+			$put_content = file_put_contents($dir, $par);
+			//$put_content = file_put_contents($dir . DIRECTORY_SEPARATOR . $name, $par);
 			if ($put_content === FALSE){
 				$last_e= json_encode(error_get_last());
 				throw new Exception('Error Put_content'.$last_e);
 			}
 		}
-		return array('id' => $this->id($dir . DIRECTORY_SEPARATOR . $name));
+		return array('id' => $this->id($dir));
 	}
 	public function rename($id, $name) {
 		$dir = $this->path($id);

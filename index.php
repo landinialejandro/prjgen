@@ -31,7 +31,7 @@
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="starter.html" class="nav-link">Home</a>
+                    <a href="starter.php" class="nav-link">Home</a>
                 </li>
             </ul>
             <form class="form-inline ml-3">
@@ -82,7 +82,7 @@
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="starter.html">Home</a></li>
+                                <li class="breadcrumb-item"><a href="starter.php">Home</a></li>
                                 <li class="breadcrumb-item active">Starter Page</li>
                             </ol>
                         </div>
@@ -109,6 +109,9 @@
     <script src="dist/adminlte3/plugins/jquery-validation/jquery.validate.min.js"></script>
     <script src="dist/adminlte3/plugins/jquery-validation/additional-methods.min.js"></script>
     <script src="dist/adminlte3/plugins/sweetalert2/sweetalert2.all.js"></script>
+    <script src="dist/adminlte3/plugins/codemirror/codemirror.js"></script>
+    <script src="dist/adminlte3/plugins/codemirror/mode"></script>
+
     <script src="dist/adminlte3/dist/js/adminlte.min.js"></script>
 
     <script src="dist/plugins/handlebars.js-4.7.6/handlebars-v4.7.6.js"></script>

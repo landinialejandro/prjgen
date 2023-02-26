@@ -37,7 +37,7 @@ async function saveSetting(nodeid) {
             operation: "save_file",
             type: "json",
             id: file,
-            text: JSON.stringify(data_setting.content),
+            content: JSON.stringify(data_setting.content),
             folder: dir,
         }
         //save in settings file

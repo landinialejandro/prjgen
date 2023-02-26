@@ -59,8 +59,8 @@ if ($operation) {
 				$rslt = $fs->copy($id, $parn);
 				break;
 			case 'save_file':
-				$parn = $text ? $text : '';
-				$rslt = $fs->create("", $id, false, $parn);
+				$parn = $content ? $content : '';
+				$rslt = $fs->create($id, null, false, $parn);
 				break;
 			case 'get_json':
 				$parn = $text ? $text : '';

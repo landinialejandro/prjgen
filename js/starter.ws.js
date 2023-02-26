@@ -47,7 +47,7 @@ async function constructWSTree() {
                                 operation: "save_file",
                                 type: "json",
                                 id: "workspace.json", //nombre del archivo a modificar
-                                text: JSON.stringify({ id, }),
+                                content: JSON.stringify({ id, }),
                                 folder: "settings",
                             }
                             get_data({

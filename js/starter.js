@@ -2,6 +2,7 @@ const msg = new Msglog()
 LoadModule("js/alert.js")
 LoadModule("js/starter.project.js")
 LoadModule("js/starter.ws.js")
+LoadModule("js/starter.debug.js")
 LoadModule("js/edit.text.button.js")
 LoadModule("js/add.new.properties.js")
 LoadModule("js/keyboard.input.js")
@@ -26,8 +27,11 @@ const get_prj_types = async () => await get_data({ url: "settings/prj_types.json
 const ws = () => $("#ws_tree")
 const get_workspace = () => get_data({ url: "settings/workspace.json" })
 const get_ws_types = () => get_data({ url: "settings/ws_types.json" })
-const get_ws_selectedNode = () => ws().jstree().get_selected(true)[0].text
+const get_ws_selectedNodeId = () => ws().jstree().get_selected(true)[0].id
+const get_ws_selectedNodeText = () => ws().jstree().get_selected(true)[0].text
 const get_ws_lastProject = async () => await get_workspace().then(({ id }) => id)
+
+const debug = () => $("#debug_tree")
 
 document.addEventListener("DOMContentLoaded", () => hidePreloader())
 
@@ -40,10 +44,11 @@ get_data({ url: "templates/nav_sidebar.hbs", isJson: false, }).then((hbs) => {
         load_page($(".nav-sidebar").find(".project-page").attr("href"))
         msg.info("Project page loaded...")
         constructWSTree()
+        constructDebugTree();
     })
 })
 get_settings()
-    .then(({ version, release = "a" }) => {
+    .then(({ version, release = "alpha" }) => {
         text = version + " - " + release
         msg.info("version: " + text);
         $(".starter-version").html(text);

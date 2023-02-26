@@ -33,5 +33,18 @@
             "text": "fa",
             "color":"info"
         }
+    },
+    {
+        "has_treeview": {
+            "menu_open": false,
+            "children": [
+                "<div id='debug_tree'></div>"
+            ]
+        },
+        "caption": "Debug Page",
+        "url": "pages/debug_page.html",
+        "active": false,
+        "icon": "fas fa-puzzle-piece",
+        "a_class": "debug-page"
     }
 ]

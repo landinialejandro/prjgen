@@ -55,8 +55,9 @@ function saveProject() {
     const data = {
         operation: "save_file",
         type: "json",
-        id: get_ws_selectedNode(),
-        text: JSON.stringify(get_json_node()),
+        id: get_ws_selectedNodeId(),
+        text: get_ws_selectedNodeText(),
+        content: JSON.stringify(get_json_node()),
         folder: "projects",
     }
     //save projet
