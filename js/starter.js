@@ -43,9 +43,10 @@ get_data({ url: "templates/nav_sidebar.hbs", isJson: false, }).then((hbs) => {
     })
 })
 get_settings()
-    .then(({ version }) => {
-        msg.info("version: " + version);
-        $(".starter-version").html(version);
+    .then(({ version, release = "a" }) => {
+        text = version + " - " + release
+        msg.info("version: " + text);
+        $(".starter-version").html(text);
     })
     .catch((err) => {
         console.log(err);
