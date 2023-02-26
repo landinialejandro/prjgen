@@ -92,7 +92,7 @@ if ($operation) {
 				}
 				$rslt = array('id' => $parn, 'content' => $res);
 				break;
-			case 'version':
+			case 'settings-data':
 				$data = json_decode($fs->getContent("settings/settings.json"), true);
 				$rslt = array('id' => $id, 'content' => $data);
 				break;

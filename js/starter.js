@@ -27,7 +27,7 @@ const ws = () => $("#ws_tree")
 const get_workspace = () => get_data({ url: "settings/workspace.json" })
 const get_ws_types = () => get_data({ url: "settings/ws_types.json" })
 const get_ws_selectedNode = () => ws().jstree().get_selected(true)[0].text
-const get_ws_lastProject = async () => await get_workspace().then(({ text }) => text)
+const get_ws_lastProject = async () => await get_workspace().then(({ id }) => id)
 
 document.addEventListener("DOMContentLoaded", () => hidePreloader())
 
@@ -42,7 +42,7 @@ get_data({ url: "templates/nav_sidebar.hbs", isJson: false, }).then((hbs) => {
         constructWSTree()
     })
 })
-getVersion()
+get_settings()
     .then(({ version }) => {
         msg.info("version: " + version);
         $(".starter-version").html(version);
@@ -64,7 +64,12 @@ $(".navbar-nav").on("click", ".saveproject", function (e) {
 $(".navbar-nav").on("click", ".newproject", (e) => loadProject("settings/blank_project.json"))
 
 //click on make project
-$(".navbar-nav").on("click", ".makeproject", (e) => tableList())
+$(".navbar-nav").on("click", ".makeproject", (e) => {
+    var tables = typeList("#", "table")
+    fields = tables.map(id => sql_CreateTable(id))
+    console.log(fields)
+})
+
 
 //click on search on tree options buttons
 $(".start-search").on("click", (e) => goto_search())

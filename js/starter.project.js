@@ -1,6 +1,5 @@
-/*
-TODO:	lista de campos de una tabla en proceso
-
+/**
+* TODO:	lista de campos de una tabla en proceso
 */
 
 /**
@@ -88,9 +87,17 @@ async function constructTree(url) {
                         }
                     }
                     if (o === "rename_node") {
+
                         if (!t[n.type].rename) {
                             msg.danger("ERROR! yo can't rename: " + n.type)
-                            return false;
+                            return false
+                        }
+                        if (n.type === "table") {
+                            tables = typeList("#", "table").map(id => get_nodeName(id))
+                            if (tables.includes(i)) {
+                                msg.danger("ERROR! Nombre Duplicado: " + i)
+                                return false
+                            }
                         }
                     }
                     msg.info("you can " + o + " ");
@@ -154,16 +161,17 @@ async function fillForm(nodeid) {
 async function createNode({ reference }, new_node_type = "", position = "last") {
     var inst = get_reference(reference);
     var obj = get_inst_node(reference);
-
     var options = {
         operation: "get_json",
         id: "#",
         text: new_node_type,
     };
 
+    nextType = typeList("#", new_node_type).length + 1
+
     var newNode = {
         type: new_node_type,
-        text: "new_" + new_node_type + "_" + (obj.children.length + 1),
+        text: "new_" + new_node_type + "_" + nextType,
         children: [],
     };
 
@@ -279,9 +287,9 @@ function contextMenu({ type }) {
 
 const sql_CreateTable = (TableId) => {
     const fields = typeList(TableId, "field")
-    const tableName = prjTree().get_node(TableId).text
+    const tableName = get_nodeName(TableId)
     fn = fields.map((e) => {
-        f = prjTree().get_node(e).text
+        f = get_nodeName(e)
         //todo: recuperar la informción de configuración del campo
         return `\`${f}\`  VARCHAR(40) NULL `
     }).join(",")
@@ -289,10 +297,18 @@ const sql_CreateTable = (TableId) => {
     return sql
 }
 
-const typeList = (id, tp) => {
-    var nodes = prjTree().get_node(id).children_d
-    return nodes.filter((e) => { if (get_json_node(e).type === tp) return e; })
-}
+/**
+ * regresa un array con los hijos de un nodo id que tenga un determinado tp (type)
+ */
+const typeList = (id, tp) => get_nodeChildrensId(id).filter((e) => get_json_node(e).type === tp && e)
+/**
+ * regresa un string con la propiedad name
+ */
+const get_nodeName = id => prjTree().get_node(id).text
+/**
+ * regresa un array con los hijos de un nodo id
+ */
+const get_nodeChildrensId = id => prjTree().get_node(id).children_d
 
 function search_intree(search_value = false, long = 3) {
     search_value && search_value.length >= long ?

@@ -22,11 +22,11 @@ async function constructWSTree() {
             plugins: ["state", "sort", "types", "contextmenu", "unique"],
         })
             .on("loaded.jstree", (e, data) => {
-                get_ws_lastProject().then(text => {
-                    msg.info("load last project..." + text)
-                    if (text && text !== "" && text !== "undefined") {
-                        ws().jstree("select_node", text, true);
-                        loadProject("projects/" + text)
+                get_ws_lastProject().then(id => {
+                    msg.info("load last project..." + id)
+                    if (id && id !== "" && id !== "undefined") {
+                        ws().jstree("select_node", id, true);
+                        loadProject("projects/" + id)
                     }
                 })
             })

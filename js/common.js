@@ -61,25 +61,35 @@ const LoadModule = (module) => {
     })
 }
 
-const hidePreloader = () => setTimeout(() => $(".spinner-wrapper").fadeOut(600), 500)
+const hidePreloader = () => {
+    var spinnerWrapper = document.querySelector(".spinner-wrapper")
+    setTimeout(() => {
+        spinnerWrapper.style.opacity = 0
+        setTimeout(() => spinnerWrapper.style.display = "none", 500)
+    }, 600)
+}
 
 /**
  * get date for last starter version
  */
-let getVersion = async () => {
+const get_settings = async () => {
     let data = {
-        operation: "version",
+        operation: "settings-data",
         id: "#",
-        text: ".starter-version",
     };
-    const { content } = await get_data({ url: "starter.php", data })
-    if (!content) {
-        throw new error(`error to get version`);
-    } else {
-        return content;
-    }
+    return new Promise((resolve, reject) => {
+        get_data({ url: "starter.php", data }).then(({ content }) => {
+            if (!content) {
+                reject(new error(`error to get version`))
+            } else {
+                resolve(content)
+            }
+        })
+    })
 };
 
+// filtra un objeto y devuelve objeto filtrado, se pasa el objeto a filtrar y el/los valor del key en array
+//el objeto se convierte a array y se filtra. el metodo reduce crea el objeto de salida
 const filteredObject = (obj, keys = []) => Object.keys(obj)
     .filter(key => keys.includes(key))
     .reduce((o, k) => {
@@ -88,13 +98,22 @@ const filteredObject = (obj, keys = []) => Object.keys(obj)
     }, {})
 
 class Msglog {
-    info_text = "background: white; color: green";
-    warning_text = "background: yellow; color: blue";
-    danger_text = "background: red; color: white";
-    secondary_text = "background: grey; color: black";
-    secondary = (msg) => this.#msg(msg, this.secondary_text);
+    Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timerProgressBar: true,
+    })
+    info_text = { style: "background: white; color: green", icon: "info", timer: 1000 }
+    warning_text = { style: "background: yellow; color: blue", icon: "warning", timer: 2000 }
+    danger_text = { style: "background: red; color: white", icon: "error", timer: 3000 }
+    secondary_text = { style: "background: grey; color: black", icon: "question", timer: 2000 }
+    secondary = (msg) => this.#msg(msg, this.secondary_text)
     danger = (msg) => this.#msg(msg, this.danger_text);
     warning = (msg) => this.#msg(msg, this.warning_text);
     info = (msg) => this.#msg(msg, this.info_text);
-    #msg = (msg, style) => console.log(`%c ${msg}`, style);
+    #msg = (msg, { style, icon, timer }) => {
+        this.Toast.fire({ icon, title: msg, timer })
+        console.log(`%c ${msg}`, style)
+    };
 }

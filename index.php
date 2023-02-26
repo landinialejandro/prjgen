@@ -9,6 +9,7 @@
     <title>Landini | Starter</title>
     <link id="browser_favicon" rel="shortcut icon" href="dist/logo/logo.png">
     <link rel="stylesheet" href="dist/adminlte3/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="dist/adminlte3/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.css">
     <link rel="stylesheet" href="dist/plugins/jstree/dist/themes/default/style.css" />
     <link rel="stylesheet" href="dist/adminlte3/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="css/starter.css">
@@ -36,17 +37,17 @@
             <form class="form-inline ml-3">
                 <div class="input-group input-group-sm">
                     <input class="form-control form-control-navbar search-value" type="search" placeholder="Search" aria-label="Search">
-                    <div class="input-group-append">
+                    <div class="input-group-append search-actions">
                         <button class="btn btn-navbar start-search" type="button">
-              <i class="fas fa-search"></i>
-            </button>
+                            <i class="fas fa-search"></i>
+                        </button>
                         <button class="btn btn-navbar clear-search" type="button">
-              <i class="far fa-times-circle"></i>
-            </button>
+                            <i class="far fa-times-circle"></i>
+                        </button>
                     </div>
                 </div>
             </form>
-            <ul class="navbar-nav ml-auto">
+            <ul class="navbar-nav ml-auto actions-nav">
                 <button type="button" class="btn btn-danger btn-xs makeproject"><i class="fa fa-magic"></i> make-it!</button>
                 <button type="button" class="btn btn-warning btn-xs newproject"> new project</button>
                 <button type="button" class="btn btn-success btn-xs saveproject">save project</button>
@@ -107,8 +108,9 @@
     <script src="dist/adminlte3/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="dist/adminlte3/plugins/jquery-validation/jquery.validate.min.js"></script>
     <script src="dist/adminlte3/plugins/jquery-validation/additional-methods.min.js"></script>
+    <script src="dist/adminlte3/plugins/sweetalert2/sweetalert2.all.js"></script>
     <script src="dist/adminlte3/dist/js/adminlte.min.js"></script>
-    
+
     <script src="dist/plugins/handlebars.js-4.7.6/handlebars-v4.7.6.js"></script>
     <script src="dist/plugins/jstree/dist/jstree.js"></script>
     <script src="dist/plugins/hotkeys/hotkeys.js"></script>
