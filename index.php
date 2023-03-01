@@ -109,8 +109,8 @@
     <script src="dist/adminlte3/plugins/jquery-validation/jquery.validate.min.js"></script>
     <script src="dist/adminlte3/plugins/jquery-validation/additional-methods.min.js"></script>
     <script src="dist/adminlte3/plugins/sweetalert2/sweetalert2.all.js"></script>
-    <script src="dist/adminlte3/plugins/codemirror/codemirror.js"></script>
-    <script src="dist/adminlte3/plugins/codemirror/mode"></script>
+    <!-- <script src="dist/adminlte3/plugins/codemirror/codemirror.js"></script>
+    <script src="dist/adminlte3/plugins/codemirror/mode"></script> -->
 
     <script src="dist/adminlte3/dist/js/adminlte.min.js"></script>
 

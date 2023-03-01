@@ -1,14 +1,13 @@
-$("body").on("click", "button.add-new-properties", function(e) {
+$("body").on("click", "button.add-new-properties", function (e) {
     var data = $(this).data();
-    add_properties_modal(data);
+    add_properties_modal(data.nodeid);
 });
-$("body").on("click", "button.remove-property", function(e) {
+$("body").on("click", "button.remove-property", function (e) {
     var data = $(this).data();
     remove_property(data);
 });
 
-async function add_properties_modal(data) {
-    var json_selected = get_json_node(data.nodeid);
+const add_properties_modal = (id) => {
     const add_object = {
         "newdata": {
             "id": "",
@@ -17,31 +16,32 @@ async function add_properties_modal(data) {
             "text": "",
             "required": "false"
         },
-        "id": data.nodeid
+        "id": id
     }
-    console.log(json_selected);
-    const form = await get_data({url:"templates/add_properties_modal.hbs",isJson:false});
-    var template = Handlebars.compile(form);
-    var bb = template(add_object);
-    $(".container-form").append(bb);
-    $("#modal-" + data.nodeid).modal("show");
+    console.log(get_json_node(id));
+    get_data({ url: "templates/add_properties_modal.hbs", isJson: false }).then((form) => {
+        var template = Handlebars.compile(form);
+        var result = template(add_object);
+        $(".container-form").append(result);
+        $("#modal-" + id).modal("show");
+    })
 }
 
-function addValues(nodeid) {
+function addValues(id) {
     if (confirm("add to project")) {
-        var obj_node = prjTree().get_node(nodeid);
+        var obj_node = get_nodeById(id)
         var new_prop = {};
-        $('.form-new-prop').each(function() {
+        $('.form-new-prop').each(function () {
             var $this = $(this)
-                //TODO: check key values
+            //TODO: check key values
             new_prop[$this.data('key')] = $this.val();
         })
         obj_node.data.properties.push(new_prop);
-        msg.info("Add property to project:" + nodeid);
+        msg.info("Add property to project:" + id);
         console.log(obj_node);
-        $("#modal-" + nodeid).modal("hide");
+        $("#modal-" + id).modal("hide");
         setTimeout(() => {
-            fillForm(nodeid);
+            fillForm(id);
             saveProject();
         }, 300);
     } else {
@@ -51,15 +51,15 @@ function addValues(nodeid) {
 
 function addSetting(nodeid) {
     alert("add to setting")
-        //TODO: add values to settings
+    //TODO: add values to settings
 }
 
 function remove_property(data) {
     msg.info('Remove property START')
     if (confirm("Remove??")) {
-        var obj_node = prjTree().get_node(data.nodeid);
+        var obj_node = get_nodeById(data.nodeid);
         msg.secondary("start object: ")
-        msg.info(obj_node);
+        console.log(obj_node);
         var elements = Object.keys(obj_node.data.properties).length
         msg.secondary("Elements: " + elements);
         if (elements > 1) {
@@ -67,7 +67,7 @@ function remove_property(data) {
             msg.danger("Remove property from project: node:" + data.nodeid + "  index: " + data.index);
             obj_node.data.properties.splice(data.index, 1);
             msg.warning("Result object: ");
-            msg.info(obj_node);
+            console.log(obj_node);
             setTimeout(() => {
                 fillForm(data.nodeid);
                 //saveProject();

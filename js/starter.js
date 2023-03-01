@@ -16,6 +16,7 @@ LoadModule("js/hbs.js")
 const project = () => $(".card-starter #project_tree")
 const prjTree = () => project().jstree(true)
 const get_json_node = (id = "#", flat = false) => prjTree().get_json(id, { flat })
+const get_nodeById = id => prjTree().get_node(id);
 const get_reference = (reference) => $.jstree.reference(reference)
 const get_inst_node = (reference) => get_reference(reference).get_node(reference)
 const compare_type = (type, node_type) => node_type != type
@@ -107,13 +108,11 @@ function Container(enable = true) {
 }
 
 //load page from links left menu
-async function load_page(url) {
-    if (url !== "#") {
-        var page = await get_data({ url, isJson: false }) //carga las distintas paginas html, project_page.html es la pagina de proyectos
-        $(".nav-sidebar .active").removeClass("active") //remueve la clase active del elemento actual, para que no se quede con la clase active el elemento que se esta cargando
-        $(".card-starter").html(page) //carga la pagina html en el div card-starter
-    } else {
-        location.reload();
-    }
-    return;
+const load_page = (url) => {
+    if (url === "#") location.reload()
+    get_data({ url, isJson: false }) //carga las distintas paginas html, project_page.html es la pagina de proyectos
+        .then((page) => {
+            $(".nav-sidebar .active").removeClass("active") //remueve la clase active del elemento actual, para que no se quede con la clase active el elemento que se esta cargando
+            $(".card-starter").html(page) //carga la pagina html en el div card-starter
+        })
 }

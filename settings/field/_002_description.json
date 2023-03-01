@@ -15,7 +15,7 @@
         ],
         "type":"html-control"
     },
-    "type":"field-settings",
+    "type": "field-settings",
     "icon": "fa fa-cog",
     "li_attr": {
         "type": "text",

@@ -18,7 +18,7 @@ function updateData() {
     msg.info("UpdateData");
     $(".form-node").each(function () {
         var $this = $(this);
-        var obj_node = prjTree().get_node($this.data("nodeid"));
+        var obj_node = get_nodeById($this.data("nodeid"));
         console.log(obj_node);
 
         if (!$.isEmptyObject(obj_node)) {
@@ -305,11 +305,11 @@ const typeList = (id, tp) => get_nodeChildrensId(id).filter((e) => get_json_node
 /**
  * regresa un string con la propiedad name
  */
-const get_nodeName = id => prjTree().get_node(id).text
+const get_nodeName = id => get_nodeById(id).text
 /**
  * regresa un array con los hijos de un nodo id
  */
-const get_nodeChildrensId = id => prjTree().get_node(id).children_d
+const get_nodeChildrensId = id => get_nodeById(id).children_d
 
 function search_intree(search_value = false, long = 3) {
     search_value && search_value.length >= long ?

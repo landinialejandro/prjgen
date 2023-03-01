@@ -12,8 +12,8 @@ async function edit_text_modal(data) {
     $("#modal-" + data.nodeid).modal("show");
 }
 
-async function saveSetting(nodeid) {
-    var obj_node = prjTree().get_node(nodeid);
+async function saveSetting(id) {
+    var obj_node = get_nodeById(id)
     var file = obj_node.data.filesetting;
     var dir = obj_node.data.filesettingdir;
     msg.info("Save in setting file: " + file);
@@ -47,17 +47,17 @@ async function saveSetting(nodeid) {
     }
 }
 
-function saveValues(nodeid) {
-    msg.info("Save in project node: " + nodeid);
-    var obj_node = prjTree().get_node(nodeid);
+function saveValues(id) {
+    msg.info("Save in project node: " + id);
+    var obj_node = get_nodeById(id)
     $('.form-node-description').each(function() {
         var $this = $(this);
         var data_desc = $this.data();
         obj_node.data.description[data_desc.key] = $this.val();
     })
-    $("#modal-" + nodeid).modal("hide");
+    $("#modal-" + id).modal("hide");
     setTimeout(() => {
-        fillForm(nodeid);
+        fillForm(id);
         saveProject();
     }, 200);
 }
