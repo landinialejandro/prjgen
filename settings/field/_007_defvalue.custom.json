@@ -2,8 +2,7 @@
     "text": "Custom default value",
     "data": {
         "placeholder": "Your custom string o value",
-        "text": "",
-        "type":"html-control"
+        "text": ""
     },
     "type":"field-settings",
     "icon": "fa fa-cog",

@@ -39,7 +39,7 @@ async function constructWSTree() {
                     if (id !== loadedWS || !active) {
                         Container(false)
                         url = $(".project-page").attr("href")
-                        load_page(url).then(() => {
+                        loadPage(url).then(() => {
                             loadedWS = id;
                             loadProject("projects/" + id)
                             msg.info("saving workspace.json")
@@ -62,6 +62,7 @@ async function constructWSTree() {
             })
     } catch (err) {
         return msg.danger(err.message);
+        Container()
     }
 }
 

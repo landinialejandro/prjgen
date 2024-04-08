@@ -1,5 +1,27 @@
 var loadedDebug = false;
+var debugjson = null;
+//click on update project
+$(".card-starter").on("click", ".updatedebug", (e) => updateDebug())
 
+const updateDebug = (json = null) => {
+    if (json === null) json = debugjson
+    var obj_node = debug().jstree().get_selected(true)[0].id
+    msg.info("saving debug");
+    //TODO: se puede controlar si el nombre es valido antes de pasarlo a la función
+    const data = {
+        operation: "save_file",
+        type: "json",
+        id: debug().jstree().get_selected(true)[0].id,
+        text: debug().jstree().get_selected(true)[0].text,
+        content: JSON.stringify(json),
+        folder: "settings",
+    }
+    //save projet
+    get_data({
+        url: "starter.php", data, callback: () => ws().jstree(true).refresh(),
+    })
+    msg.info(`saving setting file...${obj_node}`)
+}
 async function constructDebugTree() {
     try {
         debug().jstree({
@@ -21,31 +43,31 @@ async function constructDebugTree() {
             unique: { duplicate: (name, counter) => name + " " + counter },
             plugins: ["state", "sort", "types", "contextmenu", "unique"],
         })
-            .on("loaded.jstree", (e, data) => {
-                // get_ws_lastProject().then(id => {
-                //     msg.info("load last project..." + id)
-                //     if (id && id !== "" && id !== "undefined") {
-                //         ws().jstree("select_node", id, true);
-                //         loadProject("projects/" + id)
-                //     }
-                // })
-            })
-            .on("rename_node.jstree", function (e, data) {
-                // renamimg(data)
-            })
             .on("select_node.jstree", (n, { node: { text, type, id }, event }, e) => {
                 if (type === "file" && typeof event !== "undefined" && type !== "contextmenu") {
                     var active = $(".debug-page").hasClass("active")
                     if (id !== loadedDebug || !active) {
                         Container(false)
-                        url = "settings/" + id
-                        get_data({ url }).then((e) => {
-                            console.log(e)
-                            const formatted = JSON.stringify(e, null, 4);
-                            const textarea = document.getElementById("codeJson")
-                            textarea.value = formatted
-                            console.log(formatted)
-                            Container()
+                        url = $(".debug-page").attr("href")
+                        loadPage(url).then(() => {
+                            debugjson = null
+                            settings = "settings/" + id
+                            get_data({ url: settings }).then((e) => {
+                                const textarea = document.getElementById("codeJson")
+                                // textarea.textContent = ''
+                                const options = {
+                                    mode: 'tree',
+                                    onChangeJSON: function (json) {
+                                        debugjson = json
+                                        console.log(json)
+                                        updateDebug(json)
+                                    }
+                                }
+                                const editor = new JSONEditor(textarea, options)
+                                console.log(e)
+                                editor.set(e)
+                                Container()
+                            })
                         })
                     }
                 }
@@ -54,17 +76,3 @@ async function constructDebugTree() {
         return msg.danger(err.message);
     }
 }
-
-// const renamimg = (data) => {
-//     let options = {}
-//     if (data.node.type = "file") {
-//         msg.danger("renaming...")
-//         options.id = data.old
-//         options.text = data.text
-//         options.operation = "rename_node"
-//     }
-//     if (options.text != "") {
-//         get_data({ url: "starter.php", data: options })
-//             .then(({ id }) => msg.info("file renamed to: " + id))
-//     }
-// }

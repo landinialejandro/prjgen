@@ -9,8 +9,7 @@
             {"text":"Unique", "checked":false},
             {"text":"Unsigned", "checked":false},
             {"text":"Binary", "checked":false}
-        ],
-        "type":"sql-control"
+        ]
     },
     "type": "field-settings",
     "icon": "fas fa-stream",

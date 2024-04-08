@@ -42,7 +42,8 @@ get_data({ url: "templates/nav_sidebar.hbs", isJson: false, }).then((hbs) => {
     get_data({ url: "settings/nav_sidebar.json" }).then((json) => {
         msg.info("Sidebar loaded...")
         $(".nav-sidebar").html(template(json))
-        load_page($(".nav-sidebar").find(".project-page").attr("href"))
+        url = $(".nav-sidebar").find(".project-page").attr("href")
+        loadPage(url)
         msg.info("Project page loaded...")
         constructWSTree()
         constructDebugTree();
@@ -94,7 +95,7 @@ $(".card-starter").on("click", ".updateproject", (e) => updateData())
 //click on menu link item
 $(".nav-sidebar").on("click", ".nav-link", function (e) {
     e.preventDefault()
-    load_page($(this).attr("href")).then(() => $(this).addClass("active"))
+    loadPage($(this).attr("href")).then(() => $(this).addClass("active"))
 });
 
 //enable or disable containers
@@ -108,9 +109,9 @@ function Container(enable = true) {
 }
 
 //load page from links left menu
-const load_page = (url) => {
+const loadPage = async (url) => {
     if (url === "#") location.reload()
-    get_data({ url, isJson: false }) //carga las distintas paginas html, project_page.html es la pagina de proyectos
+    get_data({ url, method: "", isJson: false }) //carga las distintas paginas html, project_page.html es la pagina de proyectos
         .then((page) => {
             $(".nav-sidebar .active").removeClass("active") //remueve la clase active del elemento actual, para que no se quede con la clase active el elemento que se esta cargando
             $(".card-starter").html(page) //carga la pagina html en el div card-starter

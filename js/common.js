@@ -49,7 +49,7 @@ const MyFecth = (
         .catch((err) => console.log(err));
 };
 
-const LoadModule = (module) => {
+const LoadModuleOld = (module) => {
     return new Promise((resolve, reject) => {
         msg.secondary("loading: " + module);
         const script = document.createElement("script");
@@ -60,6 +60,22 @@ const LoadModule = (module) => {
         script.src = module;
     })
 }
+
+const LoadModule = (module) => {
+    return new Promise((resolve, reject) => {
+        msg.secondary(`loading: ${module}`);
+        const script = document.createElement("script");
+        script.type = "text/javascript";
+        document.body.appendChild(script);
+        script.onload = () => {
+            msg.info(`Successfully loaded module: ${module}`);
+            resolve(module);
+        };
+        script.onerror = () => reject(msg.danger(`Failed to load module: ${module}`));
+        script.async = true;
+        script.src = module;
+    });
+};
 
 const hidePreloader = () => {
     var spinnerWrapper = document.querySelector(".spinner-wrapper")
@@ -117,3 +133,5 @@ class Msglog {
         console.log(`%c ${msg}`, style)
     };
 }
+
+

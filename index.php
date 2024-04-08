@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="dist/plugins/jstree/dist/themes/default/style.css" />
     <link rel="stylesheet" href="dist/adminlte3/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="css/starter.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/10.0.2/jsoneditor.css" integrity="sha512-iOFdnlwX6UGb55bU5DL0tjWkS/+9jxRxw2KiRzyHMZARASUSwm0nEXBcdqsYni+t3UKJSK7vrwvlL8792/UMjQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet"> -->
 </head>
 
@@ -78,12 +79,12 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0 text-dark">Starter Page</h1>
+                            <h1 class="m-0 text-dark">Project Page</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="starter.php">Home</a></li>
-                                <li class="breadcrumb-item active">Starter Page</li>
+                                <li class="breadcrumb-item active">Project Page</li>
                             </ol>
                         </div>
                     </div>
@@ -109,6 +110,7 @@
     <script src="dist/adminlte3/plugins/jquery-validation/jquery.validate.min.js"></script>
     <script src="dist/adminlte3/plugins/jquery-validation/additional-methods.min.js"></script>
     <script src="dist/adminlte3/plugins/sweetalert2/sweetalert2.all.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/10.0.2/jsoneditor.min.js" integrity="sha512-QoEa+2J/Sie4bjZNs546qH2o7pK246K7bPYqMOkIU2J7Hdj6axTsPqYbbr0SgQ7iSAomOSa922z+z6yNbECGJQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- <script src="dist/adminlte3/plugins/codemirror/codemirror.js"></script>
     <script src="dist/adminlte3/plugins/codemirror/mode"></script> -->
 

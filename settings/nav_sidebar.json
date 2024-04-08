@@ -6,7 +6,7 @@
                 "<div id='ws_tree'></div>"
             ]
         },
-        "caption": "Starter Page",
+        "caption": "Projects Selector",
         "url": "pages/project_page.html",
         "active": true,
         "icon": "fas fa-tachometer-alt",
@@ -27,7 +27,7 @@
         "caption": "Icons page",
         "url": "pages/icons_page.html",
         "active": false,
-        "icon": "far fa-circle",
+        "icon": "fa fa-palette",
         "a_class": "docs-page",
         "badge": {
             "text": "fa",
