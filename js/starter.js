@@ -1,22 +1,44 @@
 const msg = new Msglog()
-LoadModule("js/alert.js")
-LoadModule("js/starter.project.js")
-LoadModule("js/starter.ws.js")
-LoadModule("js/starter.debug.js")
-LoadModule("js/edit.text.button.js")
-LoadModule("js/add.new.properties.js")
-LoadModule("js/keyboard.input.js")
-LoadModule("js/validate.control.js")
-LoadModule("js/hbs.js")
+const modules = [
+    "js/alert.js",
+    "js/starter.helpers.js",
+    "js/starter.project.js",
+    "js/starter.ws.js",
+    "js/starter.debug.js",
+    "js/edit.text.button.js",
+    "js/add.new.properties.js",
+    "js/keyboard.input.js",
+    "js/validate.control.js",
+    "js/hbs.js"
+];
+Promise.all(modules.map(LoadModule))
+    .then(() => {
+        //Código que se ejecuta después de que se hayan cargado todos los módulos
+        get_settings()
+            .then(({ version, release = "alpha" }) => {
+                text = version + " - " + release
+                msg.info("version: " + text);
+                $(".starter-version").html(text);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+
+        hidePreloader()
+    })
+    .catch((error) => {
+        console.error(error);
+    });
 
 /**
  * TODO: se puede verificar cuando se compile si el usuario ha modificado el archivo y avisarle
  */
 
-const getTypes = async () => await get_data({ url: "settings/types.json" })
+const getTypes = () => get_data({ url: "settings/types.json" })
 
+//opciones por defecto de jstree
 $.jstree.defaults = {
-    ...$.jstree.defaults, // Mantén las opciones predeterminadas
+    ...$.jstree.defaults,
     core: {
         ...$.jstree.defaults.core,
         data: null,
@@ -68,14 +90,13 @@ $.jstree.defaults = {
     error: function (err) { this.edit(JSON.parse(err.data).obj); }
 }
 
-
-
+const ws = () => $("#ws_tree")
+const debug = () => $("#debug_tree")
 const project = () => $(".card-starter #project_tree")
+
 const prjTree = () => project().jstree(true)
 
-const ws = () => $("#ws_tree")
 const get_workspace = () => get_data({ url: "settings/workspace.json" })
-const get_ws_types = () => types()
 const get_ws_selectedNodeId = () => ws().jstree().get_selected(true)[0].id
 const get_ws_selectedNodeText = () => ws().jstree().get_selected(true)[0].text
 const get_ws_lastProject = async () => await get_workspace().then(({ id }) => id)
@@ -88,71 +109,30 @@ const compare_type = (type, node_type) => node_type != type
 const updateTree = () => prjTree().settings.core.data = get_json_node()
 const destroyProject = () => prjTree() && prjTree().destroy()
 const goto_search = () => search_intree($(".search-value").val())
-const get_prj_types = () => types()
-
-const debug = () => $("#debug_tree")
-
-const hidePreloader = () => {
-    var spinnerWrapper = document.querySelector(".spinner-wrapper")
-    setTimeout(() => {
-        spinnerWrapper.style.opacity = 0
-        setTimeout(() => spinnerWrapper.style.display = "none", 500)
-    }, 600)
-}
-
-/**
- * get date for last starter version
- */
-const get_settings = async () => {
-    let data = {
-        operation: "settings-data",
-        id: "#",
-    };
-    return new Promise((resolve, reject) => {
-        get_data({ url: "starter.php", data }).then(({ content }) => {
-            if (!content) {
-                reject(new error(`error to get version`))
-            } else {
-                resolve(content)
-            }
-        })
-    })
-};
-
-document.addEventListener("DOMContentLoaded", () => hidePreloader())
 
 //Procesos principales
-get_data({ url: "templates/nav_sidebar.hbs", isJson: false, }).then((hbs) => {
-    const template = Handlebars.compile(hbs)
-    get_data({ url: "settings/nav_sidebar.json" })
-        .then((json) => {
-            msg.info("Sidebar loaded...")
-            $(".nav-sidebar").html(template(json))
-            url = $(".nav-sidebar").find(".project-page").attr("href")
-            loadPage(url)
-            msg.info("Project page loaded...")
-
-        })
-        .then(() => {
-            msg.info("WS tree loaded...")
-            constructWSTree()
-                .then(() => {
-                    msg.info("Debug tree loaded...")
-                    constructDebugTree()
-                })
-        })
-
-})
-
-get_settings()
-    .then(({ version, release = "alpha" }) => {
-        text = version + " - " + release
-        msg.info("version: " + text);
-        $(".starter-version").html(text);
+get_data({ url: "templates/nav_sidebar.hbs", isJson: false, })
+    .then((hbs) => {
+        const template = Handlebars.compile(hbs)
+        get_data({ url: "settings/nav_sidebar.json" })
+            .then((json) => {
+                msg.info("Sidebar loaded...")
+                $(".nav-sidebar").html(template(json))
+                url = $(".nav-sidebar").find(".project-page").attr("href")
+                loadPage(url)
+                    .then(() => {
+                        msg.info("WS tree loaded...")
+                        constructWSTree()
+                            .then(() => {
+                                // msg.info("Debug tree loaded...")
+                                // constructDebugTree()
+                                Container()
+                            })
+                    })
+                msg.info("Project page loaded...")
+            })
     })
-    .catch((err) => {
-        console.log(err);
-    });
+
 
 //click on save project
 $(".navbar-nav").on("click", ".saveproject", function (e) {
@@ -192,23 +172,6 @@ $(".nav-sidebar").on("click", ".nav-link", function (e) {
     loadPage($(this).attr("href")).then(() => $(this).addClass("active"))
     setBreadCrum(this.text.trim())
 });
-
-const setBreadCrum = (newBreadCrum) => {
-    $(".breadcrumb-item.active").text(newBreadCrum)
-}
-const setTitleFileSelected = (newTitle) => {
-    $(".title-file-selected").text(newTitle)
-}
-
-//enable or disable containers
-function Container(enable = true) {
-    if (enable) {
-        setTimeout(() => $(".container-disabled").removeClass("container-disabled"), 200)
-    } else {
-        $(".card-starter").addClass("container-disabled");
-        ws().addClass("container-disabled");
-    }
-}
 
 //load page from links left menu
 const loadPage = async (url) => {

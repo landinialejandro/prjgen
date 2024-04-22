@@ -6,17 +6,18 @@ async function constructWSTree() {
         itemSelected = $(".project-page")
         data = await get_data({ url: "starter.php", data: { operation: "get_node", id: "#", folder: "projects" } })
         types = await getTypes();
-        ws().jstree({ core: { data } , types})
+        ws().jstree({ core: { data }, types })
             .on("loaded.jstree", (e, data) => {
-                get_ws_lastProject().then(id => {
-                    setBreadCrum(itemSelected.text().trim())
-                    msg.info("load last project..." + id)
-                    if (id && id !== "" && id !== "undefined") {
-                        ws().jstree("select_node", id, true);
-                        loadProject("projects/" + id)
-                        setTitleFileSelected(id)
-                    }
-                })
+                get_ws_lastProject()
+                    .then(id => {
+                        setBreadCrum(itemSelected.text().trim())
+                        msg.info("load last project..." + id)
+                        if (id && id !== "" && id !== "undefined") {
+                            ws().jstree("select_node", id, true);
+                            loadProject("projects/" + id)
+                            setTitleFileSelected(id)
+                        }
+                    })
             })
             .on("rename_node.jstree", function (e, data) {
                 renamimg(data)
@@ -43,10 +44,11 @@ async function constructWSTree() {
                                 }
                                 get_data({
                                     url: "starter.php", data,
-                                }).then((res) => {
-                                    msg.info("saved file: " + res.id)
-                                    Container()
                                 })
+                                    .then((res) => {
+                                        msg.info("saved file: " + res.id)
+                                        Container()
+                                    })
                             })
 
                     }

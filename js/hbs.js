@@ -11,16 +11,16 @@ function RegisterHelpers() {
 			"inString": (l, r) => r.indexOf(l) !== -1,
 			"notInString": (l, r) => r.indexOf(l) === -1,
 		}
-		result = operators[operator](operand_1, operand_2);
+		result = operators[operator](operand_1, operand_2)
 
-		if (result) return options.fn(this);
-		else return options.inverse(this);
-	});
+		if (result) return options.fn(this)
+		else return options.inverse(this)
+	})
 }
 
 const RegisterPartials = () => {
 	msg.info("registering partials...")
-	const partials = ["modalHeader", "modalFooter"];
+	const partials = ["modalHeader", "modalFooter"]
 	partials.forEach(async (e) => {
 		url = `templates/partials/${e}.hbs`
 		t = await get_data({ url, isJson: false })
@@ -30,24 +30,24 @@ const RegisterPartials = () => {
 
 function getChildrenHelper(form) {
 	Handlebars.registerHelper('getchildren', function (id, options) {
-		return process_template(id, options, form);
+		return process_template(id, options, form)
 	});
 }
 
 function properties_template(form) {
 	Handlebars.registerHelper('properties_template', function (id, options) {
-		return process_template(id, options, form);
+		return process_template(id, options, form)
 	})
 }
 
 function process_template(id, options, form) {
-	var nodeid = prjTree().get_json(id);
-	var template = Handlebars.compile(form);
-	var type = options.data.root.type;
+	var nodeid = prjTree().get_json(id)
+	var template = Handlebars.compile(form)
+	var type = options.data.root.type
 	if (type != 'filed' && type != 'field-settings') {
-		nodeid['readonly'] = true;
+		nodeid['readonly'] = true
 	}
-	var res = template(nodeid);
+	var res = template(nodeid)
 	return res;
 }
 
