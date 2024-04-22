@@ -22,13 +22,12 @@ const get_data = ({ url, data = {}, isJson = true, callback = null }) => {
     })
 }
 
-const MyFecth = (
-    {
-        url = null,
-        method = "POST", //default is GET
-        body = null,
-        callback,
-    },
+const MyFecth = ({
+    url = null,
+    method = "POST", //default is GET
+    body = null,
+    callback,
+},
     isJson = true
 ) => {
     fetch(url, {
@@ -36,30 +35,18 @@ const MyFecth = (
         body,
         headers: { "X-Requested-With": "XMLHttpRequest" },
     })
-        .then((response) => (isJson ? response.json() : response.text()))
-        .then((response) => {
-            if (typeof response !== "undefined" || !isJson) {
-                isJson && console.log("RESPONSE: ", response);
-                if (typeof callback == "function") callback(response);
-            } else {
-                console.log(response);
-                errors = JSON.stringify(response, null, "\t");
-            }
-        })
-        .catch((err) => console.log(err));
-};
-
-const LoadModuleOld = (module) => {
-    return new Promise((resolve, reject) => {
-        msg.secondary("loading: " + module);
-        const script = document.createElement("script");
-        document.body.appendChild(script);
-        script.onload = resolve;
-        script.onerror = reject;
-        script.async = true;
-        script.src = module;
+    .then((response) => (isJson ? response.json() : response.text()))
+    .then((response) => {
+        if (typeof response !== "undefined" || !isJson) {
+            isJson && console.log("RESPONSE: ", response);
+            if (typeof callback == "function") callback(response);
+        } else {
+            console.log(response);
+            errors = JSON.stringify(response, null, "\t");
+        }
     })
-}
+    .catch((err) => console.log(err));
+};
 
 const LoadModule = (module) => {
     return new Promise((resolve, reject) => {
@@ -75,33 +62,6 @@ const LoadModule = (module) => {
         script.async = true;
         script.src = module;
     });
-};
-
-const hidePreloader = () => {
-    var spinnerWrapper = document.querySelector(".spinner-wrapper")
-    setTimeout(() => {
-        spinnerWrapper.style.opacity = 0
-        setTimeout(() => spinnerWrapper.style.display = "none", 500)
-    }, 600)
-}
-
-/**
- * get date for last starter version
- */
-const get_settings = async () => {
-    let data = {
-        operation: "settings-data",
-        id: "#",
-    };
-    return new Promise((resolve, reject) => {
-        get_data({ url: "starter.php", data }).then(({ content }) => {
-            if (!content) {
-                reject(new error(`error to get version`))
-            } else {
-                resolve(content)
-            }
-        })
-    })
 };
 
 // filtra un objeto y devuelve objeto filtrado, se pasa el objeto a filtrar y el/los valor del key en array

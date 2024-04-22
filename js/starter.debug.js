@@ -22,57 +22,52 @@ const updateDebug = (json = null) => {
     })
     msg.info(`saving setting file...${obj_node}`)
 }
+//Tree settings, arma el listado de archivos y carpetas en el menú de la izquierda
 async function constructDebugTree() {
     try {
-        debug().jstree({
-            core: {
-                data: await get_data({ url: "starter.php", data: { operation: "get_node", id: "#", folder: "settings" } }),
-                check_callback: function (o, n, p, i, m) {
-                    if (m && m.dnd && m.pos !== "i") return false;
-                    if (o === "move_node" || o === "copy_node" && this.get_node(n).parent === this.get_node(p).id) return false;
-                    return true
-                },
-            },
-            sort: function (a, b) {
-                return this.get_type(a) === this.get_type(b)
-                    ? this.get_text(a) > this.get_text(b) ? 1 : -1
-                    : this.get_type(a) >= this.get_type(b) ? 1 : -1;
-            },
-            contextmenu: { items: (node) => contextMenu(node) },
-            types: await get_ws_types(),
-            unique: { duplicate: (name, counter) => name + " " + counter },
-            plugins: ["state", "sort", "types", "contextmenu", "unique"],
-        })
+        itemSelected = $(".debug-page")
+        data = await get_data({ url: "starter.php", data: { operation: "get_node", id: "#", folder: "settings" } })
+        types = await getTypes();
+        debug().jstree({ core: { data } , types})
             .on("select_node.jstree", (n, { node: { text, type, id }, event }, e) => {
                 if (type === "file" && typeof event !== "undefined" && type !== "contextmenu") {
-                    var active = $(".debug-page").hasClass("active")
+                    var active = itemSelected.hasClass("active")
                     if (id !== loadedDebug || !active) {
                         Container(false)
-                        url = $(".debug-page").attr("href")
-                        loadPage(url).then(() => {
-                            debugjson = null
-                            settings = "settings/" + id
-                            get_data({ url: settings }).then((e) => {
-                                const textarea = document.getElementById("codeJson")
-                                // textarea.textContent = ''
-                                const options = {
-                                    mode: 'tree',
-                                    onChangeJSON: function (json) {
-                                        debugjson = json
-                                        console.log(json)
-                                        updateDebug(json)
-                                    }
-                                }
-                                const editor = new JSONEditor(textarea, options)
-                                console.log(e)
-                                editor.set(e)
-                                Container()
+                        url = itemSelected.attr("href")
+                        loadPage(url)
+                            .then(() => {
+                                setBreadCrum(itemSelected.text().trim())
+                                debugjson = null
+                                url = "settings/" + id
+                                get_data({ url })
+                                    .then((e) => {
+                                        setTitleFileSelected(id)
+                                        const JSONarea = document.getElementById("codeJson")
+                                        // JSONarea.textContent = ''
+                                        const options = {
+                                            mode: 'tree',
+                                            onChangeJSON: function (json) {
+                                                debugjson = json
+                                                console.log(json)
+                                                updateDebug(json)
+                                            }
+                                        }
+                                        const editor = new JSONEditor(JSONarea, options)
+                                        console.log(e)
+                                        editor.set(e)
+                                    })
+                                    .then((res) => {
+                                        msg.info("saved file: " + res.id)
+                                        Container()
+                                    })
                             })
-                        })
                     }
                 }
             })
     } catch (err) {
+        Container()
+        console.log(err)
         return msg.danger(err.message);
     }
 }

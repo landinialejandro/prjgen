@@ -91,5 +91,15 @@
     "rename": false,
     "delete": false,
     "a_attr": { "style": "background-color:#fff59d" }
+  },
+  "default": {
+    "max_children": 20,
+    "max_depth": 20,
+    "icon": "far fa-circle nav-icon text-warning"
+  },
+  "file": {
+    "max_children": 20,
+    "max_depth": 20,
+    "icon": "far fa-circle nav-icon text-info"
   }
 }

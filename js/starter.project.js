@@ -8,7 +8,10 @@
  */
 function loadProject(file) {
     destroyProject();
-    constructTree(file);
+    constructTree(file)
+    // .then((file) => {
+    //     setTitleFileSelected(file)
+    // })
 }
 
 /**
@@ -67,57 +70,10 @@ function saveProject() {
 }
 
 async function constructTree(url) {
-    const types = await get_prj_types()
     try {
-        project().jstree({
-            core: {
-                data: await get_data({ url }),
-                check_callback: (o, n, p, i, m) => {
-                    const t = filteredObject(types, [n.type])
-                    msg.secondary("check if can " + o + " by type");
-                    if (m && m.dnd && m.pos !== "i") return false;
-                    if (o === "move_node" || o === "copy_node") {
-                        if (this.get_node(n).parent === this.get_node(p).id) return false;
-                    }
-                    if (o === "delete_node") {
-                        if (!t[n.type].delete) {
-                            msg.danger("ERROR! you can't delete: " + n.type)
-                            return false;
-                        } else {
-                            return confirm("Are you sure you want to delete?");
-                        }
-                    }
-                    if (o === "rename_node") {
-
-                        if (!t[n.type].rename) {
-                            msg.danger("ERROR! yo can't rename: " + n.type)
-                            return false
-                        }
-                        if (n.type === "table") {
-                            tables = typeList("#", "table").map(id => get_nodeName(id))
-                            if (tables.includes(i)) {
-                                msg.danger("ERROR! Nombre Duplicado: " + i)
-                                return false
-                            }
-                        }
-                    }
-                    msg.info("you can " + o + " ");
-                    return true;
-                },
-            },
-            types,
-            contextmenu: {
-                items: (node) => contextMenu(node),
-            },
-            plugins: ["dnd", "search", "state", "types", "contextmenu", "unique"],
-            search: {
-                case_sensitive: false,
-                show_only_matches: true,
-            },
-            error: function (err) {
-                this.edit(JSON.parse(err.data).obj)
-            },
-        })
+        data = await get_data({ url })
+        types = await getTypes();
+        project().jstree({ core: { data }, types })
             .on("create_node.jstree", function (e, { instance, node }, pos, callback, loaded) {
                 instance.set_id(node, node.id);
                 //var json_selected = get_json_node(node.id);

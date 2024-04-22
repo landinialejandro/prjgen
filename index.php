@@ -17,7 +17,7 @@
     <!-- <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet"> -->
 </head>
 
-<body class="hold-transition sidebar-mini layout-navbar-fixed">
+<body class="hold-transition sidebar-mini layout-navbar-fixed dark-mode">
     <div class=" spinner-wrapper">
         <div class=" spinner">
             <div class=" bounce1"></div>
