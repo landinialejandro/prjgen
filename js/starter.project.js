@@ -183,8 +183,11 @@ async function createNode({ reference }, new_node_type = "", position = "last") 
  * @param {string} node
  * @param {object} $this
  */
-function contextMenu({ type }) {
-    var tmp = $.jstree.defaults.contextmenu.items();
+function contextMenu(n,tmp) {
+    type = n.type
+    msg.info(type)
+    console.log(tmp)
+    var tmp = $.jstree.defaults.contextmenu;
     tmp.create = false
     if (type !== "field_") {
         tmp.create = {

@@ -1,3 +1,4 @@
+//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
 const msg = new Msglog()
 const modules = [
     "js/alert.js",
@@ -11,24 +12,30 @@ const modules = [
     "js/validate.control.js",
     "js/hbs.js"
 ];
-Promise.all(modules.map(LoadModule))
-    .then(() => {
-        //Código que se ejecuta después de que se hayan cargado todos los módulos
-        get_settings()
-            .then(({ version, release = "alpha" }) => {
-                text = version + " - " + release
-                msg.info("version: " + text);
-                $(".starter-version").html(text);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+(async function initializeApp() {
+    try {
+        // Cargar todos los módulos necesarios en paralelo
+        await Promise.all(modules.map(LoadModule));
 
-        hidePreloader()
-    })
-    .catch((error) => {
-        console.error(error);
-    });
+        // Obtener la configuración de la aplicación
+        const settings = await get_settings();
+        const version = settings.version || "0.0.0";
+        const release = settings.release || "bad file";
+        const text = `${version} - ${release}`;
+
+        // Mostrar información de la versión al usuario
+        msg.info(`Versión: ${text}`);
+        $(".starter-version").html(text);
+    } catch (error) {
+        // Registrar el error y notificar al usuario
+        console.error("Error al inicializar la aplicación:", error);
+        msg.error("Ocurrió un problema al iniciar la aplicación. Por favor, inténtalo de nuevo más tarde.");
+    } finally {
+        // Ocultar el preloader siempre, incluso si ocurrió un error
+        hidePreloader();
+    }
+})();
+
 
 /**
  * TODO: se puede verificar cuando se compile si el usuario ha modificado el archivo y avisarle
@@ -80,7 +87,7 @@ $.jstree.defaults = {
             ? this.get_text(a) > this.get_text(b) ? 1 : -1
             : this.get_type(a) >= this.get_type(b) ? 1 : -1;
     },
-    contextmenu: { items: (node) => contextMenu(node) },
+    contextmenu: { items: (n) => contextMenu(n) },
     plugins: ["dnd", "search", "state", "sort", "types", "contextmenu", "unique"],
     unique: { duplicate: (name, counter) => name + " " + counter },
     search: {
@@ -105,6 +112,7 @@ const get_json_node = (id = "#", flat = false) => prjTree().get_json(id, { flat 
 const get_nodeById = id => prjTree().get_node(id);
 const get_reference = (reference) => $.jstree.reference(reference)
 const get_inst_node = (reference) => get_reference(reference).get_node(reference)
+
 const compare_type = (type, node_type) => node_type != type
 const updateTree = () => prjTree().settings.core.data = get_json_node()
 const destroyProject = () => prjTree() && prjTree().destroy()

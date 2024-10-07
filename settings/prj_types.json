@@ -71,7 +71,7 @@
     "valid_children": ["prj-settings"],
     "rename": false,
     "delete": false,
-    "a_attr": { "style": "background-color: #fff59d" }
+    "a_attr": { "style": "background-color: #fff59d;color:black"  }
   },
   "table-settings": {
     "max_children": 20,
@@ -80,7 +80,7 @@
     "valid_children": ["tbl-setting"],
     "rename": false,
     "delete": false,
-    "a_attr": { "style": "background-color: #fff59d" },
+    "a_attr": { "style": "background-color: #fff59d;color:black" },
     "description": "nodo agrupador de settings de tabla"
   },
   "group-settings": {
@@ -90,6 +90,6 @@
     "valid_children": ["grp-settings"],
     "rename": false,
     "delete": false,
-    "a_attr": { "style": "background-color:#fff59d" }
+    "a_attr": { "style": "background-color:#fff59d;color:black" }
   }
 }
