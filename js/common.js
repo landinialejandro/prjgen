@@ -1,38 +1,57 @@
 /**
- * simple primise get file with a promise. 
- * @param {String} url to file or ajax reponse
- * @param {Element} data object data { operation: "test", id: "#", text: "test ajax works" }
- * @returns {String} promise data
+ * Realiza una petición HTTP y devuelve una promesa que se resuelve con los datos de la respuesta.
+ *
+ * @param {Object} options - Opciones para la petición.
+ * @param {string} options.url - La URL a la que se realizará la petición. **Obligatorio.**
+ * @param {Object|string|null} [options.data=null] - Datos que se enviarán en el cuerpo de la petición.
+ * @param {string|null} [options.method=null] - Método HTTP a utilizar (GET, POST, etc.). Si no se especifica, se usa "GET" si no hay datos y "POST" si hay datos.
+ * @param {boolean} [options.isJson=true] - Indica si la respuesta debe ser tratada como JSON.
+ * @param {Function} [options.callback=null] - Función opcional que se ejecutará después de recibir la respuesta.
+ *
+ * @returns {Promise<any>} - Una promesa que se resuelve con los datos de la respuesta o se rechaza con un error.
  */
-const get_data = ({ url, data = {}, isJson = true, callback = null }) => {
-    return new Promise(function (resolve, reject) {
-        if (url) {
-            MyFetch(
-                {
-                    url,
-                    body: data ? JSON.stringify(data) : null,
-                    callback: (data) => resolve(data),
-                },
-                isJson
-            )
-            if (typeof callback == "function") callback()
-        } else {
-            reject(new Error("url needed"))
+const get_data = async ({ url, data = null, method = null, isJson = true, callback = null }) => {
+    if (!url) {
+        throw new Error("La URL es obligatoria.");
+    }
+
+    // Determinar el método HTTP si no se proporciona
+    method = method || (data ? "POST" : "GET");
+
+    try {
+        const responseData = await MyFetch(
+            {
+                url,
+                method,
+                body: data,
+            },
+            isJson
+        );
+
+        // Ejecutar el callback si es una función
+        if (typeof callback === "function") {
+            callback(responseData);
         }
-    })
-}
+
+        return responseData;
+    } catch (error) {
+        // Manejo de errores
+        console.error("Error en get_data:", error);
+        throw error;
+    }
+};
+
 
 /**
- * Realiza una petición HTTP utilizando la API Fetch y procesa la respuesta.
+ * Realiza una petición HTTP utilizando la API Fetch y devuelve una promesa con los datos de la respuesta.
  *
  * @param {Object} config - Configuración de la petición.
  * @param {string} config.url - URL a la que se realizará la petición. **Obligatorio.**
  * @param {string} [config.method='GET'] - Método HTTP a utilizar (GET, POST, etc.).
  * @param {Object|string|null} [config.body=null] - Cuerpo de la solicitud, si es aplicable.
- * @param {Function} [config.callback] - Función que se ejecutará con la respuesta.
  * @param {boolean} [isJson=true] - Indica si la respuesta debe ser tratada como JSON.
  *
- * @returns {void}
+ * @returns {Promise<any>} - Una promesa que se resuelve con los datos de la respuesta o se rechaza con un error.
  *
  * @example
  * MyFetch(
@@ -40,20 +59,22 @@ const get_data = ({ url, data = {}, isJson = true, callback = null }) => {
  *     url: 'https://api.example.com/data',
  *     method: 'POST',
  *     body: { key: 'value' },
- *     callback: (response) => {
- *       console.log('Respuesta:', response);
- *     },
  *   },
  *   true
- * );
+ * )
+ * .then((response) => {
+ *   console.log('Respuesta:', response);
+ * })
+ * .catch((error) => {
+ *   console.error('Error en la petición:', error);
+ * });
  */
 const MyFetch = async (
-    { url = null, method = "GET", body = null, callback },
+    { url = null, method = "GET", body = null },
     isJson = true
 ) => {
     if (!url) {
-        console.error("La URL es obligatoria.");
-        return;
+        throw new Error("La URL es obligatoria.");
     }
 
     const options = {
@@ -75,18 +96,18 @@ const MyFetch = async (
     try {
         const response = await fetch(url, options);
         if (!response.ok) {
-            throw new Error(`Error en la respuesta HTTP: ${response.status} ${response.statusText}`);
+            // Leer el cuerpo de la respuesta en caso de error
+            const errorText = await response.text();
+            throw new Error(`Error en la respuesta HTTP: ${response.status} ${response.statusText} - ${errorText}`);
         }
         const data = isJson ? await response.json() : await response.text();
-        if (typeof callback === "function") {
-            callback(data);
-        } else {
-            console.log("Respuesta:", data);
-        }
+        return data; // Aquí devolvemos los datos
     } catch (err) {
-        console.error("Error en la petición fetch:", err);
+        // Re-lanzamos el error para que pueda ser manejado por quien llama a la función
+        throw err;
     }
 };
+
 
 
 /**
