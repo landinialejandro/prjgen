@@ -15,8 +15,13 @@ function RegisterHelpers() {
 
 		if (result) return options.fn(this)
 		else return options.inverse(this)
-	})
+	});
+	Handlebars.registerHelper('eq', function(a, b) {
+		return a === b;
+	});
 }
+
+
 
 const RegisterPartials = () => {
 	msg.info("registering partials...")

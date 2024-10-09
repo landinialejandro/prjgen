@@ -26,7 +26,7 @@ const modules = [
 
         // Mostrar información de la versión al usuario
         msg.info(`Versión: ${text}`);
-        $(".starter-version").html(text);
+        $$(".starter-version").html(text);
     } catch (error) {
         // Registrar el error y notificar al usuario
         console.error("Error al inicializar la aplicación:", error);

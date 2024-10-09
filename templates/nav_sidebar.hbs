@@ -1,21 +1,33 @@
 {{#each this}}
-    <li class="nav-item {{#if has_treeview}}has-treeview{{/if}} {{#if has_treeview.menu_open}}menu-open{{/if}} ">
+    <li class="nav-item {{#if children}}has-treeview{{/if}} {{#if menu_open}}menu-open{{/if}}">
         <a href="{{url}}" class="nav-link {{#if active}}active{{/if}} {{a_class}}">
             <i class="nav-icon {{icon}}"></i>
             <p>
                 {{caption}}
-                {{#if has_treeview}}
-                    <i class="right fas fa-angle-left"></i>
+                {{#if children}}
+                <i class="right fas fa-angle-left"></i>
                 {{/if}}
             </p>
             {{#if badge}}
                 <span class="right badge badge-{{badge.color}}">{{badge.text}}</span>
             {{/if}}
         </a>
-        {{#if has_treeview}}
+        {{#if children}}
         <ul class="nav nav-treeview" style="padding-left: 25px;">
-            {{#each has_treeview.children}}
-                {{{this}}}
+            {{#each children}}
+                {{#if (eq type "component")}}
+                    <li class="nav-item">
+                        <div id="{{component_id}}"></div>
+                    </li>
+                    {{else}}
+                    <!-- Aquí puedes manejar otros tipos de elementos en children -->
+                    <li class="nav-item">
+                        <a href="{{url}}" class="nav-link {{#if active}}active{{/if}}">
+                            <i class="nav-icon {{icon}}"></i>
+                            <p>{{caption}}</p>
+                        </a>
+                    </li>
+                {{/if}}
             {{/each}}
         </ul>
         {{/if}}

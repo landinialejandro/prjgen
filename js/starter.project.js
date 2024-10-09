@@ -2,6 +2,19 @@
 * TODO:	lista de campos de una tabla en proceso
 */
 
+const project = () => $(".card-starter #project_tree")
+
+const prjTree = () => project().jstree(true)
+
+const get_json_node = (id = "#", flat = false) => prjTree().get_json(id, { flat })
+const get_nodeById = id => prjTree().get_node(id);
+const get_reference = (reference) => $.jstree.reference(reference)
+const get_inst_node = (reference) => get_reference(reference).get_node(reference)
+
+const compare_type = (type, node_type) => node_type != type
+const updateTree = () => prjTree().settings.core.data = get_json_node()
+const destroyProject = () => prjTree() && prjTree().destroy()
+
 /**
  * Load a project
  * @param {string} file name project to load
@@ -72,8 +85,8 @@ function saveProject() {
 async function constructTree(url) {
     try {
         data = await get_data({ url })
-        types = await getTypes();
-        project().jstree({ core: { data }, types })
+        // types = await getTypes();
+        project().jstree({ core: { data } })
             .on("create_node.jstree", function (e, { instance, node }, pos, callback, loaded) {
                 instance.set_id(node, node.id);
                 //var json_selected = get_json_node(node.id);

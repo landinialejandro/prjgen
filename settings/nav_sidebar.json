@@ -1,16 +1,17 @@
 [
     {
-        "has_treeview": {
-            "menu_open": true,
-            "children": [
-                "<div id='ws_tree'></div>"
-            ]
-        },
         "caption": "Projects Selector",
         "url": "pages/project_page.html",
         "active": true,
         "icon": "fas fa-tachometer-alt",
-        "a_class": "project-page"
+        "a_class": "project-page",
+        "menu_open": true,
+        "children": [
+            {
+                "type": "component",
+                "component_id": "ws_tree"
+            }
+        ]
     },
     {
         "caption": "Documentation",
@@ -20,7 +21,7 @@
         "a_class": "docs-page",
         "badge": {
             "text": "New",
-            "color":"danger"
+            "color": "danger"
         }
     },
     {
@@ -31,20 +32,21 @@
         "a_class": "docs-page",
         "badge": {
             "text": "fa",
-            "color":"info"
+            "color": "info"
         }
     },
     {
-        "has_treeview": {
-            "menu_open": false,
-            "children": [
-                "<div id='debug_tree'></div>"
-            ]
-        },
         "caption": "Debug Page",
         "url": "pages/debug_page.html",
         "active": false,
         "icon": "fas fa-puzzle-piece",
-        "a_class": "debug-page"
+        "a_class": "debug-page",
+        "menu_open": false,
+        "children": [
+            {
+                "type": "component",
+                "component_id": "debug_tree"
+            }
+        ]
     }
 ]

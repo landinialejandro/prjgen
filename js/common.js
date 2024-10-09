@@ -352,3 +352,81 @@ class Msglog {
         console.log(`%c${msg}`, style);
     }
 }
+
+/**
+ * `$$` es una función utilitaria para la manipulación del DOM que proporciona métodos sencillos
+ * para interactuar con los elementos seleccionados mediante un selector CSS. Ofrece funcionalidades
+ * similares a algunas de las que proporciona jQuery, pero utilizando JavaScript puro y sin dependencias
+ * externas.
+ *
+ * @param {string} selector - Un selector CSS para seleccionar los elementos del DOM.
+ *
+ * @returns {Object} Un objeto con métodos para manipular los elementos seleccionados:
+ *   - `html(content)`: Establece el contenido HTML de los elementos si se proporciona `content`, o devuelve
+ *     el contenido HTML del primer elemento si no se proporciona `content`.
+ *   - `text(content)`: Establece el contenido de texto de los elementos si se proporciona `content`, o devuelve
+ *     el contenido de texto del primer elemento si no se proporciona `content`.
+ *   - `css(property, value)`: Establece el valor de una propiedad CSS especificada en los elementos.
+ *   - `on(eventType, handler)`: Añade un manejador de eventos a los elementos para un tipo de evento específico.
+ *
+ * @example
+ * // Establecer el contenido HTML de todos los elementos con la clase 'starter-version'
+ * $$('.starter-version').html('Versión 1.0.0');
+ *
+ * // Obtener el contenido HTML del primer elemento con la clase 'starter-version'
+ * const version = $$('.starter-version').html();
+ * console.log(version);
+ *
+ * // Establecer el contenido de texto de un elemento con el id 'titulo'
+ * $$('#titulo').text('Bienvenido a mi sitio web');
+ *
+ * // Cambiar el color de texto de todos los elementos con la clase 'enlace' a azul
+ * $$('.enlace').css('color', 'blue');
+ *
+ * // Añadir un evento click a todos los botones con la clase 'boton'
+ * $$('.boton').on('click', function() {
+ *     console.log('Botón clickeado');
+ * });
+ *
+ * // Obtener el contenido de texto del primer elemento con la clase 'descripcion'
+ * const descripcion = $$('.descripcion').text();
+ * console.log(descripcion);
+ */
+const $$ = (selector) => {
+    const elements = document.querySelectorAll(selector);
+    return {
+        html: (content) => {
+            if (content !== undefined) {
+                // Establecer el contenido HTML
+                elements.forEach((element) => {
+                    element.innerHTML = content;
+                });
+            } else {
+                // Obtener el contenido HTML del primer elemento
+                return elements[0]?.innerHTML;
+            }
+        },
+        text: (content) => {
+            if (content !== undefined) {
+                // Establecer el contenido de texto
+                elements.forEach((element) => {
+                    element.textContent = content;
+                });
+            } else {
+                // Obtener el contenido de texto del primer elemento
+                return elements[0]?.textContent;
+            }
+        },
+        css: (property, value) => {
+            elements.forEach((element) => {
+                element.style[property] = value;
+            });
+        },
+        on: (eventType, handler) => {
+            elements.forEach((element) => {
+                element.addEventListener(eventType, handler);
+            });
+        },
+        // Puedes añadir más métodos según tus necesidades
+    };
+};

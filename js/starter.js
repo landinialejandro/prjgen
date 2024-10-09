@@ -2,81 +2,101 @@
  * TODO: se puede verificar cuando se compile si el usuario ha modificado el archivo y avisarle
  */
 
-const getTypes = () => get_data({ url: "settings/types.json" })
+// Función para inicializar las opciones por defecto de jsTree
+const initializeJsTreeDefaults = async () => {
+    try {
+        // Obtener los tipos
+        const types = await get_data({ url: "settings/types.json" });
 
-//opciones por defecto de jstree
-$.jstree.defaults = {
-    ...$.jstree.defaults,
-    core: {
-        ...$.jstree.defaults.core,
-        data: null,
-        check_callback: function (o, n, p, i, m) {
-            const t = filteredObject(types, [n.type])
-            msg.secondary("check if can " + o + " by type");
-            if (m && m.dnd && m.pos !== "i") return false;
-            if (o === "move_node" || o === "copy_node") {
-                if (n.parent === p.id) return false;
-            }
-            if (o === "delete_node") {
-                if (!t[n.type].delete) {
-                    msg.danger("ERROR! you can't delete: " + n.type)
-                    return false;
-                } else {
-                    return confirm("Are you sure you want to delete?");
-                }
-            }
-            if (o === "rename_node") {
-                if (!t[n.type].rename) {
-                    msg.danger("ERROR! yo can't rename: " + n.type)
-                    return false
-                }
-                if (n.type === "table") {
-                    tables = typeList("#", "table").map(id => get_nodeName(id))
-                    if (tables.includes(i)) {
-                        msg.danger("ERROR! Nombre Duplicado: " + i)
-                        return false
+        // Configuración por defecto de jsTree
+        $.jstree.defaults = {
+            ...$.jstree.defaults,
+            core: {
+                ...$.jstree.defaults.core,
+                data: null,
+                check_callback: function (operation, node, parent, new_name, more) {
+                    // Acceder a los types desde this.settings.types
+                    const typesConfig = this.settings.types || {};
+                    const typeConfig = typesConfig[node.type] || {};
+
+                    msg.secondary(`Verificando si se puede realizar la operación '${operation}' en el tipo '${node.type}'`);
+
+                    // Validación para operaciones de arrastrar y soltar
+                    if (more && more.dnd && more.pos !== "i") {
+                        msg.danger("Operación de arrastrar y soltar no permitida en esta posición.");
+                        return false;
                     }
+
+                    switch (operation) {
+                        case "move_node":
+                        case "copy_node":
+                            // No permitir mover o copiar el nodo al mismo padre
+                            if (node.parent === parent.id) {
+                                msg.danger("No se puede mover o copiar el nodo al mismo padre.");
+                                return false;
+                            }
+                            break;
+
+                        case "delete_node":
+                            if (!typeConfig.delete) {
+                                msg.danger(`No tienes permiso para eliminar el tipo '${node.type}'.`);
+                                return false;
+                            } else {
+                                return confirm("¿Estás seguro de que deseas eliminar este nodo?");
+                            }
+
+                        case "rename_node":
+                            if (!typeConfig.rename) {
+                                msg.danger(`No tienes permiso para renombrar el tipo '${node.type}'.`);
+                                return false;
+                            }
+                            if (node.type === "table") {
+                                const tables = typeList("#", "table").map(id => get_nodeName(id));
+                                if (tables.includes(new_name)) {
+                                    msg.danger(`Nombre duplicado detectado: '${new_name}'.`);
+                                    return false;
+                                }
+                            }
+                            break;
+
+                        default:
+                            // Para otras operaciones no especificadas, permitir por defecto
+                            break;
+                    }
+
+                    msg.info(`Operación '${operation}' permitida en el tipo '${node.type}'.`);
+                    return true;
+                },
+            },
+            types: types, // Incluimos los types obtenidos
+            sort: function (a, b) {
+                const typeA = this.get_type(a);
+                const typeB = this.get_type(b);
+
+                if (typeA === typeB) {
+                    return this.get_text(a) > this.get_text(b) ? 1 : -1;
+                } else {
+                    return typeA >= typeB ? 1 : -1;
                 }
+            },
+            contextmenu: { items: (node) => contextMenu(node) },
+            plugins: ["dnd", "search", "state", "sort", "types", "contextmenu", "unique"],
+            unique: { duplicate: (name, counter) => `${name} ${counter}` },
+            search: {
+                case_sensitive: false,
+                show_only_matches: true,
+            },
+            error: function (err) {
+                this.edit(JSON.parse(err.data).obj);
             }
-            msg.info("you can " + o + " ");
-            return true;
-        },
-    },
-    types: {},
-    sort: function (a, b) {
-        return this.get_type(a) === this.get_type(b)
-            ? this.get_text(a) > this.get_text(b) ? 1 : -1
-            : this.get_type(a) >= this.get_type(b) ? 1 : -1;
-    },
-    contextmenu: { items: (n) => contextMenu(n) },
-    plugins: ["dnd", "search", "state", "sort", "types", "contextmenu", "unique"],
-    unique: { duplicate: (name, counter) => name + " " + counter },
-    search: {
-        case_sensitive: false,
-        show_only_matches: true,
-    },
-    error: function (err) { this.edit(JSON.parse(err.data).obj); }
-}
+        };
 
-const ws = () => $("#ws_tree")
-const debug = () => $("#debug_tree")
-const project = () => $(".card-starter #project_tree")
+    } catch (error) {
+        console.error("Error al inicializar las opciones por defecto de jsTree:", error);
+        msg.error("No se pudo cargar la configuración del árbol.");
+    }
+};
 
-const prjTree = () => project().jstree(true)
-
-const get_workspace = () => get_data({ url: "settings/workspace.json" })
-const get_ws_selectedNodeId = () => ws().jstree().get_selected(true)[0].id
-const get_ws_selectedNodeText = () => ws().jstree().get_selected(true)[0].text
-const get_ws_lastProject = async () => await get_workspace().then(({ id }) => id)
-
-const get_json_node = (id = "#", flat = false) => prjTree().get_json(id, { flat })
-const get_nodeById = id => prjTree().get_node(id);
-const get_reference = (reference) => $.jstree.reference(reference)
-const get_inst_node = (reference) => get_reference(reference).get_node(reference)
-
-const compare_type = (type, node_type) => node_type != type
-const updateTree = () => prjTree().settings.core.data = get_json_node()
-const destroyProject = () => prjTree() && prjTree().destroy()
 const goto_search = () => search_intree($(".search-value").val())
 
 //Procesos principales
@@ -93,8 +113,8 @@ get_data({ url: "templates/nav_sidebar.hbs", isJson: false, })
                         msg.info("WS tree loaded...")
                         constructWSTree()
                             .then(() => {
-                                // msg.info("Debug tree loaded...")
-                                // constructDebugTree()
+                                msg.info("Debug tree loaded...")
+                                constructDebugTree()
                                 Container()
                             })
                     })

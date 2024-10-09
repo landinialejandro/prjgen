@@ -1,12 +1,18 @@
 var loadedWS = false;
+const ws = () => $("#ws_tree")
+
+const get_workspace = () => get_data({ url: "settings/workspace.json" })
+const get_ws_selectedNodeId = () => ws().jstree().get_selected(true)[0].id
+const get_ws_selectedNodeText = () => ws().jstree().get_selected(true)[0].text
+const get_ws_lastProject = async () => await get_workspace().then(({ id }) => id)
 
 //Tree del work space, arma el listado de archivos y carpetas en el menú de la izquierda
 async function constructWSTree() {
     try {
         itemSelected = $(".project-page")
         data = await get_data({ url: "starter.php", data: { operation: "get_node", id: "#", folder: "projects" } })
-        types = await getTypes();
-        ws().jstree({ core: { data }, types })
+        // types = await getTypes();
+        ws().jstree({ core: { data } })
             .on("loaded.jstree", (e, data) => {
                 get_ws_lastProject()
                     .then(id => {

@@ -1,3 +1,5 @@
+const debug = () => $("#debug_tree")
+
 var loadedDebug = false;
 var debugjson = null;
 //click on update project
@@ -27,8 +29,8 @@ async function constructDebugTree() {
     try {
         itemSelected = $(".debug-page")
         data = await get_data({ url: "starter.php", data: { operation: "get_node", id: "#", folder: "settings" } })
-        types = await getTypes();
-        debug().jstree({ core: { data } , types})
+        // types = await getTypes();
+        debug().jstree({ core: { data } })
             .on("select_node.jstree", (n, { node: { text, type, id }, event }, e) => {
                 if (type === "file" && typeof event !== "undefined" && type !== "contextmenu") {
                     var active = itemSelected.hasClass("active")
